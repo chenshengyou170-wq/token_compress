@@ -1,0 +1,5 @@
+﻿model,repeat,official_before,official_after,official_reduction_pct,local_before_after,local_reduction_pct,baseline_quality_passed,compressed_quality_passed
+Kimi K2.8 Preview,0,,5127,,21248 → 5622,73.54,,True
+Kimi K2.8 Preview,1,17742,5127,71.1,21248 → 5622,73.54,True,True
+Kimi K3,0,17742,5127,71.1,21248 → 5622,73.54,True,True
+Kimi K3,1,17742,5127,71.1,21248 → 5622,73.54,True,True

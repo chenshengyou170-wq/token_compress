@@ -1,0 +1,66 @@
+def unrelated_a():
+    """A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. """
+    return 0
+
+def unrelated_b():
+    """A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. """
+    return 1
+
+def unrelated_c():
+    """A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. """
+    return 2
+
+def unrelated_d():
+    """A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. """
+    return 3
+
+def unrelated_e():
+    """A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. """
+    return 4
+
+def unrelated_f():
+    """A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. """
+    return 5
+
+def unrelated_g():
+    """A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. """
+    return 6
+
+def unrelated_h():
+    """A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. """
+    return 7
+
+def unrelated_i():
+    """A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. """
+    return 8
+
+def unrelated_j():
+    """A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. """
+    return 9
+
+def unrelated_k():
+    """A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. """
+    return 10
+
+def unrelated_l():
+    """A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. """
+    return 11
+
+def unrelated_m():
+    """A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. """
+    return 12
+
+def unrelated_n():
+    """A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. """
+    return 13
+
+def unrelated_o():
+    """A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. """
+    return 14
+
+def unrelated_p():
+    """A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. A helper for background exports. """
+    return 15
+
+def refund_allowed(approved: bool, locked: bool) -> bool:
+    return approved and not locked

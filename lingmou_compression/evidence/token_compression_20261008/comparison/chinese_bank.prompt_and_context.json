@@ -1,0 +1,49 @@
+{
+  "label": "chinese_bank.prompt_and_context",
+  "returncode": 0,
+  "latency_s": 12.383,
+  "usage_source": "codex_exec_turn_completed",
+  "usage": {
+    "input_tokens": 17623,
+    "cached_input_tokens": 8960,
+    "output_tokens": 170,
+    "reasoning_output_tokens": 0
+  },
+  "upstream": "https://chatgpt.com/backend-api/codex",
+  "observed_models": [
+    "gpt-6-astra"
+  ],
+  "observed_request_count": 1,
+  "tap_stats": {
+    "running": false,
+    "request_count": 3,
+    "observed_request_count": 1,
+    "multimodal_request_count": 0,
+    "provider_count_attempt_count": 0,
+    "provider_count_success_count": 0,
+    "provider_count_error_count": 0,
+    "provider_breakdown_attempt_count": 0,
+    "provider_breakdown_success_count": 0,
+    "provider_breakdown_error_count": 0,
+    "sse_event_count": 0,
+    "error_count": 0,
+    "upstream_origin": "https://chatgpt.com",
+    "upstream_path": "/backend-api/codex"
+  },
+  "completed_turn_count": 1,
+  "tool_item_types": [],
+  "response": "{\n  \"channel_success_cny\": 501000,\n  \"core_settled_cny\": 221000,\n  \"gap_cny\": 280000,\n  \"gap_payment_id\": \"P1002\",\n  \"anomaly_face_value_cny\": 399000,\n  \"held_payment_id\": \"P1004\",\n  \"held_amount_cny\": 510000,\n  \"duplicate_payment_id\": \"P1003\",\n  \"duplicate_charge_proven\": false,\n  \"replay_authorized\": false,\n  \"raw_upload_authorized\": false,\n  \"report_send_action\": \"review\",\n  \"generic_dlp_implemented\": false,\n  \"real_bank_system_connected\": false,\n  \"secret_directory\": \"secrets/\",\n  \"approved_domain_count\": 3\n}",
+  "prompt_sha256": "bfcba8e6c507e87d5df72f3295a70bf8d4107946419cd62f7160b96b9635a0da",
+  "raw_completion_events": [
+    {
+      "type": "turn.completed",
+      "usage": {
+        "input_tokens": 17623,
+        "cached_input_tokens": 8960,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 170,
+        "reasoning_output_tokens": 0
+      }
+    }
+  ]
+}

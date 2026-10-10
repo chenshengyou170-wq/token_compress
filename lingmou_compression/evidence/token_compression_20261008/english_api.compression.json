@@ -1,0 +1,33 @@
+{
+  "label": "english_api.compression",
+  "returncode": 0,
+  "latency_s": 19.022,
+  "usage_source": "codex_exec_turn_completed",
+  "usage": {
+    "input_tokens": 16238,
+    "cached_input_tokens": 0,
+    "output_tokens": 199,
+    "reasoning_output_tokens": 0
+  },
+  "upstream": "https://chatgpt.com/backend-api/codex",
+  "observed_models": [
+    "gpt-6-astra"
+  ],
+  "observed_request_count": 0,
+  "completed_turn_count": 1,
+  "tool_item_types": [],
+  "response": "{\"prompt\":\"Read API documentation provided context carefully. Extract authentication requirements and credential handling rules. Use only provided documentation information. Return one JSON object with exactly keys: header (header name), prefix (authentication scheme, without following space), separator (literal word space if space required), error_status (integer), every_request (boolean indicating whether authentication required every request), commit_allowed (boolean indicating whether keys may be committed to version control), public_sharing_allowed (boolean), env_storage_recommended (boolean). Do not include explanation, Markdown, or additional keys. Do not use tools or access websites.\",\"context\":\"Authenticate with our API: include API key in Authorization header every request. API key should carry prefix \\\"Bearer\\\" followed by space. If authentication fails, server returns 401 Unauthorized status code with error message explaining why authentication failed. API keys sensitive credentials; should never be committed to version control or shared publicly. Recommend storing keys in environment variables or using secure secrets management system.\"}",
+  "prompt_sha256": "c1006450e3a99572fec54e0f25decffef5ea3f7e5120e3cdf1304fb1cff03988",
+  "raw_completion_events": [
+    {
+      "type": "turn.completed",
+      "usage": {
+        "input_tokens": 16238,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 199,
+        "reasoning_output_tokens": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+﻿model,case,mode,n,paired_n,quality_passes,mean_input_tokens,mean_output_tokens,input_reduction_pct,total_reduction_pct,local_reduction_pct,median_latency_s
+kimi-for-coding,english_api,hybrid,1,1,0,312,112,8.24,7.63,10.33,3.52
+kimi-for-coding,english_api,kimi,0,0,0,,,,,,
+kimi-for-coding,english_api,off,1,1,1,340,119,0.0,0.0,0.0,3.54

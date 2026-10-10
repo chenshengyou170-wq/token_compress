@@ -1,0 +1,10 @@
+{
+  "purpose": "Isolated product feasibility experiment; no integration into live Agent requests.",
+  "compression_prompt_source": "https://github.com/wilpel/caveman-compression/blob/2a11efbf74863449e3392322ea0bf8d7ebe55357/prompts/compression.txt",
+  "implementation_note": "The upstream LLM prompt is adapted to independent prompt/context JSON fields with explicit fact and constraint preservation. This is not the upstream spaCy or MLM compressor, and the model is gpt-6-astra rather than upstream gpt-4o-mini.",
+  "model_call_count": 8,
+  "validation": "8 single-request completions, correct upstream/model, no tool calls; 24 expected fields pass in each of 3 variants (72 field checks). Input SHA256 matches saved text; usage matches saved raw completion events.",
+  "pilot_note": "The parent directory contains an excluded first compression trial. Its official usage was valid, but the experiment read relay stats after shutdown and reported zero requests. The harness now uses the stats returned by stop(); the complete comparison was rerun in this directory.",
+  "scope": "The supplied task prompt and context were compressed. Codex built-in system instructions, skill descriptions, tool schemas and execution environment context were held outside the compression target.",
+  "cost_note": "input_tokens includes cached_input_tokens. No cached-token subtraction, price conversion or latency conclusion is used. Compression costs are listed separately. One-off net token savings exclude smoke tests, the pilot, and the other comparison arms."
+}

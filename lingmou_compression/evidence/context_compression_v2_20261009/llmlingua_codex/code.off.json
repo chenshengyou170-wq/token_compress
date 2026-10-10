@@ -1,0 +1,56 @@
+{
+  "provider": "codex_chatgpt",
+  "mode": "off",
+  "model": "gpt-6-astra",
+  "returncode": 0,
+  "error": null,
+  "latency_s": 8.769,
+  "response": "{\"allowed\":false,\"function\":\"refund_allowed\"}",
+  "requests": [
+    {
+      "task_id": "code",
+      "purpose": "generation",
+      "attempt": 1,
+      "accounting_labelled": true,
+      "task_source": "codex_turn_metadata",
+      "purpose_source": "request",
+      "attempt_source": "repeated_body_inference",
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T07:31:37.338388+00:00",
+      "model": "gpt-6-astra",
+      "input_tokens_before_estimate": 20435,
+      "input_tokens_after_estimate": 20435,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 18567,
+        "output_tokens": 14,
+        "total_tokens": 18581,
+        "cached_input_tokens": 14464,
+        "reasoning_output_tokens": 0
+      },
+      "usage_source": "provider_sse_usage",
+      "status": "completed",
+      "http_status": 200,
+      "response_content_type": "",
+      "response_content_encoding": "identity",
+      "response_model": "gpt-6-astra",
+      "latency_ms": 3733.256
+    }
+  ],
+  "compression_observations": [],
+  "tool_items": [],
+  "codex_usage": {
+    "input_tokens": 18567,
+    "output_tokens": 14,
+    "total_tokens": 18581,
+    "cached_input_tokens": 14464,
+    "reasoning_output_tokens": 0
+  },
+  "prompt_sha256": "5627f4a7187f73d04b6145652a1f21494d93bba027c627d7ede441287d0a9658",
+  "checks": {
+    "exact_fields": true,
+    "allowed": true,
+    "function": true
+  }
+}

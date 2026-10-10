@@ -1,0 +1,226 @@
+{
+  "schema_version": "lingmou.codex-input-compression-ab.v1",
+  "started_at": "2026-10-09T02:43:00.403593+00:00",
+  "model": "gpt-6-astra",
+  "method": "hybrid in RequestTokenTap, after Codex assembles the complete request",
+  "usage_source": "codex_exec_turn_completed",
+  "cases": [],
+  "limitations": [
+    "Two fixtures and fixed-answer retention checks are not general semantic-equivalence evidence.",
+    "Official input_tokens includes cached_input_tokens; these are token counts, not monetary costs.",
+    "Local compressor counters are labelled estimates and never substitute for official usage."
+  ],
+  "codex_version": "0.161.0",
+  "tool_roundtrip": {
+    "off": {
+      "usage": {
+        "input_tokens": 32185,
+        "output_tokens": 73,
+        "total_tokens": 32258,
+        "cached_input_tokens": 25472,
+        "reasoning_output_tokens": 0
+      },
+      "passed": true,
+      "observed_request_count": 2,
+      "caller_prompt_sha256": "e43fc4072aeb5ddd80102dbf4ff8e93b09074b1c0a0ee76bbbf2611f8131fa9c",
+      "compression_observations": [],
+      "request_usage": {
+        "totals": {
+          "requests": 2,
+          "requests_with_official_usage": 2,
+          "official_input_tokens": 32185,
+          "official_output_tokens": 73,
+          "official_total_tokens": 32258
+        },
+        "recent_requests": [
+          {
+            "request_id": "tap-1",
+            "started_at": "2026-10-09T02:43:03.537951+00:00",
+            "model": "gpt-6-astra",
+            "input_tokens_before_estimate": 17862,
+            "input_tokens_after_estimate": 17862,
+            "tokenizer_source": "tokenizer-proxy-o200k-est",
+            "context_complete": true,
+            "official_usage": {
+              "input_tokens": 16046,
+              "output_tokens": 59,
+              "total_tokens": 16105,
+              "cached_input_tokens": 9600,
+              "reasoning_output_tokens": 0
+            },
+            "usage_source": "provider_sse_usage",
+            "status": "completed",
+            "http_status": 200,
+            "response_content_type": "",
+            "response_content_encoding": "identity",
+            "response_model": "gpt-6-astra",
+            "latency_ms": 4452.737
+          },
+          {
+            "request_id": "tap-2",
+            "started_at": "2026-10-09T02:43:07.828557+00:00",
+            "model": "gpt-6-astra",
+            "input_tokens_before_estimate": 18303,
+            "input_tokens_after_estimate": 18303,
+            "tokenizer_source": "tokenizer-proxy-o200k-est",
+            "context_complete": true,
+            "official_usage": {
+              "input_tokens": 16139,
+              "output_tokens": 14,
+              "total_tokens": 16153,
+              "cached_input_tokens": 15872,
+              "reasoning_output_tokens": 0
+            },
+            "usage_source": "provider_sse_usage",
+            "status": "completed",
+            "http_status": 200,
+            "response_content_type": "",
+            "response_content_encoding": "identity",
+            "response_model": "gpt-6-astra",
+            "latency_ms": 4182.372
+          }
+        ],
+        "recent_request_limit": 200
+      }
+    },
+    "hybrid": {
+      "usage": {
+        "input_tokens": 31600,
+        "output_tokens": 73,
+        "total_tokens": 31673,
+        "cached_input_tokens": 15616,
+        "reasoning_output_tokens": 0
+      },
+      "passed": true,
+      "observed_request_count": 2,
+      "caller_prompt_sha256": "e43fc4072aeb5ddd80102dbf4ff8e93b09074b1c0a0ee76bbbf2611f8131fa9c",
+      "compression_observations": [
+        {
+          "status": "compressed",
+          "reason": "shorter_text",
+          "text_tokens_before_estimate": 10400,
+          "text_tokens_after_estimate": 10108,
+          "changed_fields": 6,
+          "changed_roles": [
+            "developer",
+            "user"
+          ],
+          "tokenizer_source": "tokenizer-proxy-o200k-est",
+          "latency_ms": 25.508,
+          "compression_model_calls": 0,
+          "cache_hits": 0,
+          "rejected_fields": 0
+        },
+        {
+          "status": "compressed",
+          "reason": "shorter_text",
+          "text_tokens_before_estimate": 10408,
+          "text_tokens_after_estimate": 10115,
+          "changed_fields": 7,
+          "changed_roles": [
+            "assistant",
+            "developer",
+            "user"
+          ],
+          "tokenizer_source": "tokenizer-proxy-o200k-est",
+          "latency_ms": 24.728,
+          "compression_model_calls": 0,
+          "cache_hits": 0,
+          "rejected_fields": 0
+        }
+      ],
+      "request_usage": {
+        "totals": {
+          "requests": 2,
+          "requests_with_official_usage": 2,
+          "official_input_tokens": 31600,
+          "official_output_tokens": 73,
+          "official_total_tokens": 31673
+        },
+        "recent_requests": [
+          {
+            "request_id": "tap-1",
+            "started_at": "2026-10-09T02:43:18.066835+00:00",
+            "model": "gpt-6-astra",
+            "input_tokens_before_estimate": 17830,
+            "input_tokens_after_estimate": 17538,
+            "tokenizer_source": "tokenizer-proxy-o200k-est",
+            "context_complete": true,
+            "official_usage": {
+              "input_tokens": 15754,
+              "output_tokens": 59,
+              "total_tokens": 15813,
+              "cached_input_tokens": 0,
+              "reasoning_output_tokens": 0
+            },
+            "usage_source": "provider_sse_usage",
+            "status": "completed",
+            "compression": {
+              "status": "compressed",
+              "reason": "shorter_text",
+              "text_tokens_before_estimate": 10400,
+              "text_tokens_after_estimate": 10108,
+              "changed_fields": 6,
+              "changed_roles": [
+                "developer",
+                "user"
+              ],
+              "tokenizer_source": "tokenizer-proxy-o200k-est",
+              "latency_ms": 25.508,
+              "compression_model_calls": 0,
+              "cache_hits": 0,
+              "rejected_fields": 0
+            },
+            "http_status": 200,
+            "response_content_type": "",
+            "response_content_encoding": "identity",
+            "response_model": "gpt-6-astra",
+            "latency_ms": 3683.518
+          },
+          {
+            "request_id": "tap-2",
+            "started_at": "2026-10-09T02:43:21.783234+00:00",
+            "model": "gpt-6-astra",
+            "input_tokens_before_estimate": 18270,
+            "input_tokens_after_estimate": 17977,
+            "tokenizer_source": "tokenizer-proxy-o200k-est",
+            "context_complete": true,
+            "official_usage": {
+              "input_tokens": 15846,
+              "output_tokens": 14,
+              "total_tokens": 15860,
+              "cached_input_tokens": 15616,
+              "reasoning_output_tokens": 0
+            },
+            "usage_source": "provider_sse_usage",
+            "status": "completed",
+            "compression": {
+              "status": "compressed",
+              "reason": "shorter_text",
+              "text_tokens_before_estimate": 10408,
+              "text_tokens_after_estimate": 10115,
+              "changed_fields": 7,
+              "changed_roles": [
+                "assistant",
+                "developer",
+                "user"
+              ],
+              "tokenizer_source": "tokenizer-proxy-o200k-est",
+              "latency_ms": 24.728,
+              "compression_model_calls": 0,
+              "cache_hits": 0,
+              "rejected_fields": 0
+            },
+            "http_status": 200,
+            "response_content_type": "",
+            "response_content_encoding": "identity",
+            "response_model": "gpt-6-astra",
+            "latency_ms": 5645.562
+          }
+        ],
+        "recent_request_limit": 200
+      }
+    }
+  },
+  "completed_at": "2026-10-09T02:43:30.775806+00:00"
+}

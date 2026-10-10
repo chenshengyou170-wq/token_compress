@@ -1,0 +1,6 @@
+{
+  "python": "3.11.9",
+  "httpx": "0.28.1",
+  "tiktoken": "0.14.0",
+  "codex": "codex-cli 0.161.0"
+}

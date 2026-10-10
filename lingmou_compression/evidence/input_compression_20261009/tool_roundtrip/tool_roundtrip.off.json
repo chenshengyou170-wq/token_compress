@@ -1,0 +1,120 @@
+{
+  "label": "tool_roundtrip.off",
+  "returncode": 0,
+  "latency_s": 14.354,
+  "usage_source": "codex_exec_turn_completed",
+  "usage": {
+    "input_tokens": 32185,
+    "output_tokens": 73,
+    "total_tokens": 32258,
+    "cached_input_tokens": 25472,
+    "reasoning_output_tokens": 0
+  },
+  "upstream": "https://chatgpt.com/backend-api/codex",
+  "observed_models": [
+    "gpt-6-astra"
+  ],
+  "observed_request_count": 2,
+  "tap_stats": {
+    "running": false,
+    "request_count": 4,
+    "observed_request_count": 2,
+    "multimodal_request_count": 0,
+    "provider_count_attempt_count": 0,
+    "provider_count_success_count": 0,
+    "provider_count_error_count": 0,
+    "provider_breakdown_attempt_count": 0,
+    "provider_breakdown_success_count": 0,
+    "provider_breakdown_error_count": 0,
+    "sse_event_count": 0,
+    "error_count": 0,
+    "upstream_origin": "https://chatgpt.com",
+    "upstream_path": "/backend-api/codex",
+    "usage_ledger": {
+      "totals": {
+        "requests": 2,
+        "requests_with_official_usage": 2,
+        "official_input_tokens": 32185,
+        "official_output_tokens": 73,
+        "official_total_tokens": 32258
+      },
+      "recent_requests": [
+        {
+          "request_id": "tap-1",
+          "started_at": "2026-10-09T02:43:03.537951+00:00",
+          "model": "gpt-6-astra",
+          "input_tokens_before_estimate": 17862,
+          "input_tokens_after_estimate": 17862,
+          "tokenizer_source": "tokenizer-proxy-o200k-est",
+          "context_complete": true,
+          "official_usage": {
+            "input_tokens": 16046,
+            "output_tokens": 59,
+            "total_tokens": 16105,
+            "cached_input_tokens": 9600,
+            "reasoning_output_tokens": 0
+          },
+          "usage_source": "provider_sse_usage",
+          "status": "completed",
+          "http_status": 200,
+          "response_content_type": "",
+          "response_content_encoding": "identity",
+          "response_model": "gpt-6-astra",
+          "latency_ms": 4452.737
+        },
+        {
+          "request_id": "tap-2",
+          "started_at": "2026-10-09T02:43:07.828557+00:00",
+          "model": "gpt-6-astra",
+          "input_tokens_before_estimate": 18303,
+          "input_tokens_after_estimate": 18303,
+          "tokenizer_source": "tokenizer-proxy-o200k-est",
+          "context_complete": true,
+          "official_usage": {
+            "input_tokens": 16139,
+            "output_tokens": 14,
+            "total_tokens": 16153,
+            "cached_input_tokens": 15872,
+            "reasoning_output_tokens": 0
+          },
+          "usage_source": "provider_sse_usage",
+          "status": "completed",
+          "http_status": 200,
+          "response_content_type": "",
+          "response_content_encoding": "identity",
+          "response_model": "gpt-6-astra",
+          "latency_ms": 4182.372
+        }
+      ],
+      "recent_request_limit": 200
+    }
+  },
+  "completed_turn_count": 1,
+  "tool_item_types": [
+    "command_execution"
+  ],
+  "response": "CODEX_INPUT_COMPRESSION_OK_20261008",
+  "prompt_sha256": "e43fc4072aeb5ddd80102dbf4ff8e93b09074b1c0a0ee76bbbf2611f8131fa9c",
+  "raw_completion_events": [
+    {
+      "type": "turn.completed",
+      "usage": {
+        "input_tokens": 32185,
+        "cached_input_tokens": 25472,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 73,
+        "reasoning_output_tokens": 0
+      }
+    }
+  ],
+  "tool_items": [
+    {
+      "id": "item_1",
+      "type": "command_execution",
+      "command": "/usr/bin/zsh -lc \"printf '%s\\\\n' 'CODEX_INPUT_COMPRESSION_OK_20261008'\"",
+      "aggregated_output": "CODEX_INPUT_COMPRESSION_OK_20261008\n",
+      "exit_code": 0,
+      "status": "completed"
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "model": "k3",
+  "case": "chinese_bank",
+  "repeat": 0,
+  "mode": "hybrid",
+  "started_at": "2026-10-09T02:50:15.694387+00:00",
+  "status": "completed",
+  "prompt_sha256": "7d1012e407b8e127b55eee060d0654a23ebe6a26daddc9f9aea4610e786c5079",
+  "transport": "kimi_official_api",
+  "response_model": "k3",
+  "raw_usage": {
+    "prompt_tokens": 2145,
+    "completion_tokens": 182,
+    "total_tokens": 2327,
+    "completion_tokens_details": {
+      "reasoning_tokens": 4
+    }
+  },
+  "response_id": "chatcmpl-aMFVjRazUh5gIwK4nD9o0sHF",
+  "usage": {
+    "input_tokens": 2145,
+    "output_tokens": 182,
+    "total_tokens": 2327,
+    "cached_input_tokens": null,
+    "reasoning_output_tokens": 4
+  },
+  "response": "{\n  \"channel_success_cny\": 501000,\n  \"core_settled_cny\": 221000,\n  \"gap_cny\": 280000,\n  \"gap_payment_id\": \"P1002\",\n  \"anomaly_face_value_cny\": 399000,\n  \"held_payment_id\": \"P1004\",\n  \"held_amount_cny\": 510000,\n  \"duplicate_payment_id\": \"P1003\",\n  \"duplicate_charge_proven\": false,\n  \"replay_authorized\": false,\n  \"raw_upload_authorized\": false,\n  \"report_send_action\": \"review\",\n  \"generic_dlp_implemented\": false,\n  \"real_bank_system_connected\": false,\n  \"secret_directory\": \"secrets/\",\n  \"approved_domain_count\": 3\n}",
+  "checks": {
+    "channel_success_cny": true,
+    "core_settled_cny": true,
+    "gap_cny": true,
+    "gap_payment_id": true,
+    "anomaly_face_value_cny": true,
+    "held_payment_id": true,
+    "held_amount_cny": true,
+    "duplicate_payment_id": true,
+    "duplicate_charge_proven": true,
+    "replay_authorized": true,
+    "raw_upload_authorized": true,
+    "report_send_action": true,
+    "generic_dlp_implemented": true,
+    "real_bank_system_connected": true,
+    "secret_directory": true,
+    "approved_domain_count": true
+  },
+  "checks_passed": 16,
+  "checks_total": 16,
+  "quality_passed": true,
+  "latency_s": 6.011,
+  "request_usage": [
+    {
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T02:50:15.701399+00:00",
+      "model": "k3",
+      "input_tokens_before_estimate": 2472,
+      "input_tokens_after_estimate": 2472,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 2145,
+        "output_tokens": 182,
+        "total_tokens": 2327,
+        "cached_input_tokens": null,
+        "reasoning_output_tokens": 4
+      },
+      "usage_source": "provider_json_usage",
+      "status": "completed",
+      "compression": {
+        "status": "skipped",
+        "reason": "no_savings",
+        "text_tokens_before_estimate": 2372,
+        "text_tokens_after_estimate": 2372,
+        "changed_fields": 0,
+        "changed_roles": [],
+        "tokenizer_source": "tokenizer-proxy-o200k-est",
+        "latency_ms": 3.444,
+        "compression_model_calls": 0,
+        "cache_hits": 0,
+        "rejected_fields": 0
+      },
+      "http_status": 200,
+      "response_content_type": "application/json; charset=utf-8",
+      "response_content_encoding": "identity",
+      "response_model": "k3",
+      "latency_ms": 5799.546
+    }
+  ],
+  "compression_model_usage_excluded": true,
+  "compression_calls": []
+}

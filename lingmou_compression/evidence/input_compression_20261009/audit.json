@@ -1,0 +1,13 @@
+{
+  "main_attempts": 72,
+  "valid_single_request_runs": 71,
+  "quality_passed_runs": 64,
+  "main_retries_excluded": 1,
+  "per_request_usage_matches_client": true,
+  "aggregate_calculations_verified": true,
+  "real_tool_roundtrip_passed": true,
+  "frozen_implementation_matches": true,
+  "credentials_found": false,
+  "synthetic_tool_attempts": 8,
+  "synthetic_tool_completed": 7
+}

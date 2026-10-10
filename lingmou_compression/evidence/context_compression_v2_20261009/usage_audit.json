@@ -1,0 +1,390 @@
+[
+  {
+    "result": "host_demo.json",
+    "requests": 3,
+    "provider_usage_complete": false,
+    "matches_codex_turn_usage": null,
+    "checks": {},
+    "missing_usage_requests": [
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "result": "codex/reference_zh.off.json",
+    "requests": 1,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "status": true,
+      "approved": true,
+      "amount_cents": true,
+      "can_refund_without_approval": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "codex/code.off.json",
+    "requests": 1,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "allowed": true,
+      "function": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "codex/reread.extract.json",
+    "requests": 3,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "approved": true,
+      "audit_marker": false,
+      "source_tool_called": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "codex/table_en.structure.json",
+    "requests": 1,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "status": true,
+      "approved": true,
+      "amount_cents": true,
+      "currency": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "codex/table_en.off.json",
+    "requests": 2,
+    "provider_usage_complete": false,
+    "matches_codex_turn_usage": null,
+    "checks": {
+      "exact_fields": true,
+      "status": true,
+      "approved": true,
+      "amount_cents": true,
+      "currency": true
+    },
+    "missing_usage_requests": [
+      "tap-1"
+    ]
+  },
+  {
+    "result": "codex/reread.off.json",
+    "requests": 3,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "approved": true,
+      "audit_marker": false,
+      "source_tool_called": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "codex/code.extract.json",
+    "requests": 1,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "allowed": true,
+      "function": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "codex/reference_zh.extract.json",
+    "requests": 1,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "status": true,
+      "approved": true,
+      "amount_cents": true,
+      "can_refund_without_approval": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "codex/code.structure.json",
+    "requests": 1,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "allowed": true,
+      "function": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "codex/table_en.extract.json",
+    "requests": 1,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "status": true,
+      "approved": true,
+      "amount_cents": true,
+      "currency": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "codex/reference_zh.structure.json",
+    "requests": 1,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "status": true,
+      "approved": true,
+      "amount_cents": true,
+      "can_refund_without_approval": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "codex/reread.structure.json",
+    "requests": 3,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "approved": true,
+      "audit_marker": false,
+      "source_tool_called": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "llmlingua_codex/reference_zh.off.json",
+    "requests": 1,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "status": true,
+      "approved": true,
+      "amount_cents": true,
+      "can_refund_without_approval": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "llmlingua_codex/code.off.json",
+    "requests": 1,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "allowed": true,
+      "function": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "llmlingua_codex/reference_zh.llmlingua2.json",
+    "requests": 1,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "status": true,
+      "approved": true,
+      "amount_cents": true,
+      "can_refund_without_approval": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "llmlingua_codex/code.llmlingua2.json",
+    "requests": 1,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "allowed": true,
+      "function": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "semantic_codex/reference_zh.off.json",
+    "requests": 1,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "status": true,
+      "approved": true,
+      "amount_cents": true,
+      "can_refund_without_approval": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "semantic_codex/reference_zh.kimi.json",
+    "requests": 1,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "status": true,
+      "approved": true,
+      "amount_cents": true,
+      "can_refund_without_approval": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "semantic_codex/reference_zh.jev.json",
+    "requests": 1,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "status": true,
+      "approved": true,
+      "amount_cents": true,
+      "can_refund_without_approval": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "reread_protocol/result.json",
+    "requests": 3,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "approved": true,
+      "audit_marker": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "reread_final/reread.extract.json",
+    "requests": 4,
+    "provider_usage_complete": false,
+    "matches_codex_turn_usage": null,
+    "checks": {
+      "exact_fields": true,
+      "approved": true,
+      "audit_marker": true,
+      "source_tool_called": true
+    },
+    "missing_usage_requests": [
+      "tap-3"
+    ]
+  },
+  {
+    "result": "reread_final/reread.off.json",
+    "requests": 3,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "approved": true,
+      "audit_marker": true,
+      "source_tool_called": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "codex_final/reread.extract.json",
+    "requests": 3,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "approved": true,
+      "audit_marker": true,
+      "source_tool_called": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "codex_final/table_en.structure.json",
+    "requests": 1,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "status": true,
+      "approved": true,
+      "amount_cents": true,
+      "currency": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "codex_final/table_en.off.json",
+    "requests": 1,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "status": true,
+      "approved": true,
+      "amount_cents": true,
+      "currency": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "codex_final/reread.off.json",
+    "requests": 3,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "approved": true,
+      "audit_marker": true,
+      "source_tool_called": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "codex_final/table_en.extract.json",
+    "requests": 1,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "status": true,
+      "approved": true,
+      "amount_cents": true,
+      "currency": true
+    },
+    "missing_usage_requests": []
+  },
+  {
+    "result": "codex_final/reread.structure.json",
+    "requests": 3,
+    "provider_usage_complete": true,
+    "matches_codex_turn_usage": true,
+    "checks": {
+      "exact_fields": true,
+      "approved": true,
+      "audit_marker": true,
+      "source_tool_called": true
+    },
+    "missing_usage_requests": []
+  }
+]

@@ -1,0 +1,98 @@
+{
+  "model": "gpt-5.6-sol",
+  "case": "chinese_bank",
+  "repeat": 0,
+  "mode": "hybrid",
+  "started_at": "2026-10-09T03:00:59.332744+00:00",
+  "status": "completed",
+  "prompt_sha256": "7d1012e407b8e127b55eee060d0654a23ebe6a26daddc9f9aea4610e786c5079",
+  "transport": "codex",
+  "codex_version": "0.161.0",
+  "observed_models": [
+    "gpt-5.6-sol"
+  ],
+  "raw_completion_events": [
+    {
+      "type": "turn.completed",
+      "usage": {
+        "input_tokens": 16403,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 166,
+        "reasoning_output_tokens": 37
+      }
+    }
+  ],
+  "usage": {
+    "input_tokens": 16403,
+    "output_tokens": 166,
+    "total_tokens": 16569,
+    "cached_input_tokens": 0,
+    "reasoning_output_tokens": 37
+  },
+  "response": "{\"channel_success_cny\":501000,\"core_settled_cny\":221000,\"gap_cny\":280000,\"gap_payment_id\":\"P1002\",\"anomaly_face_value_cny\":399000,\"held_payment_id\":\"P1004\",\"held_amount_cny\":510000,\"duplicate_payment_id\":\"P1003\",\"duplicate_charge_proven\":false,\"replay_authorized\":false,\"raw_upload_authorized\":false,\"report_send_action\":\"review\",\"generic_dlp_implemented\":false,\"real_bank_system_connected\":false,\"secret_directory\":\"secrets/\",\"approved_domain_count\":3}",
+  "checks": {
+    "channel_success_cny": true,
+    "core_settled_cny": true,
+    "gap_cny": true,
+    "gap_payment_id": true,
+    "anomaly_face_value_cny": true,
+    "held_payment_id": true,
+    "held_amount_cny": true,
+    "duplicate_payment_id": true,
+    "duplicate_charge_proven": true,
+    "replay_authorized": true,
+    "raw_upload_authorized": true,
+    "report_send_action": true,
+    "generic_dlp_implemented": true,
+    "real_bank_system_connected": true,
+    "secret_directory": true,
+    "approved_domain_count": true
+  },
+  "checks_passed": 16,
+  "checks_total": 16,
+  "quality_passed": true,
+  "latency_s": 10.123,
+  "request_usage": [
+    {
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T03:01:01.957925+00:00",
+      "model": "gpt-5.6-sol",
+      "input_tokens_before_estimate": 18354,
+      "input_tokens_after_estimate": 18063,
+      "tokenizer_source": "tokenizer-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 16403,
+        "output_tokens": 166,
+        "total_tokens": 16569,
+        "cached_input_tokens": 0,
+        "reasoning_output_tokens": 37
+      },
+      "usage_source": "provider_sse_usage",
+      "status": "completed",
+      "compression": {
+        "status": "compressed",
+        "reason": "shorter_text",
+        "text_tokens_before_estimate": 12091,
+        "text_tokens_after_estimate": 11800,
+        "changed_fields": 5,
+        "changed_roles": [
+          "developer"
+        ],
+        "tokenizer_source": "tokenizer-est",
+        "latency_ms": 25.719,
+        "compression_model_calls": 0,
+        "cache_hits": 0,
+        "rejected_fields": 0
+      },
+      "http_status": 200,
+      "response_content_type": "",
+      "response_content_encoding": "identity",
+      "response_model": "gpt-5.6-sol",
+      "latency_ms": 4987.026
+    }
+  ],
+  "compression_model_usage_excluded": true,
+  "compression_calls": []
+}

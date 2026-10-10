@@ -1,0 +1,870 @@
+....................................................F.......FFF......... [ 68%]
+....................FFF...FFFFFFF                                        [100%]
+=================================== FAILURES ===================================
+______ test_relay_host_labels_full_attempts_and_strips_accounting_headers ______
+
+    def test_relay_host_labels_full_attempts_and_strips_accounting_headers():
+        import threading
+        from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+        import httpx
+        from codexscope.request_token_tap import RequestTokenTap
+        received, records = [], []
+        done = threading.Event()
+        class Upstream(BaseHTTPRequestHandler):
+            def log_message(self, *_): pass
+            def do_POST(self):
+                received.append((dict(self.headers), json.loads(self.rfile.read(int(self.headers['Content-Length'])))))
+                index = len(received)
+                payload = {'model': 'test', 'usage': {'input_tokens': 100 * index, 'output_tokens': 10}} if index < 3 else {'error': 'temporary_failure'}
+                raw = json.dumps(payload).encode()
+                self.send_response(200 if index < 3 else 503)
+                self.send_header('Content-Type', 'application/json')
+                self.send_header('Content-Length', str(len(raw)))
+                self.end_headers(); self.wfile.write(raw)
+>       upstream = ThreadingHTTPServer(('127.0.0.1', 0), Upstream)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_compression_v2.py:394: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/socketserver.py:452: in __init__
+    self.socket = socket.socket(self.address_family,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socket.socket fd=-1, family=0, type=0, proto=0>
+family = <AddressFamily.AF_INET: 2>, type = <SocketKind.SOCK_STREAM: 1>
+proto = 0, fileno = None
+
+    def __init__(self, family=-1, type=-1, proto=-1, fileno=None):
+        # For user code address family and type values are IntEnum members, but
+        # for the underlying _socket.socket they're just integers. The
+        # constructor of _socket.socket converts the given argument to an
+        # integer automatically.
+        if fileno is None:
+            if family == -1:
+                family = AF_INET
+            if type == -1:
+                type = SOCK_STREAM
+            if proto == -1:
+                proto = 0
+>       _socket.socket.__init__(self, family, type, proto, fileno)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/lib/python3.11/socket.py:232: PermissionError
+____ test_chat_relay_records_official_usage_once_with_estimates[False-True] ____
+
+stream = False, has_content_type = True
+
+    @pytest.mark.parametrize(('stream', 'has_content_type'), [(False, True), (True, True), (True, False)])
+    def test_chat_relay_records_official_usage_once_with_estimates(stream, has_content_type):
+        received, records = [], []
+        ready = threading.Event()
+        usage = {'prompt_tokens':100,'completion_tokens':20,'total_tokens':120}
+        class Upstream(BaseHTTPRequestHandler):
+            def log_message(self, *args): pass
+            def do_POST(self):
+                received.append(json.loads(self.rfile.read(int(self.headers['Content-Length']))))
+                data = {'object':'chat.completion.chunk' if stream else 'chat.completion',
+                        'model':'kimi-for-coding','usage':usage}
+                raw = ('data: '+json.dumps(data)+'\n\n') * 2 + 'data: [DONE]\n\n' if stream else json.dumps(data)
+                raw = raw.encode()
+                self.send_response(200)
+                if has_content_type:
+                    self.send_header('Content-Type','text/event-stream' if stream else 'application/json')
+                self.send_header('Content-Length',str(len(raw)))
+                self.end_headers(); self.wfile.write(raw)
+>       upstream = ThreadingHTTPServer(('127.0.0.1',0), Upstream)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_context_compression.py:118: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/socketserver.py:452: in __init__
+    self.socket = socket.socket(self.address_family,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socket.socket fd=-1, family=0, type=0, proto=0>
+family = <AddressFamily.AF_INET: 2>, type = <SocketKind.SOCK_STREAM: 1>
+proto = 0, fileno = None
+
+    def __init__(self, family=-1, type=-1, proto=-1, fileno=None):
+        # For user code address family and type values are IntEnum members, but
+        # for the underlying _socket.socket they're just integers. The
+        # constructor of _socket.socket converts the given argument to an
+        # integer automatically.
+        if fileno is None:
+            if family == -1:
+                family = AF_INET
+            if type == -1:
+                type = SOCK_STREAM
+            if proto == -1:
+                proto = 0
+>       _socket.socket.__init__(self, family, type, proto, fileno)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/lib/python3.11/socket.py:232: PermissionError
+____ test_chat_relay_records_official_usage_once_with_estimates[True-True] _____
+
+stream = True, has_content_type = True
+
+    @pytest.mark.parametrize(('stream', 'has_content_type'), [(False, True), (True, True), (True, False)])
+    def test_chat_relay_records_official_usage_once_with_estimates(stream, has_content_type):
+        received, records = [], []
+        ready = threading.Event()
+        usage = {'prompt_tokens':100,'completion_tokens':20,'total_tokens':120}
+        class Upstream(BaseHTTPRequestHandler):
+            def log_message(self, *args): pass
+            def do_POST(self):
+                received.append(json.loads(self.rfile.read(int(self.headers['Content-Length']))))
+                data = {'object':'chat.completion.chunk' if stream else 'chat.completion',
+                        'model':'kimi-for-coding','usage':usage}
+                raw = ('data: '+json.dumps(data)+'\n\n') * 2 + 'data: [DONE]\n\n' if stream else json.dumps(data)
+                raw = raw.encode()
+                self.send_response(200)
+                if has_content_type:
+                    self.send_header('Content-Type','text/event-stream' if stream else 'application/json')
+                self.send_header('Content-Length',str(len(raw)))
+                self.end_headers(); self.wfile.write(raw)
+>       upstream = ThreadingHTTPServer(('127.0.0.1',0), Upstream)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_context_compression.py:118: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/socketserver.py:452: in __init__
+    self.socket = socket.socket(self.address_family,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socket.socket fd=-1, family=0, type=0, proto=0>
+family = <AddressFamily.AF_INET: 2>, type = <SocketKind.SOCK_STREAM: 1>
+proto = 0, fileno = None
+
+    def __init__(self, family=-1, type=-1, proto=-1, fileno=None):
+        # For user code address family and type values are IntEnum members, but
+        # for the underlying _socket.socket they're just integers. The
+        # constructor of _socket.socket converts the given argument to an
+        # integer automatically.
+        if fileno is None:
+            if family == -1:
+                family = AF_INET
+            if type == -1:
+                type = SOCK_STREAM
+            if proto == -1:
+                proto = 0
+>       _socket.socket.__init__(self, family, type, proto, fileno)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/lib/python3.11/socket.py:232: PermissionError
+____ test_chat_relay_records_official_usage_once_with_estimates[True-False] ____
+
+stream = True, has_content_type = False
+
+    @pytest.mark.parametrize(('stream', 'has_content_type'), [(False, True), (True, True), (True, False)])
+    def test_chat_relay_records_official_usage_once_with_estimates(stream, has_content_type):
+        received, records = [], []
+        ready = threading.Event()
+        usage = {'prompt_tokens':100,'completion_tokens':20,'total_tokens':120}
+        class Upstream(BaseHTTPRequestHandler):
+            def log_message(self, *args): pass
+            def do_POST(self):
+                received.append(json.loads(self.rfile.read(int(self.headers['Content-Length']))))
+                data = {'object':'chat.completion.chunk' if stream else 'chat.completion',
+                        'model':'kimi-for-coding','usage':usage}
+                raw = ('data: '+json.dumps(data)+'\n\n') * 2 + 'data: [DONE]\n\n' if stream else json.dumps(data)
+                raw = raw.encode()
+                self.send_response(200)
+                if has_content_type:
+                    self.send_header('Content-Type','text/event-stream' if stream else 'application/json')
+                self.send_header('Content-Length',str(len(raw)))
+                self.end_headers(); self.wfile.write(raw)
+>       upstream = ThreadingHTTPServer(('127.0.0.1',0), Upstream)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_context_compression.py:118: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/socketserver.py:452: in __init__
+    self.socket = socket.socket(self.address_family,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socket.socket fd=-1, family=0, type=0, proto=0>
+family = <AddressFamily.AF_INET: 2>, type = <SocketKind.SOCK_STREAM: 1>
+proto = 0, fileno = None
+
+    def __init__(self, family=-1, type=-1, proto=-1, fileno=None):
+        # For user code address family and type values are IntEnum members, but
+        # for the underlying _socket.socket they're just integers. The
+        # constructor of _socket.socket converts the given argument to an
+        # integer automatically.
+        if fileno is None:
+            if family == -1:
+                family = AF_INET
+            if type == -1:
+                type = SOCK_STREAM
+            if proto == -1:
+                proto = 0
+>       _socket.socket.__init__(self, family, type, proto, fileno)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/lib/python3.11/socket.py:232: PermissionError
+______ test_request_token_tap_relays_bytes_and_emits_numeric_observations ______
+
+    def test_request_token_tap_relays_bytes_and_emits_numeric_observations():
+        upstream_requests: list[dict] = []
+    
+        class UpstreamHandler(BaseHTTPRequestHandler):
+            protocol_version = "HTTP/1.1"
+    
+            def log_message(self, _format: str, *_args: object) -> None:
+                return
+    
+            def do_POST(self) -> None:  # noqa: N802
+                length = int(self.headers.get("Content-Length") or 0)
+                body = self.rfile.read(length)
+                upstream_requests.append(
+                    {
+                        "path": self.path,
+                        "body": body,
+                        "authorization": self.headers.get("Authorization"),
+                        "accept_encoding": self.headers.get("Accept-Encoding"),
+                    }
+                )
+                events = (
+                    b"event: response.function_call_arguments.delta\n"
+                    b'data: {"type":"response.function_call_arguments.delta",'
+                    b'"item_id":"call-1","delta":"{\\"command\\":"}\n\n'
+                    b"event: response.function_call_arguments.delta\n"
+                    b'data: {"type":"response.function_call_arguments.delta",'
+                    b'"item_id":"call-1","delta":"\\"pytest\\"}"}\n\n'
+                )
+                self.send_response(200)
+                self.send_header("Content-Type", "text/event-stream")
+                self.send_header("Content-Length", str(len(events)))
+                self.end_headers()
+                self.wfile.write(events[:41])
+                self.wfile.flush()
+                self.wfile.write(events[41:])
+                self.wfile.flush()
+    
+>       upstream = ThreadingHTTPServer(("127.0.0.1", 0), UpstreamHandler)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_request_token_tap.py:229: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/socketserver.py:452: in __init__
+    self.socket = socket.socket(self.address_family,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socket.socket fd=-1, family=0, type=0, proto=0>
+family = <AddressFamily.AF_INET: 2>, type = <SocketKind.SOCK_STREAM: 1>
+proto = 0, fileno = None
+
+    def __init__(self, family=-1, type=-1, proto=-1, fileno=None):
+        # For user code address family and type values are IntEnum members, but
+        # for the underlying _socket.socket they're just integers. The
+        # constructor of _socket.socket converts the given argument to an
+        # integer automatically.
+        if fileno is None:
+            if family == -1:
+                family = AF_INET
+            if type == -1:
+                type = SOCK_STREAM
+            if proto == -1:
+                proto = 0
+>       _socket.socket.__init__(self, family, type, proto, fileno)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/lib/python3.11/socket.py:232: PermissionError
+______ test_request_token_tap_upgrades_pdf_input_to_provider_exact_count _______
+
+    def test_request_token_tap_upgrades_pdf_input_to_provider_exact_count():
+        upstream_requests: list[dict] = []
+    
+        class UpstreamHandler(BaseHTTPRequestHandler):
+            protocol_version = "HTTP/1.1"
+    
+            def log_message(self, _format: str, *_args: object) -> None:
+                return
+    
+            def do_POST(self) -> None:  # noqa: N802
+                length = int(self.headers.get("Content-Length") or 0)
+                raw = self.rfile.read(length)
+                payload = json.loads(raw)
+                upstream_requests.append(
+                    {
+                        "path": self.path,
+                        "payload": payload,
+                        "authorization": self.headers.get("Authorization"),
+                    }
+                )
+                if self.path == "/v1/responses/input_tokens":
+                    serialized = json.dumps(payload)
+                    count = 1_200 if "input_file" in serialized else 200
+                    response_body = json.dumps(
+                        {
+                            "object": "response.input_tokens",
+                            "input_tokens": count,
+                        }
+                    ).encode()
+                else:
+                    response_body = b'{"id":"resp-test","status":"completed"}'
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(response_body)))
+                self.end_headers()
+                self.wfile.write(response_body)
+    
+>       upstream = ThreadingHTTPServer(("127.0.0.1", 0), UpstreamHandler)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_request_token_tap.py:357: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/socketserver.py:452: in __init__
+    self.socket = socket.socket(self.address_family,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socket.socket fd=-1, family=0, type=0, proto=0>
+family = <AddressFamily.AF_INET: 2>, type = <SocketKind.SOCK_STREAM: 1>
+proto = 0, fileno = None
+
+    def __init__(self, family=-1, type=-1, proto=-1, fileno=None):
+        # For user code address family and type values are IntEnum members, but
+        # for the underlying _socket.socket they're just integers. The
+        # constructor of _socket.socket converts the given argument to an
+        # integer automatically.
+        if fileno is None:
+            if family == -1:
+                family = AF_INET
+            if type == -1:
+                type = SOCK_STREAM
+            if proto == -1:
+                proto = 0
+>       _socket.socket.__init__(self, family, type, proto, fileno)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/lib/python3.11/socket.py:232: PermissionError
+__________ test_pdf_provider_count_failure_is_fail_open_and_reported ___________
+
+    def test_pdf_provider_count_failure_is_fail_open_and_reported():
+        class UpstreamHandler(BaseHTTPRequestHandler):
+            protocol_version = "HTTP/1.1"
+    
+            def log_message(self, _format: str, *_args: object) -> None:
+                return
+    
+            def do_POST(self) -> None:  # noqa: N802
+                length = int(self.headers.get("Content-Length") or 0)
+                self.rfile.read(length)
+                if self.path == "/v1/responses/input_tokens":
+                    response_body = b'{"error":"unsupported"}'
+                    self.send_response(404)
+                else:
+                    response_body = b'{"id":"resp-test","status":"completed"}'
+                    self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(response_body)))
+                self.end_headers()
+                self.wfile.write(response_body)
+    
+>       upstream = ThreadingHTTPServer(("127.0.0.1", 0), UpstreamHandler)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_request_token_tap.py:496: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/socketserver.py:452: in __init__
+    self.socket = socket.socket(self.address_family,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socket.socket fd=-1, family=0, type=0, proto=0>
+family = <AddressFamily.AF_INET: 2>, type = <SocketKind.SOCK_STREAM: 1>
+proto = 0, fileno = None
+
+    def __init__(self, family=-1, type=-1, proto=-1, fileno=None):
+        # For user code address family and type values are IntEnum members, but
+        # for the underlying _socket.socket they're just integers. The
+        # constructor of _socket.socket converts the given argument to an
+        # integer automatically.
+        if fileno is None:
+            if family == -1:
+                family = AF_INET
+            if type == -1:
+                type = SOCK_STREAM
+            if proto == -1:
+                proto = 0
+>       _socket.socket.__init__(self, family, type, proto, fileno)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/lib/python3.11/socket.py:232: PermissionError
+_ test_input_compression_is_applied_before_observation_and_forwarding[off-/v1/responses--False] _
+
+mode = 'off', endpoint = '/v1/responses', encoding = '', should_change = False
+
+    @pytest.mark.parametrize('mode,endpoint,encoding,should_change', [
+        ('off', '/v1/responses', '', False),
+        ('caveman', '/v1/responses', '', True),
+        ('caveman', '/v1/responses/compact', '', False),
+        ('caveman', '/v1/chat/completions', '', False),
+        ('caveman', '/v1/responses', 'gzip', False),
+        ('broken', '/v1/responses', '', False),
+        ('signed', '/v1/responses', '', False),
+    ])
+    def test_input_compression_is_applied_before_observation_and_forwarding(mode, endpoint, encoding, should_change):
+        import gzip
+        from urllib.parse import urlsplit
+        from codexscope.input_compression import ResponsesInputCompressor
+    
+        observed = []
+        estimates = []
+        reply = b'data: {"type":"response.completed"}\n\n'
+    
+        class Upstream(BaseHTTPRequestHandler):
+            def log_message(self, *_args):
+                pass
+    
+            def do_POST(self):
+                length = int(self.headers['Content-Length'])
+                body = self.rfile.read(length)
+                observed.append((body, dict(self.headers)))
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/event-stream')
+                self.send_header('Content-Length', str(len(reply)))
+                self.end_headers()
+                self.wfile.write(reply)
+    
+>       server = ThreadingHTTPServer(('127.0.0.1', 0), Upstream)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_request_token_tap.py:614: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/socketserver.py:452: in __init__
+    self.socket = socket.socket(self.address_family,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socket.socket fd=-1, family=0, type=0, proto=0>
+family = <AddressFamily.AF_INET: 2>, type = <SocketKind.SOCK_STREAM: 1>
+proto = 0, fileno = None
+
+    def __init__(self, family=-1, type=-1, proto=-1, fileno=None):
+        # For user code address family and type values are IntEnum members, but
+        # for the underlying _socket.socket they're just integers. The
+        # constructor of _socket.socket converts the given argument to an
+        # integer automatically.
+        if fileno is None:
+            if family == -1:
+                family = AF_INET
+            if type == -1:
+                type = SOCK_STREAM
+            if proto == -1:
+                proto = 0
+>       _socket.socket.__init__(self, family, type, proto, fileno)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/lib/python3.11/socket.py:232: PermissionError
+_ test_input_compression_is_applied_before_observation_and_forwarding[caveman-/v1/responses--True] _
+
+mode = 'caveman', endpoint = '/v1/responses', encoding = ''
+should_change = True
+
+    @pytest.mark.parametrize('mode,endpoint,encoding,should_change', [
+        ('off', '/v1/responses', '', False),
+        ('caveman', '/v1/responses', '', True),
+        ('caveman', '/v1/responses/compact', '', False),
+        ('caveman', '/v1/chat/completions', '', False),
+        ('caveman', '/v1/responses', 'gzip', False),
+        ('broken', '/v1/responses', '', False),
+        ('signed', '/v1/responses', '', False),
+    ])
+    def test_input_compression_is_applied_before_observation_and_forwarding(mode, endpoint, encoding, should_change):
+        import gzip
+        from urllib.parse import urlsplit
+        from codexscope.input_compression import ResponsesInputCompressor
+    
+        observed = []
+        estimates = []
+        reply = b'data: {"type":"response.completed"}\n\n'
+    
+        class Upstream(BaseHTTPRequestHandler):
+            def log_message(self, *_args):
+                pass
+    
+            def do_POST(self):
+                length = int(self.headers['Content-Length'])
+                body = self.rfile.read(length)
+                observed.append((body, dict(self.headers)))
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/event-stream')
+                self.send_header('Content-Length', str(len(reply)))
+                self.end_headers()
+                self.wfile.write(reply)
+    
+>       server = ThreadingHTTPServer(('127.0.0.1', 0), Upstream)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_request_token_tap.py:614: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/socketserver.py:452: in __init__
+    self.socket = socket.socket(self.address_family,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socket.socket fd=-1, family=0, type=0, proto=0>
+family = <AddressFamily.AF_INET: 2>, type = <SocketKind.SOCK_STREAM: 1>
+proto = 0, fileno = None
+
+    def __init__(self, family=-1, type=-1, proto=-1, fileno=None):
+        # For user code address family and type values are IntEnum members, but
+        # for the underlying _socket.socket they're just integers. The
+        # constructor of _socket.socket converts the given argument to an
+        # integer automatically.
+        if fileno is None:
+            if family == -1:
+                family = AF_INET
+            if type == -1:
+                type = SOCK_STREAM
+            if proto == -1:
+                proto = 0
+>       _socket.socket.__init__(self, family, type, proto, fileno)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/lib/python3.11/socket.py:232: PermissionError
+_ test_input_compression_is_applied_before_observation_and_forwarding[caveman-/v1/responses/compact--False] _
+
+mode = 'caveman', endpoint = '/v1/responses/compact', encoding = ''
+should_change = False
+
+    @pytest.mark.parametrize('mode,endpoint,encoding,should_change', [
+        ('off', '/v1/responses', '', False),
+        ('caveman', '/v1/responses', '', True),
+        ('caveman', '/v1/responses/compact', '', False),
+        ('caveman', '/v1/chat/completions', '', False),
+        ('caveman', '/v1/responses', 'gzip', False),
+        ('broken', '/v1/responses', '', False),
+        ('signed', '/v1/responses', '', False),
+    ])
+    def test_input_compression_is_applied_before_observation_and_forwarding(mode, endpoint, encoding, should_change):
+        import gzip
+        from urllib.parse import urlsplit
+        from codexscope.input_compression import ResponsesInputCompressor
+    
+        observed = []
+        estimates = []
+        reply = b'data: {"type":"response.completed"}\n\n'
+    
+        class Upstream(BaseHTTPRequestHandler):
+            def log_message(self, *_args):
+                pass
+    
+            def do_POST(self):
+                length = int(self.headers['Content-Length'])
+                body = self.rfile.read(length)
+                observed.append((body, dict(self.headers)))
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/event-stream')
+                self.send_header('Content-Length', str(len(reply)))
+                self.end_headers()
+                self.wfile.write(reply)
+    
+>       server = ThreadingHTTPServer(('127.0.0.1', 0), Upstream)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_request_token_tap.py:614: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/socketserver.py:452: in __init__
+    self.socket = socket.socket(self.address_family,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socket.socket fd=-1, family=0, type=0, proto=0>
+family = <AddressFamily.AF_INET: 2>, type = <SocketKind.SOCK_STREAM: 1>
+proto = 0, fileno = None
+
+    def __init__(self, family=-1, type=-1, proto=-1, fileno=None):
+        # For user code address family and type values are IntEnum members, but
+        # for the underlying _socket.socket they're just integers. The
+        # constructor of _socket.socket converts the given argument to an
+        # integer automatically.
+        if fileno is None:
+            if family == -1:
+                family = AF_INET
+            if type == -1:
+                type = SOCK_STREAM
+            if proto == -1:
+                proto = 0
+>       _socket.socket.__init__(self, family, type, proto, fileno)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/lib/python3.11/socket.py:232: PermissionError
+_ test_input_compression_is_applied_before_observation_and_forwarding[caveman-/v1/chat/completions--False] _
+
+mode = 'caveman', endpoint = '/v1/chat/completions', encoding = ''
+should_change = False
+
+    @pytest.mark.parametrize('mode,endpoint,encoding,should_change', [
+        ('off', '/v1/responses', '', False),
+        ('caveman', '/v1/responses', '', True),
+        ('caveman', '/v1/responses/compact', '', False),
+        ('caveman', '/v1/chat/completions', '', False),
+        ('caveman', '/v1/responses', 'gzip', False),
+        ('broken', '/v1/responses', '', False),
+        ('signed', '/v1/responses', '', False),
+    ])
+    def test_input_compression_is_applied_before_observation_and_forwarding(mode, endpoint, encoding, should_change):
+        import gzip
+        from urllib.parse import urlsplit
+        from codexscope.input_compression import ResponsesInputCompressor
+    
+        observed = []
+        estimates = []
+        reply = b'data: {"type":"response.completed"}\n\n'
+    
+        class Upstream(BaseHTTPRequestHandler):
+            def log_message(self, *_args):
+                pass
+    
+            def do_POST(self):
+                length = int(self.headers['Content-Length'])
+                body = self.rfile.read(length)
+                observed.append((body, dict(self.headers)))
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/event-stream')
+                self.send_header('Content-Length', str(len(reply)))
+                self.end_headers()
+                self.wfile.write(reply)
+    
+>       server = ThreadingHTTPServer(('127.0.0.1', 0), Upstream)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_request_token_tap.py:614: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/socketserver.py:452: in __init__
+    self.socket = socket.socket(self.address_family,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socket.socket fd=-1, family=0, type=0, proto=0>
+family = <AddressFamily.AF_INET: 2>, type = <SocketKind.SOCK_STREAM: 1>
+proto = 0, fileno = None
+
+    def __init__(self, family=-1, type=-1, proto=-1, fileno=None):
+        # For user code address family and type values are IntEnum members, but
+        # for the underlying _socket.socket they're just integers. The
+        # constructor of _socket.socket converts the given argument to an
+        # integer automatically.
+        if fileno is None:
+            if family == -1:
+                family = AF_INET
+            if type == -1:
+                type = SOCK_STREAM
+            if proto == -1:
+                proto = 0
+>       _socket.socket.__init__(self, family, type, proto, fileno)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/lib/python3.11/socket.py:232: PermissionError
+_ test_input_compression_is_applied_before_observation_and_forwarding[caveman-/v1/responses-gzip-False] _
+
+mode = 'caveman', endpoint = '/v1/responses', encoding = 'gzip'
+should_change = False
+
+    @pytest.mark.parametrize('mode,endpoint,encoding,should_change', [
+        ('off', '/v1/responses', '', False),
+        ('caveman', '/v1/responses', '', True),
+        ('caveman', '/v1/responses/compact', '', False),
+        ('caveman', '/v1/chat/completions', '', False),
+        ('caveman', '/v1/responses', 'gzip', False),
+        ('broken', '/v1/responses', '', False),
+        ('signed', '/v1/responses', '', False),
+    ])
+    def test_input_compression_is_applied_before_observation_and_forwarding(mode, endpoint, encoding, should_change):
+        import gzip
+        from urllib.parse import urlsplit
+        from codexscope.input_compression import ResponsesInputCompressor
+    
+        observed = []
+        estimates = []
+        reply = b'data: {"type":"response.completed"}\n\n'
+    
+        class Upstream(BaseHTTPRequestHandler):
+            def log_message(self, *_args):
+                pass
+    
+            def do_POST(self):
+                length = int(self.headers['Content-Length'])
+                body = self.rfile.read(length)
+                observed.append((body, dict(self.headers)))
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/event-stream')
+                self.send_header('Content-Length', str(len(reply)))
+                self.end_headers()
+                self.wfile.write(reply)
+    
+>       server = ThreadingHTTPServer(('127.0.0.1', 0), Upstream)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_request_token_tap.py:614: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/socketserver.py:452: in __init__
+    self.socket = socket.socket(self.address_family,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socket.socket fd=-1, family=0, type=0, proto=0>
+family = <AddressFamily.AF_INET: 2>, type = <SocketKind.SOCK_STREAM: 1>
+proto = 0, fileno = None
+
+    def __init__(self, family=-1, type=-1, proto=-1, fileno=None):
+        # For user code address family and type values are IntEnum members, but
+        # for the underlying _socket.socket they're just integers. The
+        # constructor of _socket.socket converts the given argument to an
+        # integer automatically.
+        if fileno is None:
+            if family == -1:
+                family = AF_INET
+            if type == -1:
+                type = SOCK_STREAM
+            if proto == -1:
+                proto = 0
+>       _socket.socket.__init__(self, family, type, proto, fileno)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/lib/python3.11/socket.py:232: PermissionError
+_ test_input_compression_is_applied_before_observation_and_forwarding[broken-/v1/responses--False] _
+
+mode = 'broken', endpoint = '/v1/responses', encoding = ''
+should_change = False
+
+    @pytest.mark.parametrize('mode,endpoint,encoding,should_change', [
+        ('off', '/v1/responses', '', False),
+        ('caveman', '/v1/responses', '', True),
+        ('caveman', '/v1/responses/compact', '', False),
+        ('caveman', '/v1/chat/completions', '', False),
+        ('caveman', '/v1/responses', 'gzip', False),
+        ('broken', '/v1/responses', '', False),
+        ('signed', '/v1/responses', '', False),
+    ])
+    def test_input_compression_is_applied_before_observation_and_forwarding(mode, endpoint, encoding, should_change):
+        import gzip
+        from urllib.parse import urlsplit
+        from codexscope.input_compression import ResponsesInputCompressor
+    
+        observed = []
+        estimates = []
+        reply = b'data: {"type":"response.completed"}\n\n'
+    
+        class Upstream(BaseHTTPRequestHandler):
+            def log_message(self, *_args):
+                pass
+    
+            def do_POST(self):
+                length = int(self.headers['Content-Length'])
+                body = self.rfile.read(length)
+                observed.append((body, dict(self.headers)))
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/event-stream')
+                self.send_header('Content-Length', str(len(reply)))
+                self.end_headers()
+                self.wfile.write(reply)
+    
+>       server = ThreadingHTTPServer(('127.0.0.1', 0), Upstream)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_request_token_tap.py:614: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/socketserver.py:452: in __init__
+    self.socket = socket.socket(self.address_family,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socket.socket fd=-1, family=0, type=0, proto=0>
+family = <AddressFamily.AF_INET: 2>, type = <SocketKind.SOCK_STREAM: 1>
+proto = 0, fileno = None
+
+    def __init__(self, family=-1, type=-1, proto=-1, fileno=None):
+        # For user code address family and type values are IntEnum members, but
+        # for the underlying _socket.socket they're just integers. The
+        # constructor of _socket.socket converts the given argument to an
+        # integer automatically.
+        if fileno is None:
+            if family == -1:
+                family = AF_INET
+            if type == -1:
+                type = SOCK_STREAM
+            if proto == -1:
+                proto = 0
+>       _socket.socket.__init__(self, family, type, proto, fileno)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/lib/python3.11/socket.py:232: PermissionError
+_ test_input_compression_is_applied_before_observation_and_forwarding[signed-/v1/responses--False] _
+
+mode = 'signed', endpoint = '/v1/responses', encoding = ''
+should_change = False
+
+    @pytest.mark.parametrize('mode,endpoint,encoding,should_change', [
+        ('off', '/v1/responses', '', False),
+        ('caveman', '/v1/responses', '', True),
+        ('caveman', '/v1/responses/compact', '', False),
+        ('caveman', '/v1/chat/completions', '', False),
+        ('caveman', '/v1/responses', 'gzip', False),
+        ('broken', '/v1/responses', '', False),
+        ('signed', '/v1/responses', '', False),
+    ])
+    def test_input_compression_is_applied_before_observation_and_forwarding(mode, endpoint, encoding, should_change):
+        import gzip
+        from urllib.parse import urlsplit
+        from codexscope.input_compression import ResponsesInputCompressor
+    
+        observed = []
+        estimates = []
+        reply = b'data: {"type":"response.completed"}\n\n'
+    
+        class Upstream(BaseHTTPRequestHandler):
+            def log_message(self, *_args):
+                pass
+    
+            def do_POST(self):
+                length = int(self.headers['Content-Length'])
+                body = self.rfile.read(length)
+                observed.append((body, dict(self.headers)))
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/event-stream')
+                self.send_header('Content-Length', str(len(reply)))
+                self.end_headers()
+                self.wfile.write(reply)
+    
+>       server = ThreadingHTTPServer(('127.0.0.1', 0), Upstream)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_request_token_tap.py:614: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/socketserver.py:452: in __init__
+    self.socket = socket.socket(self.address_family,
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socket.socket fd=-1, family=0, type=0, proto=0>
+family = <AddressFamily.AF_INET: 2>, type = <SocketKind.SOCK_STREAM: 1>
+proto = 0, fileno = None
+
+    def __init__(self, family=-1, type=-1, proto=-1, fileno=None):
+        # For user code address family and type values are IntEnum members, but
+        # for the underlying _socket.socket they're just integers. The
+        # constructor of _socket.socket converts the given argument to an
+        # integer automatically.
+        if fileno is None:
+            if family == -1:
+                family = AF_INET
+            if type == -1:
+                type = SOCK_STREAM
+            if proto == -1:
+                proto = 0
+>       _socket.socket.__init__(self, family, type, proto, fileno)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/lib/python3.11/socket.py:232: PermissionError
+=========================== short test summary info ============================
+FAILED tests/test_compression_v2.py::test_relay_host_labels_full_attempts_and_strips_accounting_headers
+FAILED tests/test_context_compression.py::test_chat_relay_records_official_usage_once_with_estimates[False-True]
+FAILED tests/test_context_compression.py::test_chat_relay_records_official_usage_once_with_estimates[True-True]
+FAILED tests/test_context_compression.py::test_chat_relay_records_official_usage_once_with_estimates[True-False]
+FAILED tests/test_request_token_tap.py::test_request_token_tap_relays_bytes_and_emits_numeric_observations
+FAILED tests/test_request_token_tap.py::test_request_token_tap_upgrades_pdf_input_to_provider_exact_count
+FAILED tests/test_request_token_tap.py::test_pdf_provider_count_failure_is_fail_open_and_reported
+FAILED tests/test_request_token_tap.py::test_input_compression_is_applied_before_observation_and_forwarding[off-/v1/responses--False]
+FAILED tests/test_request_token_tap.py::test_input_compression_is_applied_before_observation_and_forwarding[caveman-/v1/responses--True]
+FAILED tests/test_request_token_tap.py::test_input_compression_is_applied_before_observation_and_forwarding[caveman-/v1/responses/compact--False]
+FAILED tests/test_request_token_tap.py::test_input_compression_is_applied_before_observation_and_forwarding[caveman-/v1/chat/completions--False]
+FAILED tests/test_request_token_tap.py::test_input_compression_is_applied_before_observation_and_forwarding[caveman-/v1/responses-gzip-False]
+FAILED tests/test_request_token_tap.py::test_input_compression_is_applied_before_observation_and_forwarding[broken-/v1/responses--False]
+FAILED tests/test_request_token_tap.py::test_input_compression_is_applied_before_observation_and_forwarding[signed-/v1/responses--False]
+14 failed, 91 passed, 1 deselected in 1.38s

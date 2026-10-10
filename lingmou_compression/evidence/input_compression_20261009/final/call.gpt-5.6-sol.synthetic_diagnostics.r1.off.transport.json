@@ -1,0 +1,85 @@
+{
+  "label": "call.gpt-5.6-sol.synthetic_diagnostics.r1.off.transport",
+  "returncode": 0,
+  "latency_s": 9.476,
+  "usage_source": "codex_exec_turn_completed",
+  "usage": {
+    "input_tokens": 16092,
+    "output_tokens": 105,
+    "total_tokens": 16197,
+    "cached_input_tokens": 4352,
+    "reasoning_output_tokens": 43
+  },
+  "upstream": "https://chatgpt.com/backend-api/codex",
+  "observed_models": [
+    "gpt-5.6-sol"
+  ],
+  "observed_request_count": 1,
+  "tap_stats": {
+    "running": false,
+    "request_count": 3,
+    "observed_request_count": 1,
+    "multimodal_request_count": 0,
+    "provider_count_attempt_count": 0,
+    "provider_count_success_count": 0,
+    "provider_count_error_count": 0,
+    "provider_breakdown_attempt_count": 0,
+    "provider_breakdown_success_count": 0,
+    "provider_breakdown_error_count": 0,
+    "sse_event_count": 0,
+    "error_count": 0,
+    "upstream_origin": "https://chatgpt.com",
+    "upstream_path": "/backend-api/codex",
+    "usage_ledger": {
+      "totals": {
+        "requests": 1,
+        "requests_with_official_usage": 1,
+        "official_input_tokens": 16092,
+        "official_output_tokens": 105,
+        "official_total_tokens": 16197
+      },
+      "recent_requests": [
+        {
+          "request_id": "tap-1",
+          "started_at": "2026-10-09T03:03:37.593292+00:00",
+          "model": "gpt-5.6-sol",
+          "input_tokens_before_estimate": 17693,
+          "input_tokens_after_estimate": 17693,
+          "tokenizer_source": "tokenizer-est",
+          "context_complete": true,
+          "official_usage": {
+            "input_tokens": 16092,
+            "output_tokens": 105,
+            "total_tokens": 16197,
+            "cached_input_tokens": 4352,
+            "reasoning_output_tokens": 43
+          },
+          "usage_source": "provider_sse_usage",
+          "status": "completed",
+          "http_status": 200,
+          "response_content_type": "",
+          "response_content_encoding": "identity",
+          "response_model": "gpt-5.6-sol",
+          "latency_ms": 4236.391
+        }
+      ],
+      "recent_request_limit": 200
+    }
+  },
+  "completed_turn_count": 1,
+  "tool_item_types": [],
+  "response": "{\"batch_count\":24,\"invalid_batch\":13,\"accepted_records\":2587,\"retry_authorized\":false,\"retry_executed\":false,\"first_checksum\":\"C01X\",\"last_checksum\":\"C24X\",\"remediation\":\"repair --batch 13 --dry-run\"}",
+  "prompt_sha256": "37f7859a9284b4ddf64269096a7658b45f49848be33691009b9b4fa1542c35d4",
+  "raw_completion_events": [
+    {
+      "type": "turn.completed",
+      "usage": {
+        "input_tokens": 16092,
+        "cached_input_tokens": 4352,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 105,
+        "reasoning_output_tokens": 43
+      }
+    }
+  ]
+}

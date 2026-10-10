@@ -1,0 +1,146 @@
+{
+  "provider": "codex_chatgpt",
+  "mode": "off",
+  "model": "gpt-6-astra",
+  "returncode": 0,
+  "error": null,
+  "latency_s": 19.578,
+  "response": "{\"approved\":false,\"audit_marker\":\"AUDIT-Z83\"}",
+  "requests": [
+    {
+      "task_id": "reread",
+      "purpose": "generation",
+      "attempt": 1,
+      "accounting_labelled": true,
+      "task_source": "codex_turn_metadata",
+      "purpose_source": "request",
+      "attempt_source": "repeated_body_inference",
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T07:33:32.237981+00:00",
+      "model": "gpt-6-astra",
+      "input_tokens_before_estimate": 21758,
+      "input_tokens_after_estimate": 21758,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 19982,
+        "output_tokens": 76,
+        "total_tokens": 20058,
+        "cached_input_tokens": 8960,
+        "reasoning_output_tokens": 0
+      },
+      "usage_source": "provider_sse_usage",
+      "status": "completed",
+      "http_status": 200,
+      "response_content_type": "",
+      "response_content_encoding": "identity",
+      "response_model": "gpt-6-astra",
+      "latency_ms": 4758.254
+    },
+    {
+      "task_id": "reread",
+      "purpose": "generation",
+      "attempt": 1,
+      "accounting_labelled": true,
+      "task_source": "codex_turn_metadata",
+      "purpose_source": "request",
+      "attempt_source": "repeated_body_inference",
+      "request_id": "tap-2",
+      "started_at": "2026-10-09T07:33:36.816346+00:00",
+      "model": "gpt-6-astra",
+      "input_tokens_before_estimate": 22330,
+      "input_tokens_after_estimate": 22330,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 20207,
+        "output_tokens": 78,
+        "total_tokens": 20285,
+        "cached_input_tokens": 19840,
+        "reasoning_output_tokens": 0
+      },
+      "usage_source": "provider_sse_usage",
+      "status": "completed",
+      "http_status": 200,
+      "response_content_type": "",
+      "response_content_encoding": "identity",
+      "response_model": "gpt-6-astra",
+      "latency_ms": 4168.368
+    },
+    {
+      "task_id": "reread",
+      "purpose": "generation",
+      "attempt": 1,
+      "accounting_labelled": true,
+      "task_source": "codex_turn_metadata",
+      "purpose_source": "request",
+      "attempt_source": "repeated_body_inference",
+      "request_id": "tap-3",
+      "started_at": "2026-10-09T07:33:40.997697+00:00",
+      "model": "gpt-6-astra",
+      "input_tokens_before_estimate": 22891,
+      "input_tokens_after_estimate": 22891,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 20510,
+        "output_tokens": 17,
+        "total_tokens": 20527,
+        "cached_input_tokens": 19968,
+        "reasoning_output_tokens": 0
+      },
+      "usage_source": "provider_sse_usage",
+      "status": "completed",
+      "http_status": 200,
+      "response_content_type": "",
+      "response_content_encoding": "identity",
+      "response_model": "gpt-6-astra",
+      "latency_ms": 3391.622
+    }
+  ],
+  "compression_observations": [],
+  "tool_items": [
+    {
+      "id": "item_1",
+      "type": "mcp_tool_call",
+      "server": "lingmou_sources",
+      "tool": "lingmou_source_read",
+      "arguments": {
+        "source_id": "139aa7f95a0fdc063ef5c8d2285a3d4c11b07aef06ecc56515c53182a609ad54",
+        "start_line": 38,
+        "end_line": 38
+      },
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\n  \"source_id\": \"139aa7f95a0fdc063ef5c8d2285a3d4c11b07aef06ecc56515c53182a609ad54\",\n  \"start_line\": 38,\n  \"end_line\": 38,\n  \"total_lines\": 38,\n  \"text\": \"Original audit marker: \\\"AUDIT-Z83\\\".\\n\",\n  \"next_line\": null\n}"
+          }
+        ],
+        "structured_content": {
+          "source_id": "139aa7f95a0fdc063ef5c8d2285a3d4c11b07aef06ecc56515c53182a609ad54",
+          "start_line": 38,
+          "end_line": 38,
+          "total_lines": 38,
+          "text": "Original audit marker: \"AUDIT-Z83\".\n",
+          "next_line": null
+        }
+      },
+      "error": null,
+      "status": "completed"
+    }
+  ],
+  "codex_usage": {
+    "input_tokens": 60699,
+    "output_tokens": 171,
+    "total_tokens": 60870,
+    "cached_input_tokens": 48768,
+    "reasoning_output_tokens": 0
+  },
+  "prompt_sha256": "6eed82880c9a32af7eab1ed0ebf191aaa1319da0900c0ba0cde627c93ad5da45",
+  "checks": {
+    "exact_fields": true,
+    "approved": true,
+    "audit_marker": true
+  }
+}

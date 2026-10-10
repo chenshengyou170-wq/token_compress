@@ -1,0 +1,91 @@
+{
+  "model": "gpt-6-astra",
+  "case": "synthetic_diagnostics",
+  "repeat": 0,
+  "mode": "hybrid",
+  "started_at": "2026-10-09T02:55:54.834322+00:00",
+  "status": "completed",
+  "prompt_sha256": "37f7859a9284b4ddf64269096a7658b45f49848be33691009b9b4fa1542c35d4",
+  "transport": "codex",
+  "codex_version": "0.161.0",
+  "observed_models": [
+    "gpt-6-astra"
+  ],
+  "raw_completion_events": [
+    {
+      "type": "turn.completed",
+      "usage": {
+        "input_tokens": 16662,
+        "cached_input_tokens": 4864,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 82,
+        "reasoning_output_tokens": 20
+      }
+    }
+  ],
+  "usage": {
+    "input_tokens": 16662,
+    "output_tokens": 82,
+    "total_tokens": 16744,
+    "cached_input_tokens": 4864,
+    "reasoning_output_tokens": 20
+  },
+  "response": "{\"batch_count\":24,\"invalid_batch\":13,\"accepted_records\":2587,\"retry_authorized\":false,\"retry_executed\":false,\"first_checksum\":\"C01X\",\"last_checksum\":\"C24X\",\"remediation\":\"repair --batch 13 --dry-run\"}",
+  "checks": {
+    "batch_count": true,
+    "invalid_batch": true,
+    "accepted_records": true,
+    "retry_authorized": true,
+    "retry_executed": true,
+    "first_checksum": true,
+    "last_checksum": true,
+    "remediation": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "quality_passed": true,
+  "latency_s": 9.676,
+  "request_usage": [
+    {
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T02:55:57.512318+00:00",
+      "model": "gpt-6-astra",
+      "input_tokens_before_estimate": 18800,
+      "input_tokens_after_estimate": 18364,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 16662,
+        "output_tokens": 82,
+        "total_tokens": 16744,
+        "cached_input_tokens": 4864,
+        "reasoning_output_tokens": 20
+      },
+      "usage_source": "provider_sse_usage",
+      "status": "completed",
+      "compression": {
+        "status": "compressed",
+        "reason": "shorter_text",
+        "text_tokens_before_estimate": 12092,
+        "text_tokens_after_estimate": 11656,
+        "changed_fields": 6,
+        "changed_roles": [
+          "developer",
+          "user"
+        ],
+        "tokenizer_source": "tokenizer-proxy-o200k-est",
+        "latency_ms": 30.039,
+        "compression_model_calls": 0,
+        "cache_hits": 0,
+        "rejected_fields": 0
+      },
+      "http_status": 200,
+      "response_content_type": "",
+      "response_content_encoding": "identity",
+      "response_model": "gpt-6-astra",
+      "latency_ms": 4602.984
+    }
+  ],
+  "compression_model_usage_excluded": true,
+  "compression_calls": []
+}

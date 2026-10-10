@@ -1,0 +1,312 @@
+{
+  "schema_version": "lingmou.prompt-compression-ab.v1",
+  "started_at": "2026-10-08T12:50:17.007453+00:00",
+  "model": "gpt-6-astra",
+  "reasoning_effort": "low",
+  "source_revision": "2a11efbf74863449e3392322ea0bf8d7ebe55357",
+  "compression_method": "Caveman LLM prompt, adapted to two independent JSON string fields; Codex transport",
+  "usage_helper": "/home/abc/zju/codexscope/scripts/run_codex_image_tap_e2e.py",
+  "limitations": [
+    "Two examples, one downstream request per variant; no statistical quality claim.",
+    "Official input counts include unchanged Codex system, skill and tool overhead.",
+    "Fields are checked against fixed expected answers, not an LLM judge.",
+    "Input tokens include cached tokens; raw-token totals are not a monetary cost estimate.",
+    "The Chinese context contains reference conclusions; this checks retention, not independent investigation."
+  ],
+  "cases": [
+    {
+      "id": "english_api",
+      "label": "英文短提示词与 API 文档",
+      "compression_usage": {
+        "input_tokens": 16238,
+        "cached_input_tokens": 0,
+        "output_tokens": 193,
+        "reasoning_output_tokens": 0
+      },
+      "variants": {
+        "original": {
+          "usage": {
+            "input_tokens": 15604,
+            "cached_input_tokens": 0,
+            "output_tokens": 46,
+            "reasoning_output_tokens": 0
+          },
+          "latency_s": 9.793,
+          "checks": {
+            "header": true,
+            "prefix": true,
+            "separator": true,
+            "error_status": true,
+            "every_request": true,
+            "commit_allowed": true,
+            "public_sharing_allowed": true,
+            "env_storage_recommended": true
+          },
+          "passed": 8,
+          "total": 8,
+          "exact_keys": true,
+          "answer": {
+            "header": "Authorization",
+            "prefix": "Bearer",
+            "separator": "space",
+            "error_status": 401,
+            "every_request": true,
+            "commit_allowed": false,
+            "public_sharing_allowed": false,
+            "env_storage_recommended": true
+          },
+          "input_tokens_saved": 0,
+          "input_reduction_percent": 0.0
+        },
+        "prompt_only": {
+          "usage": {
+            "input_tokens": 15565,
+            "cached_input_tokens": 8960,
+            "output_tokens": 46,
+            "reasoning_output_tokens": 0
+          },
+          "latency_s": 10.11,
+          "checks": {
+            "header": true,
+            "prefix": true,
+            "separator": true,
+            "error_status": true,
+            "every_request": true,
+            "commit_allowed": true,
+            "public_sharing_allowed": true,
+            "env_storage_recommended": true
+          },
+          "passed": 8,
+          "total": 8,
+          "exact_keys": true,
+          "answer": {
+            "header": "Authorization",
+            "prefix": "Bearer",
+            "separator": "space",
+            "error_status": 401,
+            "every_request": true,
+            "commit_allowed": false,
+            "public_sharing_allowed": false,
+            "env_storage_recommended": true
+          },
+          "input_tokens_saved": 39,
+          "input_reduction_percent": 0.25
+        },
+        "prompt_and_context": {
+          "usage": {
+            "input_tokens": 15537,
+            "cached_input_tokens": 0,
+            "output_tokens": 46,
+            "reasoning_output_tokens": 0
+          },
+          "latency_s": 9.82,
+          "checks": {
+            "header": true,
+            "prefix": true,
+            "separator": true,
+            "error_status": true,
+            "every_request": true,
+            "commit_allowed": true,
+            "public_sharing_allowed": true,
+            "env_storage_recommended": true
+          },
+          "passed": 8,
+          "total": 8,
+          "exact_keys": true,
+          "answer": {
+            "header": "Authorization",
+            "prefix": "Bearer",
+            "separator": "space",
+            "error_status": 401,
+            "every_request": true,
+            "commit_allowed": false,
+            "public_sharing_allowed": false,
+            "env_storage_recommended": true
+          },
+          "input_tokens_saved": 67,
+          "input_reduction_percent": 0.429
+        }
+      },
+      "execution_order": [
+        "original",
+        "prompt_only",
+        "prompt_and_context"
+      ],
+      "downstream_total_tokens_saved": 67,
+      "compression_total_tokens": 16431,
+      "single_use_net_total_tokens_saved": -16364
+    },
+    {
+      "id": "chinese_bank",
+      "label": "中文业务提示词与较长场景文档",
+      "compression_usage": {
+        "input_tokens": 18439,
+        "cached_input_tokens": 14464,
+        "output_tokens": 2363,
+        "reasoning_output_tokens": 0
+      },
+      "variants": {
+        "prompt_and_context": {
+          "usage": {
+            "input_tokens": 17623,
+            "cached_input_tokens": 8960,
+            "output_tokens": 170,
+            "reasoning_output_tokens": 0
+          },
+          "latency_s": 12.383,
+          "checks": {
+            "channel_success_cny": true,
+            "core_settled_cny": true,
+            "gap_cny": true,
+            "gap_payment_id": true,
+            "anomaly_face_value_cny": true,
+            "held_payment_id": true,
+            "held_amount_cny": true,
+            "duplicate_payment_id": true,
+            "duplicate_charge_proven": true,
+            "replay_authorized": true,
+            "raw_upload_authorized": true,
+            "report_send_action": true,
+            "generic_dlp_implemented": true,
+            "real_bank_system_connected": true,
+            "secret_directory": true,
+            "approved_domain_count": true
+          },
+          "passed": 16,
+          "total": 16,
+          "exact_keys": true,
+          "answer": {
+            "channel_success_cny": 501000,
+            "core_settled_cny": 221000,
+            "gap_cny": 280000,
+            "gap_payment_id": "P1002",
+            "anomaly_face_value_cny": 399000,
+            "held_payment_id": "P1004",
+            "held_amount_cny": 510000,
+            "duplicate_payment_id": "P1003",
+            "duplicate_charge_proven": false,
+            "replay_authorized": false,
+            "raw_upload_authorized": false,
+            "report_send_action": "review",
+            "generic_dlp_implemented": false,
+            "real_bank_system_connected": false,
+            "secret_directory": "secrets/",
+            "approved_domain_count": 3
+          },
+          "input_tokens_saved": 98,
+          "input_reduction_percent": 0.553
+        },
+        "prompt_only": {
+          "usage": {
+            "input_tokens": 17690,
+            "cached_input_tokens": 0,
+            "output_tokens": 170,
+            "reasoning_output_tokens": 0
+          },
+          "latency_s": 12.885,
+          "checks": {
+            "channel_success_cny": true,
+            "core_settled_cny": true,
+            "gap_cny": true,
+            "gap_payment_id": true,
+            "anomaly_face_value_cny": true,
+            "held_payment_id": true,
+            "held_amount_cny": true,
+            "duplicate_payment_id": true,
+            "duplicate_charge_proven": true,
+            "replay_authorized": true,
+            "raw_upload_authorized": true,
+            "report_send_action": true,
+            "generic_dlp_implemented": true,
+            "real_bank_system_connected": true,
+            "secret_directory": true,
+            "approved_domain_count": true
+          },
+          "passed": 16,
+          "total": 16,
+          "exact_keys": true,
+          "answer": {
+            "channel_success_cny": 501000,
+            "core_settled_cny": 221000,
+            "gap_cny": 280000,
+            "gap_payment_id": "P1002",
+            "anomaly_face_value_cny": 399000,
+            "held_payment_id": "P1004",
+            "held_amount_cny": 510000,
+            "duplicate_payment_id": "P1003",
+            "duplicate_charge_proven": false,
+            "replay_authorized": false,
+            "raw_upload_authorized": false,
+            "report_send_action": "review",
+            "generic_dlp_implemented": false,
+            "real_bank_system_connected": false,
+            "secret_directory": "secrets/",
+            "approved_domain_count": 3
+          },
+          "input_tokens_saved": 31,
+          "input_reduction_percent": 0.175
+        },
+        "original": {
+          "usage": {
+            "input_tokens": 17721,
+            "cached_input_tokens": 0,
+            "output_tokens": 170,
+            "reasoning_output_tokens": 0
+          },
+          "latency_s": 11.833,
+          "checks": {
+            "channel_success_cny": true,
+            "core_settled_cny": true,
+            "gap_cny": true,
+            "gap_payment_id": true,
+            "anomaly_face_value_cny": true,
+            "held_payment_id": true,
+            "held_amount_cny": true,
+            "duplicate_payment_id": true,
+            "duplicate_charge_proven": true,
+            "replay_authorized": true,
+            "raw_upload_authorized": true,
+            "report_send_action": true,
+            "generic_dlp_implemented": true,
+            "real_bank_system_connected": true,
+            "secret_directory": true,
+            "approved_domain_count": true
+          },
+          "passed": 16,
+          "total": 16,
+          "exact_keys": true,
+          "answer": {
+            "channel_success_cny": 501000,
+            "core_settled_cny": 221000,
+            "gap_cny": 280000,
+            "gap_payment_id": "P1002",
+            "anomaly_face_value_cny": 399000,
+            "held_payment_id": "P1004",
+            "held_amount_cny": 510000,
+            "duplicate_payment_id": "P1003",
+            "duplicate_charge_proven": false,
+            "replay_authorized": false,
+            "raw_upload_authorized": false,
+            "report_send_action": "review",
+            "generic_dlp_implemented": false,
+            "real_bank_system_connected": false,
+            "secret_directory": "secrets/",
+            "approved_domain_count": 3
+          },
+          "input_tokens_saved": 0,
+          "input_reduction_percent": 0.0
+        }
+      },
+      "execution_order": [
+        "prompt_and_context",
+        "prompt_only",
+        "original"
+      ],
+      "downstream_total_tokens_saved": 98,
+      "compression_total_tokens": 20802,
+      "single_use_net_total_tokens_saved": -20704
+    }
+  ],
+  "codex_version": "0.161.0",
+  "completed_at": "2026-10-08T12:53:02.517882+00:00"
+}

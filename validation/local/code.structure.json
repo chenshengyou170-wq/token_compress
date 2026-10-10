@@ -1,0 +1,28 @@
+{
+  "provider": "local_only",
+  "mode": "structure",
+  "observation": {
+    "status": "compressed",
+    "reason": "data_regions_only",
+    "text_tokens_before_estimate": 2186,
+    "text_tokens_after_estimate": 748,
+    "changed_fields": 1,
+    "changed_roles": [
+      "user"
+    ],
+    "tokenizer_source": "tokenizer-proxy-o200k-est",
+    "latency_ms": 3.262,
+    "compression_model_calls": 0,
+    "cache_hits": 0,
+    "rejected_fields": 0,
+    "full_request_tokens_before_estimate": 2332,
+    "full_request_tokens_after_estimate": 818,
+    "compression_calls": [],
+    "local_model_calls": 0,
+    "lossy_fields": 0
+  },
+  "request_sha256": "52306e1e705900c1d092614c1e518de92c64b0e18f1a925b8958a0bf191cab7b",
+  "protected_instructions_exact": true,
+  "official_usage": null,
+  "quality_passed": null
+}

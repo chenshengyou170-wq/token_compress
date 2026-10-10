@@ -1,0 +1,12 @@
+{
+  "provider": "codex",
+  "model": "gpt-6-astra",
+  "cases": [
+    "reference_zh"
+  ],
+  "modes": [
+    "jev",
+    "kimi"
+  ],
+  "fixtures_sha256": "debe1a19204e48bad91226d6d3799535cf1c330bafaf2e8d19a86923f53f5d23"
+}

@@ -1,0 +1,25 @@
+{
+  "modules_from_collected_source": {
+    "codexscope": "lingmou_compression/src/codexscope/__init__.py",
+    "codexscope.compression_boundary": "lingmou_compression/src/codexscope/compression_boundary.py",
+    "codexscope.compression_models": "lingmou_compression/src/codexscope/compression_models.py",
+    "codexscope.context_compression": "lingmou_compression/src/codexscope/context_compression.py",
+    "codexscope.context_tools": "lingmou_compression/src/codexscope/context_tools.py",
+    "codexscope.deferred_tools": "lingmou_compression/src/codexscope/deferred_tools.py",
+    "codexscope.input_compression": "lingmou_compression/src/codexscope/input_compression.py",
+    "codexscope.llmlingua_compression": "lingmou_compression/src/codexscope/llmlingua_compression.py",
+    "codexscope.media_token_task": "lingmou_compression/src/codexscope/media_token_task.py",
+    "codexscope.proxy_usage": "lingmou_compression/src/codexscope/proxy_usage.py",
+    "codexscope.reference_selection": "lingmou_compression/src/codexscope/reference_selection.py",
+    "codexscope.request_token_tap": "lingmou_compression/src/codexscope/request_token_tap.py",
+    "codexscope.request_usage_ledger": "lingmou_compression/src/codexscope/request_usage_ledger.py",
+    "codexscope.structural_compression": "lingmou_compression/src/codexscope/structural_compression.py"
+  },
+  "syntax_valid": true,
+  "pyproject_valid": true,
+  "cli_entrypoint_valid": true,
+  "legacy_fixtures": [
+    "english_api",
+    "chinese_bank"
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "model": "kimi-for-coding",
+  "case": "synthetic_diagnostics",
+  "repeat": 0,
+  "mode": "off",
+  "started_at": "2026-10-09T02:47:31.820923+00:00",
+  "status": "completed",
+  "prompt_sha256": "37f7859a9284b4ddf64269096a7658b45f49848be33691009b9b4fa1542c35d4",
+  "transport": "kimi_official_api",
+  "response_model": "kimi-for-coding",
+  "raw_usage": {
+    "prompt_tokens": 1853,
+    "completion_tokens": 137,
+    "total_tokens": 1990,
+    "completion_tokens_details": {
+      "reasoning_tokens": 67
+    }
+  },
+  "response_id": "chatcmpl-nzcDNOgitRRlg0PYzWXm5pMl",
+  "usage": {
+    "input_tokens": 1853,
+    "output_tokens": 137,
+    "total_tokens": 1990,
+    "cached_input_tokens": null,
+    "reasoning_output_tokens": 67
+  },
+  "response": "{\"batch_count\":24,\"invalid_batch\":13,\"accepted_records\":2587,\"retry_authorized\":false,\"retry_executed\":false,\"first_checksum\":\"C01X\",\"last_checksum\":\"C24X\",\"remediation\":\"repair --batch 13 --dry-run\"}",
+  "checks": {
+    "batch_count": true,
+    "invalid_batch": true,
+    "accepted_records": true,
+    "retry_authorized": true,
+    "retry_executed": true,
+    "first_checksum": true,
+    "last_checksum": true,
+    "remediation": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "quality_passed": true,
+  "latency_s": 4.515,
+  "request_usage": [
+    {
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T02:47:31.834765+00:00",
+      "model": "kimi-for-coding",
+      "input_tokens_before_estimate": 1834,
+      "input_tokens_after_estimate": 1834,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 1853,
+        "output_tokens": 137,
+        "total_tokens": 1990,
+        "cached_input_tokens": null,
+        "reasoning_output_tokens": 67
+      },
+      "usage_source": "provider_json_usage",
+      "status": "completed",
+      "http_status": 200,
+      "response_content_type": "application/json; charset=utf-8",
+      "response_content_encoding": "identity",
+      "response_model": "kimi-for-coding",
+      "latency_ms": 4406.771
+    }
+  ],
+  "compression_model_usage_excluded": true,
+  "compression_calls": []
+}

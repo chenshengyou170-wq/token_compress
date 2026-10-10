@@ -1,0 +1,58 @@
+{
+  "provider": "codex_chatgpt",
+  "mode": "off",
+  "model": "gpt-6-astra",
+  "returncode": 0,
+  "error": null,
+  "latency_s": 11.191,
+  "response": "{\"status\":\"needs_review\",\"approved\":false,\"amount_cents\":2700,\"can_refund_without_approval\":false}",
+  "requests": [
+    {
+      "task_id": "reference_zh",
+      "purpose": "generation",
+      "attempt": 1,
+      "accounting_labelled": true,
+      "task_source": "codex_turn_metadata",
+      "purpose_source": "request",
+      "attempt_source": "repeated_body_inference",
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T07:31:06.347069+00:00",
+      "model": "gpt-6-astra",
+      "input_tokens_before_estimate": 21737,
+      "input_tokens_after_estimate": 21737,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 19971,
+        "output_tokens": 30,
+        "total_tokens": 20001,
+        "cached_input_tokens": 8960,
+        "reasoning_output_tokens": 0
+      },
+      "usage_source": "provider_sse_usage",
+      "status": "completed",
+      "http_status": 200,
+      "response_content_type": "",
+      "response_content_encoding": "identity",
+      "response_model": "gpt-6-astra",
+      "latency_ms": 5893.878
+    }
+  ],
+  "compression_observations": [],
+  "tool_items": [],
+  "codex_usage": {
+    "input_tokens": 19971,
+    "output_tokens": 30,
+    "total_tokens": 20001,
+    "cached_input_tokens": 8960,
+    "reasoning_output_tokens": 0
+  },
+  "prompt_sha256": "0e6a079bea666b18938a0e490222d95265641fcff781e725a9876a581bc7d874",
+  "checks": {
+    "exact_fields": true,
+    "status": true,
+    "approved": true,
+    "amount_cents": true,
+    "can_refund_without_approval": true
+  }
+}

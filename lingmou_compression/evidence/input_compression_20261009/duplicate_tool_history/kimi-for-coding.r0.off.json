@@ -1,0 +1,9 @@
+{
+  "model": "kimi-for-coding",
+  "repeat": 0,
+  "mode": "off",
+  "status": "error",
+  "error_type": "ReadTimeout",
+  "latency_s": 120.15,
+  "request_usage": []
+}

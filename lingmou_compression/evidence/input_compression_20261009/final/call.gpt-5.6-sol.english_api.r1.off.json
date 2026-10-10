@@ -1,0 +1,75 @@
+{
+  "model": "gpt-5.6-sol",
+  "case": "english_api",
+  "repeat": 1,
+  "mode": "off",
+  "started_at": "2026-10-09T03:02:08.967155+00:00",
+  "status": "completed",
+  "prompt_sha256": "9f7719536508e3e8fb6ea42ee682cdb1b85e6507ce423d6c63115bf710efef5d",
+  "transport": "codex",
+  "codex_version": "0.161.0",
+  "observed_models": [
+    "gpt-5.6-sol"
+  ],
+  "raw_completion_events": [
+    {
+      "type": "turn.completed",
+      "usage": {
+        "input_tokens": 14577,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 46,
+        "reasoning_output_tokens": 0
+      }
+    }
+  ],
+  "usage": {
+    "input_tokens": 14577,
+    "output_tokens": 46,
+    "total_tokens": 14623,
+    "cached_input_tokens": 0,
+    "reasoning_output_tokens": 0
+  },
+  "response": "{\"header\":\"Authorization\",\"prefix\":\"Bearer\",\"separator\":\"space\",\"error_status\":401,\"every_request\":true,\"commit_allowed\":false,\"public_sharing_allowed\":false,\"env_storage_recommended\":true}",
+  "checks": {
+    "header": true,
+    "prefix": true,
+    "separator": true,
+    "error_status": true,
+    "every_request": true,
+    "commit_allowed": true,
+    "public_sharing_allowed": true,
+    "env_storage_recommended": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "quality_passed": true,
+  "latency_s": 9.162,
+  "request_usage": [
+    {
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T03:02:11.630372+00:00",
+      "model": "gpt-5.6-sol",
+      "input_tokens_before_estimate": 16130,
+      "input_tokens_after_estimate": 16130,
+      "tokenizer_source": "tokenizer-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 14577,
+        "output_tokens": 46,
+        "total_tokens": 14623,
+        "cached_input_tokens": 0,
+        "reasoning_output_tokens": 0
+      },
+      "usage_source": "provider_sse_usage",
+      "status": "completed",
+      "http_status": 200,
+      "response_content_type": "",
+      "response_content_encoding": "identity",
+      "response_model": "gpt-5.6-sol",
+      "latency_ms": 3927.998
+    }
+  ],
+  "compression_model_usage_excluded": true,
+  "compression_calls": []
+}

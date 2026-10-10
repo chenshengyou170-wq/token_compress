@@ -1,0 +1,96 @@
+{
+  "provider": "codex_chatgpt",
+  "mode": "extract",
+  "model": "gpt-6-astra",
+  "returncode": 0,
+  "error": null,
+  "latency_s": 10.829,
+  "response": "{\"status\":\"needs_review\",\"approved\":false,\"amount_cents\":2700,\"can_refund_without_approval\":false}",
+  "requests": [
+    {
+      "task_id": "reference_zh",
+      "purpose": "unclassified",
+      "attempt": 1,
+      "accounting_labelled": false,
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T07:23:26.295177+00:00",
+      "model": "gpt-6-astra",
+      "input_tokens_before_estimate": 21750,
+      "input_tokens_after_estimate": 18828,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 17058,
+        "output_tokens": 30,
+        "total_tokens": 17088,
+        "cached_input_tokens": 8960,
+        "reasoning_output_tokens": 0
+      },
+      "usage_source": "provider_sse_usage",
+      "status": "completed",
+      "compression": {
+        "status": "compressed",
+        "reason": "data_regions_only",
+        "text_tokens_before_estimate": 14954,
+        "text_tokens_after_estimate": 12053,
+        "changed_fields": 1,
+        "changed_roles": [
+          "user"
+        ],
+        "tokenizer_source": "tokenizer-proxy-o200k-est",
+        "latency_ms": 22.468,
+        "compression_model_calls": 0,
+        "cache_hits": 0,
+        "rejected_fields": 0,
+        "full_request_tokens_before_estimate": 22400,
+        "full_request_tokens_after_estimate": 19478,
+        "compression_calls": [],
+        "local_model_calls": 0,
+        "lossy_fields": 1
+      },
+      "http_status": 200,
+      "response_content_type": "",
+      "response_content_encoding": "identity",
+      "response_model": "gpt-6-astra",
+      "latency_ms": 3707.337
+    }
+  ],
+  "compression_observations": [
+    {
+      "status": "compressed",
+      "reason": "data_regions_only",
+      "text_tokens_before_estimate": 14954,
+      "text_tokens_after_estimate": 12053,
+      "changed_fields": 1,
+      "changed_roles": [
+        "user"
+      ],
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "latency_ms": 22.468,
+      "compression_model_calls": 0,
+      "cache_hits": 0,
+      "rejected_fields": 0,
+      "full_request_tokens_before_estimate": 22400,
+      "full_request_tokens_after_estimate": 19478,
+      "compression_calls": [],
+      "local_model_calls": 0,
+      "lossy_fields": 1
+    }
+  ],
+  "tool_items": [],
+  "codex_usage": {
+    "input_tokens": 17058,
+    "output_tokens": 30,
+    "total_tokens": 17088,
+    "cached_input_tokens": 8960,
+    "reasoning_output_tokens": 0
+  },
+  "prompt_sha256": "0e6a079bea666b18938a0e490222d95265641fcff781e725a9876a581bc7d874",
+  "checks": {
+    "exact_fields": true,
+    "status": true,
+    "approved": true,
+    "amount_cents": true,
+    "can_refund_without_approval": true
+  }
+}

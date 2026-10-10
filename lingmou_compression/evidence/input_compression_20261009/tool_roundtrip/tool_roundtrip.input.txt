@@ -1,0 +1,1 @@
+This is a read-only tool protocol test. Use the local command tool exactly once to run `printf '%s\n' 'CODEX_INPUT_COMPRESSION_OK_20261008'`. Do not call any other tools, read files, write files or access the network. After the command completes, reply with exactly its output line, without explanation. Do not answer before running it.

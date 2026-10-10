@@ -1,0 +1,67 @@
+{
+  "model": "kimi-for-coding",
+  "case": "english_api",
+  "repeat": 0,
+  "mode": "off",
+  "started_at": "2026-10-09T02:31:39.726693+00:00",
+  "status": "completed",
+  "prompt_sha256": "9f7719536508e3e8fb6ea42ee682cdb1b85e6507ce423d6c63115bf710efef5d",
+  "transport": "kimi_official_api",
+  "response_model": "kimi-for-coding",
+  "raw_usage": {
+    "prompt_tokens": 340,
+    "completion_tokens": 119,
+    "total_tokens": 459,
+    "completion_tokens_details": {
+      "reasoning_tokens": 62
+    }
+  },
+  "response_id": "chatcmpl-C1cfBEAv37q2lWaC4n8Ijwz4",
+  "usage": {
+    "input_tokens": 340,
+    "output_tokens": 119,
+    "total_tokens": 459,
+    "cached_input_tokens": null,
+    "reasoning_output_tokens": 62
+  },
+  "response": "{\"header\":\"Authorization\",\"prefix\":\"Bearer\",\"separator\":\"space\",\"error_status\":401,\"every_request\":true,\"commit_allowed\":false,\"public_sharing_allowed\":false,\"env_storage_recommended\":true}",
+  "checks": {
+    "header": true,
+    "prefix": true,
+    "separator": true,
+    "error_status": true,
+    "every_request": true,
+    "commit_allowed": true,
+    "public_sharing_allowed": true,
+    "env_storage_recommended": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "quality_passed": true,
+  "latency_s": 3.535,
+  "request_usage": [
+    {
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T02:31:39.945778+00:00",
+      "model": "kimi-for-coding",
+      "input_tokens_before_estimate": 271,
+      "input_tokens_after_estimate": 271,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 340,
+        "output_tokens": 119,
+        "total_tokens": 459,
+        "cached_input_tokens": null,
+        "reasoning_output_tokens": 62
+      },
+      "usage_source": "provider_json_usage",
+      "status": "completed",
+      "http_status": 200,
+      "response_model": "kimi-for-coding",
+      "latency_ms": 3493.821
+    }
+  ],
+  "compression_model_usage_excluded": true,
+  "compression_calls": []
+}

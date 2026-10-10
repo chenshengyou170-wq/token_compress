@@ -1,0 +1,8 @@
+Use the supplied material only. No tools. Return the requested JSON object.
+
+<task>
+Read API documentation provided context carefully. Extract authentication requirements and credential handling rules. Use only provided documentation information. Return one JSON object with exactly keys: header (header name), prefix (authentication scheme, without following space), separator (literal word space if space required), error_status (integer), every_request (boolean indicating whether authentication required every request), commit_allowed (boolean indicating whether keys may be committed to version control), public_sharing_allowed (boolean), env_storage_recommended (boolean). No explanation, Markdown, additional keys. Do not use tools or access websites.
+</task>
+<context>
+To authenticate with our API, you need to include your API key in the Authorization header of every request. The API key should be prefixed with the word "Bearer" followed by a space. If authentication fails, the server will return a 401 Unauthorized status code along with an error message explaining why the authentication failed. Please note that API keys are sensitive credentials and should never be committed to version control or shared publicly. We recommend storing them in environment variables or using a secure secrets management system.
+</context>

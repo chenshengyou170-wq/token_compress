@@ -1,0 +1,73 @@
+{
+  "model": "k3",
+  "case": "english_api",
+  "repeat": 1,
+  "mode": "off",
+  "started_at": "2026-10-09T02:51:04.329700+00:00",
+  "status": "completed",
+  "prompt_sha256": "9f7719536508e3e8fb6ea42ee682cdb1b85e6507ce423d6c63115bf710efef5d",
+  "transport": "kimi_official_api",
+  "response_model": "k3",
+  "raw_usage": {
+    "prompt_tokens": 340,
+    "completion_tokens": 172,
+    "total_tokens": 512,
+    "cached_tokens": 340,
+    "completion_tokens_details": {
+      "reasoning_tokens": 117
+    },
+    "prompt_tokens_details": {
+      "cached_tokens": 340
+    }
+  },
+  "response_id": "chatcmpl-MIp8yVb9Chak0RPfu9btlFpx",
+  "usage": {
+    "input_tokens": 340,
+    "output_tokens": 172,
+    "total_tokens": 512,
+    "cached_input_tokens": 340,
+    "reasoning_output_tokens": 117
+  },
+  "response": "{\"header\":\"Authorization\",\"prefix\":\"Bearer\",\"separator\":\"space\",\"error_status\":401,\"every_request\":true,\"commit_allowed\":false,\"public_sharing_allowed\":false,\"env_storage_recommended\":true}",
+  "checks": {
+    "header": true,
+    "prefix": true,
+    "separator": true,
+    "error_status": true,
+    "every_request": true,
+    "commit_allowed": true,
+    "public_sharing_allowed": true,
+    "env_storage_recommended": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "quality_passed": true,
+  "latency_s": 6.517,
+  "request_usage": [
+    {
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T02:51:04.339535+00:00",
+      "model": "k3",
+      "input_tokens_before_estimate": 271,
+      "input_tokens_after_estimate": 271,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 340,
+        "output_tokens": 172,
+        "total_tokens": 512,
+        "cached_input_tokens": 340,
+        "reasoning_output_tokens": 117
+      },
+      "usage_source": "provider_json_usage",
+      "status": "completed",
+      "http_status": 200,
+      "response_content_type": "application/json; charset=utf-8",
+      "response_content_encoding": "identity",
+      "response_model": "k3",
+      "latency_ms": 6055.791
+    }
+  ],
+  "compression_model_usage_excluded": true,
+  "compression_calls": []
+}

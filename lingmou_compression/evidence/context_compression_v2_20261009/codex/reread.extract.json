@@ -1,0 +1,246 @@
+{
+  "provider": "codex_chatgpt",
+  "mode": "extract",
+  "model": "gpt-6-astra",
+  "returncode": 0,
+  "error": null,
+  "latency_s": 32.978,
+  "response": "{\"approved\":false,\"audit_marker\":\"无法核实：lingmou_source_read 需要审批，但当前审批策略为 never，读取被拒绝。\"}",
+  "requests": [
+    {
+      "task_id": "reread",
+      "purpose": "unclassified",
+      "attempt": 1,
+      "accounting_labelled": false,
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T07:24:49.172053+00:00",
+      "model": "gpt-6-astra",
+      "input_tokens_before_estimate": 21789,
+      "input_tokens_after_estimate": 18853,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 17098,
+        "output_tokens": 72,
+        "total_tokens": 17170,
+        "cached_input_tokens": 8960,
+        "reasoning_output_tokens": 0
+      },
+      "usage_source": "provider_sse_usage",
+      "status": "completed",
+      "compression": {
+        "status": "compressed",
+        "reason": "data_regions_only",
+        "text_tokens_before_estimate": 15004,
+        "text_tokens_after_estimate": 12093,
+        "changed_fields": 1,
+        "changed_roles": [
+          "user"
+        ],
+        "tokenizer_source": "tokenizer-proxy-o200k-est",
+        "latency_ms": 22.006,
+        "compression_model_calls": 0,
+        "cache_hits": 0,
+        "rejected_fields": 0,
+        "full_request_tokens_before_estimate": 22416,
+        "full_request_tokens_after_estimate": 19480,
+        "compression_calls": [],
+        "local_model_calls": 0,
+        "lossy_fields": 1
+      },
+      "http_status": 200,
+      "response_content_type": "",
+      "response_content_encoding": "identity",
+      "response_model": "gpt-6-astra",
+      "latency_ms": 4772.658
+    },
+    {
+      "task_id": "reread",
+      "purpose": "unclassified",
+      "attempt": 1,
+      "accounting_labelled": false,
+      "request_id": "tap-2",
+      "started_at": "2026-10-09T07:24:53.964848+00:00",
+      "model": "gpt-6-astra",
+      "input_tokens_before_estimate": 22363,
+      "input_tokens_after_estimate": 19427,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 17319,
+        "output_tokens": 97,
+        "total_tokens": 17416,
+        "cached_input_tokens": 16896,
+        "reasoning_output_tokens": 0
+      },
+      "usage_source": "provider_sse_usage",
+      "status": "completed",
+      "compression": {
+        "status": "compressed",
+        "reason": "data_regions_only",
+        "text_tokens_before_estimate": 15020,
+        "text_tokens_after_estimate": 12109,
+        "changed_fields": 1,
+        "changed_roles": [
+          "user"
+        ],
+        "tokenizer_source": "tokenizer-proxy-o200k-est",
+        "latency_ms": 19.292,
+        "compression_model_calls": 0,
+        "cache_hits": 1,
+        "rejected_fields": 0,
+        "full_request_tokens_before_estimate": 22990,
+        "full_request_tokens_after_estimate": 20054,
+        "compression_calls": [],
+        "local_model_calls": 0,
+        "lossy_fields": 1
+      },
+      "http_status": 200,
+      "response_content_type": "",
+      "response_content_encoding": "identity",
+      "response_model": "gpt-6-astra",
+      "latency_ms": 5880.077
+    },
+    {
+      "task_id": "reread",
+      "purpose": "unclassified",
+      "attempt": 1,
+      "accounting_labelled": false,
+      "request_id": "tap-3",
+      "started_at": "2026-10-09T07:24:59.843160+00:00",
+      "model": "gpt-6-astra",
+      "input_tokens_before_estimate": 22731,
+      "input_tokens_after_estimate": 19795,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 17451,
+        "output_tokens": 55,
+        "total_tokens": 17506,
+        "cached_input_tokens": 17152,
+        "reasoning_output_tokens": 16
+      },
+      "usage_source": "provider_sse_usage",
+      "status": "completed",
+      "compression": {
+        "status": "compressed",
+        "reason": "data_regions_only",
+        "text_tokens_before_estimate": 15020,
+        "text_tokens_after_estimate": 12109,
+        "changed_fields": 1,
+        "changed_roles": [
+          "user"
+        ],
+        "tokenizer_source": "tokenizer-proxy-o200k-est",
+        "latency_ms": 20.315,
+        "compression_model_calls": 0,
+        "cache_hits": 1,
+        "rejected_fields": 0,
+        "full_request_tokens_before_estimate": 23358,
+        "full_request_tokens_after_estimate": 20422,
+        "compression_calls": [],
+        "local_model_calls": 0,
+        "lossy_fields": 1
+      },
+      "http_status": 200,
+      "response_content_type": "",
+      "response_content_encoding": "identity",
+      "response_model": "gpt-6-astra",
+      "latency_ms": 6271.973
+    }
+  ],
+  "compression_observations": [
+    {
+      "status": "compressed",
+      "reason": "data_regions_only",
+      "text_tokens_before_estimate": 15004,
+      "text_tokens_after_estimate": 12093,
+      "changed_fields": 1,
+      "changed_roles": [
+        "user"
+      ],
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "latency_ms": 22.006,
+      "compression_model_calls": 0,
+      "cache_hits": 0,
+      "rejected_fields": 0,
+      "full_request_tokens_before_estimate": 22416,
+      "full_request_tokens_after_estimate": 19480,
+      "compression_calls": [],
+      "local_model_calls": 0,
+      "lossy_fields": 1
+    },
+    {
+      "status": "compressed",
+      "reason": "data_regions_only",
+      "text_tokens_before_estimate": 15020,
+      "text_tokens_after_estimate": 12109,
+      "changed_fields": 1,
+      "changed_roles": [
+        "user"
+      ],
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "latency_ms": 19.292,
+      "compression_model_calls": 0,
+      "cache_hits": 1,
+      "rejected_fields": 0,
+      "full_request_tokens_before_estimate": 22990,
+      "full_request_tokens_after_estimate": 20054,
+      "compression_calls": [],
+      "local_model_calls": 0,
+      "lossy_fields": 1
+    },
+    {
+      "status": "compressed",
+      "reason": "data_regions_only",
+      "text_tokens_before_estimate": 15020,
+      "text_tokens_after_estimate": 12109,
+      "changed_fields": 1,
+      "changed_roles": [
+        "user"
+      ],
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "latency_ms": 20.315,
+      "compression_model_calls": 0,
+      "cache_hits": 1,
+      "rejected_fields": 0,
+      "full_request_tokens_before_estimate": 23358,
+      "full_request_tokens_after_estimate": 20422,
+      "compression_calls": [],
+      "local_model_calls": 0,
+      "lossy_fields": 1
+    }
+  ],
+  "tool_items": [
+    {
+      "id": "item_1",
+      "type": "mcp_tool_call",
+      "server": "lingmou_sources",
+      "tool": "lingmou_source_read",
+      "arguments": {
+        "source_id": "139aa7f95a0fdc063ef5c8d2285a3d4c11b07aef06ecc56515c53182a609ad54",
+        "start_line": 38,
+        "end_line": 38
+      },
+      "result": null,
+      "error": {
+        "message": "MCP tool call requires approval, but approval policy is never"
+      },
+      "status": "failed"
+    }
+  ],
+  "codex_usage": {
+    "input_tokens": 51868,
+    "output_tokens": 224,
+    "total_tokens": 52092,
+    "cached_input_tokens": 43008,
+    "reasoning_output_tokens": 16
+  },
+  "prompt_sha256": "6eed82880c9a32af7eab1ed0ebf191aaa1319da0900c0ba0cde627c93ad5da45",
+  "checks": {
+    "exact_fields": true,
+    "approved": true,
+    "audit_marker": false,
+    "source_tool_called": true
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "model": "gpt-5.6-sol",
+  "case": "english_api",
+  "repeat": 0,
+  "mode": "hybrid",
+  "started_at": "2026-10-09T02:58:38.081918+00:00",
+  "status": "completed",
+  "prompt_sha256": "9f7719536508e3e8fb6ea42ee682cdb1b85e6507ce423d6c63115bf710efef5d",
+  "transport": "codex",
+  "codex_version": "0.161.0",
+  "observed_models": [
+    "gpt-5.6-sol"
+  ],
+  "raw_completion_events": [
+    {
+      "type": "turn.completed",
+      "usage": {
+        "input_tokens": 14279,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 46,
+        "reasoning_output_tokens": 0
+      }
+    }
+  ],
+  "usage": {
+    "input_tokens": 14279,
+    "output_tokens": 46,
+    "total_tokens": 14325,
+    "cached_input_tokens": 0,
+    "reasoning_output_tokens": 0
+  },
+  "response": "{\"header\":\"Authorization\",\"prefix\":\"Bearer\",\"separator\":\"space\",\"error_status\":401,\"every_request\":true,\"commit_allowed\":false,\"public_sharing_allowed\":false,\"env_storage_recommended\":true}",
+  "checks": {
+    "header": true,
+    "prefix": true,
+    "separator": true,
+    "error_status": true,
+    "every_request": true,
+    "commit_allowed": true,
+    "public_sharing_allowed": true,
+    "env_storage_recommended": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "quality_passed": true,
+  "latency_s": 7.861,
+  "request_usage": [
+    {
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T02:58:40.945739+00:00",
+      "model": "gpt-5.6-sol",
+      "input_tokens_before_estimate": 16136,
+      "input_tokens_after_estimate": 15838,
+      "tokenizer_source": "tokenizer-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 14279,
+        "output_tokens": 46,
+        "total_tokens": 14325,
+        "cached_input_tokens": 0,
+        "reasoning_output_tokens": 0
+      },
+      "usage_source": "provider_sse_usage",
+      "status": "completed",
+      "compression": {
+        "status": "compressed",
+        "reason": "shorter_text",
+        "text_tokens_before_estimate": 9974,
+        "text_tokens_after_estimate": 9676,
+        "changed_fields": 6,
+        "changed_roles": [
+          "developer",
+          "user"
+        ],
+        "tokenizer_source": "tokenizer-est",
+        "latency_ms": 22.423,
+        "compression_model_calls": 0,
+        "cache_hits": 0,
+        "rejected_fields": 0
+      },
+      "http_status": 200,
+      "response_content_type": "",
+      "response_content_encoding": "identity",
+      "response_model": "gpt-5.6-sol",
+      "latency_ms": 2677.175
+    }
+  ],
+  "compression_model_usage_excluded": true,
+  "compression_calls": []
+}

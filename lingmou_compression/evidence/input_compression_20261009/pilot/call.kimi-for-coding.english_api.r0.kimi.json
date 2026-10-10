@@ -1,0 +1,37 @@
+{
+  "model": "kimi-for-coding",
+  "case": "english_api",
+  "repeat": 0,
+  "mode": "kimi",
+  "started_at": "2026-10-09T02:31:46.784339+00:00",
+  "status": "error",
+  "prompt_sha256": "9f7719536508e3e8fb6ea42ee682cdb1b85e6507ce423d6c63115bf710efef5d",
+  "error_type": "ReadTimeout",
+  "latency_s": 120.131,
+  "request_usage": [],
+  "compression_model_usage_excluded": true,
+  "compression_calls": [
+    {
+      "model": "kimi-for-coding",
+      "requested_model": "kimi-for-coding",
+      "response_id": "chatcmpl-QGRpPGgEWTSjtPdeortr6Xtb",
+      "finish_reason": "stop",
+      "usage": {
+        "input_tokens": 456,
+        "output_tokens": 237,
+        "total_tokens": 693,
+        "cached_input_tokens": null,
+        "reasoning_output_tokens": 51
+      },
+      "raw_usage": {
+        "prompt_tokens": 456,
+        "completion_tokens": 237,
+        "total_tokens": 693,
+        "completion_tokens_details": {
+          "reasoning_tokens": 51
+        }
+      },
+      "latency_s": 6.662
+    }
+  ]
+}

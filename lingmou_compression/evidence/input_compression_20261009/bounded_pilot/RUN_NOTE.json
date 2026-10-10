@@ -1,0 +1,4 @@
+{
+  "status": "stopped_for_revision",
+  "reason": "Prioritize task text before fixed prefixes; shorten protected markers; back off failed rewrites. Completed records retained. One in-flight Chinese-case attempt interrupted; official usage unavailable for that attempt."
+}

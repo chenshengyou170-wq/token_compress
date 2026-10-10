@@ -1,0 +1,16 @@
+{
+  "provider": "local",
+  "comparisons": [],
+  "cases": [
+    "table_en",
+    "reference_zh",
+    "code",
+    "reread"
+  ],
+  "limits": [
+    "Synthetic fixtures; no daily-workload savings claim.",
+    "Missing provider usage disables net savings claims; no failed request is dropped.",
+    "Codex transport requests are counted in full; unlabelled retry/reread subcategories are not guessed.",
+    "LLMLingua-2 is a local lossy baseline; optional weights and dependency are required."
+  ]
+}

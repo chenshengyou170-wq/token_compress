@@ -1,0 +1,44 @@
+{
+  "label": "probe",
+  "returncode": 1,
+  "latency_s": 4.826,
+  "usage_source": "codex_exec_turn_completed",
+  "usage": null,
+  "upstream": "https://chatgpt.com/backend-api/codex",
+  "observed_models": [],
+  "observed_request_count": 0,
+  "tap_stats": {
+    "running": false,
+    "request_count": 3,
+    "observed_request_count": 0,
+    "multimodal_request_count": 0,
+    "provider_count_attempt_count": 0,
+    "provider_count_success_count": 0,
+    "provider_count_error_count": 0,
+    "provider_breakdown_attempt_count": 0,
+    "provider_breakdown_success_count": 0,
+    "provider_breakdown_error_count": 0,
+    "sse_event_count": 0,
+    "error_count": 0,
+    "upstream_origin": "https://chatgpt.com",
+    "upstream_path": "/backend-api/codex",
+    "usage_ledger": {
+      "totals": {
+        "requests": 0,
+        "requests_with_official_usage": 0,
+        "official_input_tokens": 0,
+        "official_output_tokens": 0,
+        "official_total_tokens": 0
+      },
+      "recent_requests": [],
+      "recent_request_limit": 200
+    }
+  },
+  "completed_turn_count": 0,
+  "tool_item_types": [
+    "error"
+  ],
+  "response": "",
+  "prompt_sha256": "26475041e910d0e51340acad707aa7fe82c5229a8ccf749eacb663f43ba6e94b",
+  "raw_completion_events": []
+}

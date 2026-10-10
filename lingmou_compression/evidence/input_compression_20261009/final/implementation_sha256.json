@@ -1,0 +1,8 @@
+{
+  "src/codexscope/context_compression.py": "d1ae67ad2cf8fb1792873440657913f528566c4f8155965bde83fb053aa1aec9",
+  "src/codexscope/compression_models.py": "b6e3583b1dd8544833d8d527e094c67ccfcf57b24ac9b9fa1d92ed728bc8a272",
+  "src/codexscope/request_token_tap.py": "b9588fe208c029dcbbd6b5770ef72e95d462a3cc045741b65be388d4a4d93442",
+  "src/codexscope/request_usage_ledger.py": "83ffb183b64cf115f8ddffddacaee768ebfbae9b46e580946a555e7541056322",
+  "scripts/benchmark_input_compression.py": "fd71ccffc2620cd33c6b43a5bf7497779bed2f90e1b8d245d5930386009e644b",
+  "scripts/codex_usage_probe.py": "6f9d0e5d0f0ecc506b5402f753fc5490b87d10e4441f7005402522c78b91850b"
+}

@@ -1,0 +1,239 @@
+{
+  "schema_version": "lingmou.codex-input-compression-ab.v1",
+  "started_at": "2026-10-08T13:28:34.430741+00:00",
+  "model": "gpt-6-astra",
+  "method": "local Caveman-style rules in RequestTokenTap, after Codex assembles the complete request",
+  "compression_model_calls": 0,
+  "usage_source": "codex_exec_turn_completed",
+  "cases": [
+    {
+      "id": "english_api",
+      "label": "英文短提示词与 API 文档",
+      "variants": {
+        "off": {
+          "usage": {
+            "input_tokens": 15604,
+            "cached_input_tokens": 0,
+            "output_tokens": 46,
+            "reasoning_output_tokens": 0
+          },
+          "latency_s": 9.239,
+          "checks": {
+            "header": true,
+            "prefix": true,
+            "separator": true,
+            "error_status": true,
+            "every_request": true,
+            "commit_allowed": true,
+            "public_sharing_allowed": true,
+            "env_storage_recommended": true
+          },
+          "passed": 8,
+          "total": 8,
+          "exact_keys": true,
+          "answer": {
+            "header": "Authorization",
+            "prefix": "Bearer",
+            "separator": "space",
+            "error_status": 401,
+            "every_request": true,
+            "commit_allowed": false,
+            "public_sharing_allowed": false,
+            "env_storage_recommended": true
+          },
+          "caller_prompt_sha256": "8c9813ae09bc55d0c12664c9fb25f91e1ccee102c785040b4139364c066aed26",
+          "compression_observations": []
+        },
+        "caveman": {
+          "usage": {
+            "input_tokens": 15083,
+            "cached_input_tokens": 0,
+            "output_tokens": 46,
+            "reasoning_output_tokens": 0
+          },
+          "latency_s": 9.15,
+          "checks": {
+            "header": true,
+            "prefix": true,
+            "separator": true,
+            "error_status": true,
+            "every_request": true,
+            "commit_allowed": true,
+            "public_sharing_allowed": true,
+            "env_storage_recommended": true
+          },
+          "passed": 8,
+          "total": 8,
+          "exact_keys": true,
+          "answer": {
+            "header": "Authorization",
+            "prefix": "Bearer",
+            "separator": "space",
+            "error_status": 401,
+            "every_request": true,
+            "commit_allowed": false,
+            "public_sharing_allowed": false,
+            "env_storage_recommended": true
+          },
+          "caller_prompt_sha256": "8c9813ae09bc55d0c12664c9fb25f91e1ccee102c785040b4139364c066aed26",
+          "compression_observations": [
+            {
+              "status": "compressed",
+              "reason": "shorter_text",
+              "text_tokens_before_estimate": 12467,
+              "text_tokens_after_estimate": 12037,
+              "changed_fields": 7,
+              "changed_roles": [
+                "developer",
+                "user"
+              ],
+              "tokenizer_source": "heuristic-est",
+              "latency_ms": 15.713
+            }
+          ]
+        }
+      },
+      "execution_order": [
+        "off",
+        "caveman"
+      ],
+      "input_tokens_saved": 521,
+      "input_reduction_percent": 3.339,
+      "total_tokens_saved": 521
+    },
+    {
+      "id": "chinese_bank",
+      "label": "中文业务提示词与较长场景文档",
+      "variants": {
+        "caveman": {
+          "usage": {
+            "input_tokens": 17228,
+            "cached_input_tokens": 0,
+            "output_tokens": 170,
+            "reasoning_output_tokens": 0
+          },
+          "latency_s": 12.502,
+          "checks": {
+            "channel_success_cny": true,
+            "core_settled_cny": true,
+            "gap_cny": true,
+            "gap_payment_id": true,
+            "anomaly_face_value_cny": true,
+            "held_payment_id": true,
+            "held_amount_cny": true,
+            "duplicate_payment_id": true,
+            "duplicate_charge_proven": true,
+            "replay_authorized": true,
+            "raw_upload_authorized": true,
+            "report_send_action": true,
+            "generic_dlp_implemented": true,
+            "real_bank_system_connected": true,
+            "secret_directory": true,
+            "approved_domain_count": true
+          },
+          "passed": 16,
+          "total": 16,
+          "exact_keys": true,
+          "answer": {
+            "channel_success_cny": 501000,
+            "core_settled_cny": 221000,
+            "gap_cny": 280000,
+            "gap_payment_id": "P1002",
+            "anomaly_face_value_cny": 399000,
+            "held_payment_id": "P1004",
+            "held_amount_cny": 510000,
+            "duplicate_payment_id": "P1003",
+            "duplicate_charge_proven": false,
+            "replay_authorized": false,
+            "raw_upload_authorized": false,
+            "report_send_action": "review",
+            "generic_dlp_implemented": false,
+            "real_bank_system_connected": false,
+            "secret_directory": "secrets/",
+            "approved_domain_count": 3
+          },
+          "caller_prompt_sha256": "cc079a5da908222c5f3eb234796bda0de54100f262f74387d7c0b2a309daacd0",
+          "compression_observations": [
+            {
+              "status": "compressed",
+              "reason": "shorter_text",
+              "text_tokens_before_estimate": 15039,
+              "text_tokens_after_estimate": 14635,
+              "changed_fields": 7,
+              "changed_roles": [
+                "developer",
+                "user"
+              ],
+              "tokenizer_source": "heuristic-est",
+              "latency_ms": 17.378
+            }
+          ]
+        },
+        "off": {
+          "usage": {
+            "input_tokens": 17721,
+            "cached_input_tokens": 0,
+            "output_tokens": 170,
+            "reasoning_output_tokens": 0
+          },
+          "latency_s": 12.382,
+          "checks": {
+            "channel_success_cny": true,
+            "core_settled_cny": true,
+            "gap_cny": true,
+            "gap_payment_id": true,
+            "anomaly_face_value_cny": true,
+            "held_payment_id": true,
+            "held_amount_cny": true,
+            "duplicate_payment_id": true,
+            "duplicate_charge_proven": true,
+            "replay_authorized": true,
+            "raw_upload_authorized": true,
+            "report_send_action": true,
+            "generic_dlp_implemented": true,
+            "real_bank_system_connected": true,
+            "secret_directory": true,
+            "approved_domain_count": true
+          },
+          "passed": 16,
+          "total": 16,
+          "exact_keys": true,
+          "answer": {
+            "channel_success_cny": 501000,
+            "core_settled_cny": 221000,
+            "gap_cny": 280000,
+            "gap_payment_id": "P1002",
+            "anomaly_face_value_cny": 399000,
+            "held_payment_id": "P1004",
+            "held_amount_cny": 510000,
+            "duplicate_payment_id": "P1003",
+            "duplicate_charge_proven": false,
+            "replay_authorized": false,
+            "raw_upload_authorized": false,
+            "report_send_action": "review",
+            "generic_dlp_implemented": false,
+            "real_bank_system_connected": false,
+            "secret_directory": "secrets/",
+            "approved_domain_count": 3
+          },
+          "caller_prompt_sha256": "cc079a5da908222c5f3eb234796bda0de54100f262f74387d7c0b2a309daacd0",
+          "compression_observations": []
+        }
+      },
+      "execution_order": [
+        "caveman",
+        "off"
+      ],
+      "input_tokens_saved": 493,
+      "input_reduction_percent": 2.782,
+      "total_tokens_saved": 493
+    }
+  ],
+  "limitations": [
+    "Two fixtures and fixed-answer retention checks are not general semantic-equivalence evidence.",
+    "Official input_tokens includes cached_input_tokens; these are token counts, not monetary costs.",
+    "Local compressor counters are labelled estimates and never substitute for official usage."
+  ],
+  "codex_version": "0.161.0",
+  "completed_at": "2026-10-08T13:29:18.493837+00:00"
+}

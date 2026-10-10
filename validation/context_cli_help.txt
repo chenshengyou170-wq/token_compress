@@ -1,0 +1,9 @@
+usage: context_tools.py [-h] {serve,read,compress,report} ...
+
+CLI and stdio MCP reader for a single run's retained reference sources.
+
+positional arguments:
+  {serve,read,compress,report}
+
+options:
+  -h, --help            show this help message and exit

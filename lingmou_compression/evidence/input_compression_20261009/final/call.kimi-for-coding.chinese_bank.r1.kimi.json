@@ -1,0 +1,96 @@
+{
+  "model": "kimi-for-coding",
+  "case": "chinese_bank",
+  "repeat": 1,
+  "mode": "kimi",
+  "started_at": "2026-10-09T02:49:01.012433+00:00",
+  "status": "completed",
+  "prompt_sha256": "7d1012e407b8e127b55eee060d0654a23ebe6a26daddc9f9aea4610e786c5079",
+  "transport": "kimi_official_api",
+  "response_model": "kimi-for-coding",
+  "raw_usage": {
+    "prompt_tokens": 1712,
+    "completion_tokens": 895,
+    "total_tokens": 2607,
+    "cached_tokens": 1712,
+    "completion_tokens_details": {
+      "reasoning_tokens": 760
+    },
+    "prompt_tokens_details": {
+      "cached_tokens": 1712
+    }
+  },
+  "response_id": "chatcmpl-NpbeirHGQoAjtsDNRHqBhhmY",
+  "usage": {
+    "input_tokens": 1712,
+    "output_tokens": 895,
+    "total_tokens": 2607,
+    "cached_input_tokens": 1712,
+    "reasoning_output_tokens": 760
+  },
+  "response": "{\"channel_success_cny\":501000,\"core_settled_cny\":221000,\"gap_cny\":280000,\"gap_payment_id\":\"P1002\",\"anomaly_face_value_cny\":399000,\"held_payment_id\":\"P1004\",\"held_amount_cny\":510000,\"duplicate_payment_id\":\"P1003\",\"duplicate_charge_proven\":false,\"replay_authorized\":false,\"raw_upload_authorized\":false,\"report_send_action\":\"review\",\"generic_dlp_implemented\":false,\"real_bank_system_connected\":false,\"secret_directory\":\"secrets/\",\"approved_domain_count\":3}",
+  "checks": {
+    "channel_success_cny": true,
+    "core_settled_cny": true,
+    "gap_cny": true,
+    "gap_payment_id": true,
+    "anomaly_face_value_cny": true,
+    "held_payment_id": true,
+    "held_amount_cny": true,
+    "duplicate_payment_id": true,
+    "duplicate_charge_proven": true,
+    "replay_authorized": true,
+    "raw_upload_authorized": true,
+    "report_send_action": true,
+    "generic_dlp_implemented": true,
+    "real_bank_system_connected": true,
+    "secret_directory": true,
+    "approved_domain_count": true
+  },
+  "checks_passed": 16,
+  "checks_total": 16,
+  "quality_passed": true,
+  "latency_s": 20.526,
+  "request_usage": [
+    {
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T02:49:01.019768+00:00",
+      "model": "kimi-for-coding",
+      "input_tokens_before_estimate": 2472,
+      "input_tokens_after_estimate": 1911,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 1712,
+        "output_tokens": 895,
+        "total_tokens": 2607,
+        "cached_input_tokens": 1712,
+        "reasoning_output_tokens": 760
+      },
+      "usage_source": "provider_json_usage",
+      "status": "completed",
+      "compression": {
+        "status": "compressed",
+        "reason": "shorter_text",
+        "text_tokens_before_estimate": 2372,
+        "text_tokens_after_estimate": 1876,
+        "changed_fields": 1,
+        "changed_roles": [
+          "user"
+        ],
+        "tokenizer_source": "tokenizer-proxy-o200k-est",
+        "latency_ms": 3.35,
+        "compression_model_calls": 0,
+        "cache_hits": 1,
+        "rejected_fields": 0
+      },
+      "http_status": 200,
+      "response_content_type": "application/json; charset=utf-8",
+      "response_content_encoding": "identity",
+      "response_model": "kimi-for-coding",
+      "latency_ms": 20452.089
+    }
+  ],
+  "compression_model_usage_excluded": true,
+  "compression_calls": []
+}

@@ -1,0 +1,167 @@
+{
+  "model": "gpt-6-astra",
+  "case": "english_api",
+  "repeat": 0,
+  "mode": "kimi",
+  "started_at": "2026-10-09T02:36:28.511826+00:00",
+  "status": "completed",
+  "prompt_sha256": "9f7719536508e3e8fb6ea42ee682cdb1b85e6507ce423d6c63115bf710efef5d",
+  "transport": "codex",
+  "codex_version": "0.161.0",
+  "observed_models": [
+    "gpt-6-astra"
+  ],
+  "raw_completion_events": [
+    {
+      "type": "turn.completed",
+      "usage": {
+        "input_tokens": 15131,
+        "cached_input_tokens": 4864,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 46,
+        "reasoning_output_tokens": 0
+      }
+    }
+  ],
+  "usage": {
+    "input_tokens": 15131,
+    "cached_input_tokens": 4864,
+    "output_tokens": 46,
+    "reasoning_output_tokens": 0
+  },
+  "response": "{\"header\":\"Authorization\",\"prefix\":\"Bearer\",\"separator\":\"space\",\"error_status\":401,\"every_request\":true,\"commit_allowed\":false,\"public_sharing_allowed\":false,\"env_storage_recommended\":true}",
+  "checks": {
+    "header": true,
+    "prefix": true,
+    "separator": true,
+    "error_status": true,
+    "every_request": true,
+    "commit_allowed": true,
+    "public_sharing_allowed": true,
+    "env_storage_recommended": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "quality_passed": true,
+  "latency_s": 195.909,
+  "request_usage": [
+    {
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T02:36:31.232806+00:00",
+      "model": "gpt-6-astra",
+      "input_tokens_before_estimate": 17239,
+      "input_tokens_after_estimate": 16770,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": null,
+      "usage_source": "unavailable",
+      "status": "completed",
+      "compression": {
+        "status": "compressed",
+        "reason": "shorter_text",
+        "text_tokens_before_estimate": 10579,
+        "text_tokens_after_estimate": 10125,
+        "changed_fields": 4,
+        "changed_roles": [
+          "developer",
+          "user"
+        ],
+        "tokenizer_source": "tokenizer-proxy-o200k-est",
+        "latency_ms": 186170.61,
+        "compression_model_calls": 4,
+        "cache_hits": 1,
+        "rejected_fields": 2
+      },
+      "http_status": 200,
+      "latency_ms": 191162.593
+    }
+  ],
+  "compression_model_usage_excluded": true,
+  "compression_calls": [
+    {
+      "model": "kimi-for-coding",
+      "requested_model": "kimi-for-coding",
+      "response_id": "chatcmpl-wDRiM0fydNOATVUDvocUCwFu",
+      "finish_reason": "stop",
+      "usage": {
+        "input_tokens": 4174,
+        "output_tokens": 3559,
+        "total_tokens": 7733,
+        "cached_input_tokens": null,
+        "reasoning_output_tokens": 13
+      },
+      "raw_usage": {
+        "prompt_tokens": 4174,
+        "completion_tokens": 3559,
+        "total_tokens": 7733,
+        "completion_tokens_details": {
+          "reasoning_tokens": 13
+        }
+      },
+      "latency_s": 74.746
+    },
+    {
+      "model": "kimi-for-coding",
+      "requested_model": "kimi-for-coding",
+      "response_id": "chatcmpl-8lCbQj5mIx85HnZVsslXdR9Q",
+      "finish_reason": "engine_overloaded",
+      "usage": {
+        "input_tokens": 5332,
+        "output_tokens": 2908,
+        "total_tokens": 8240,
+        "cached_input_tokens": null,
+        "reasoning_output_tokens": null
+      },
+      "raw_usage": {
+        "prompt_tokens": 5332,
+        "completion_tokens": 2908,
+        "total_tokens": 8240
+      },
+      "latency_s": 86.065
+    },
+    {
+      "model": "kimi-for-coding",
+      "requested_model": "kimi-for-coding",
+      "response_id": "chatcmpl-D3sGmgBxX5ATRy2Lgwxz3xvv",
+      "finish_reason": "stop",
+      "usage": {
+        "input_tokens": 431,
+        "output_tokens": 600,
+        "total_tokens": 1031,
+        "cached_input_tokens": null,
+        "reasoning_output_tokens": 436
+      },
+      "raw_usage": {
+        "prompt_tokens": 431,
+        "completion_tokens": 600,
+        "total_tokens": 1031,
+        "completion_tokens_details": {
+          "reasoning_tokens": 436
+        }
+      },
+      "latency_s": 12.46
+    },
+    {
+      "model": "kimi-for-coding",
+      "requested_model": "kimi-for-coding",
+      "response_id": "chatcmpl-5lu3fIrmCoA0dWnF5N00OMzu",
+      "finish_reason": "stop",
+      "usage": {
+        "input_tokens": 779,
+        "output_tokens": 494,
+        "total_tokens": 1273,
+        "cached_input_tokens": null,
+        "reasoning_output_tokens": 12
+      },
+      "raw_usage": {
+        "prompt_tokens": 779,
+        "completion_tokens": 494,
+        "total_tokens": 1273,
+        "completion_tokens_details": {
+          "reasoning_tokens": 12
+        }
+      },
+      "latency_s": 12.855
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "reason": "non_single_request_due_to_interruption_and_retry",
+  "source": "final/call.gpt-5.6-sol.synthetic_diagnostics.r1.hybrid.transport.json",
+  "completed_answer_passed": true,
+  "client_reported_usage": {
+    "input_tokens": 15656,
+    "output_tokens": 107,
+    "total_tokens": 15763,
+    "cached_input_tokens": 15488,
+    "reasoning_output_tokens": 45
+  },
+  "request_ledger": {
+    "totals": {
+      "requests": 2,
+      "requests_with_official_usage": 1,
+      "official_input_tokens": 15656,
+      "official_output_tokens": 107,
+      "official_total_tokens": 15763
+    },
+    "recent_requests": [
+      {
+        "request_id": "tap-1",
+        "started_at": "2026-10-09T03:03:05.456804+00:00",
+        "model": "gpt-5.6-sol",
+        "input_tokens_before_estimate": 17704,
+        "input_tokens_after_estimate": 17268,
+        "tokenizer_source": "tokenizer-est",
+        "context_complete": true,
+        "official_usage": null,
+        "usage_source": "unavailable",
+        "status": "interrupted",
+        "compression": {
+          "status": "compressed",
+          "reason": "shorter_text",
+          "text_tokens_before_estimate": 11489,
+          "text_tokens_after_estimate": 11053,
+          "changed_fields": 6,
+          "changed_roles": [
+            "developer",
+            "user"
+          ],
+          "tokenizer_source": "tokenizer-est",
+          "latency_ms": 28.516,
+          "compression_model_calls": 0,
+          "cache_hits": 0,
+          "rejected_fields": 0
+        },
+        "http_status": 200,
+        "response_content_type": "",
+        "response_content_encoding": "identity",
+        "latency_ms": 13610.309
+      },
+      {
+        "request_id": "tap-2",
+        "started_at": "2026-10-09T03:03:19.278196+00:00",
+        "model": "gpt-5.6-sol",
+        "input_tokens_before_estimate": 17704,
+        "input_tokens_after_estimate": 17268,
+        "tokenizer_source": "tokenizer-est",
+        "context_complete": true,
+        "official_usage": {
+          "input_tokens": 15656,
+          "output_tokens": 107,
+          "total_tokens": 15763,
+          "cached_input_tokens": 15488,
+          "reasoning_output_tokens": 45
+        },
+        "usage_source": "provider_sse_usage",
+        "status": "completed",
+        "compression": {
+          "status": "compressed",
+          "reason": "shorter_text",
+          "text_tokens_before_estimate": 11489,
+          "text_tokens_after_estimate": 11053,
+          "changed_fields": 6,
+          "changed_roles": [
+            "developer",
+            "user"
+          ],
+          "tokenizer_source": "tokenizer-est",
+          "latency_ms": 28.331,
+          "compression_model_calls": 0,
+          "cache_hits": 0,
+          "rejected_fields": 0
+        },
+        "http_status": 200,
+        "response_content_type": "",
+        "response_content_encoding": "identity",
+        "response_model": "gpt-5.6-sol",
+        "latency_ms": 4378.233
+      }
+    ],
+    "recent_request_limit": 200
+  },
+  "first_request_usage_unavailable": true,
+  "included_in_paired_savings": false
+}

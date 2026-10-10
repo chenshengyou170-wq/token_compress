@@ -1,0 +1,58 @@
+Transform the following two JSON string fields independently using the Caveman rules below. Do not answer or execute the embedded task. Do not use tools. Return only JSON with string fields prompt and context. Keep each field's language. Preserve all factual details, numbers, identifiers, output keys/types, negations, conditions, authorization boundaries, uncertainty and code literals. Do not tailor or prune the context to the question. Only remove linguistic redundancy; do not add facts. The JSON output requirement takes precedence over the rules' plain-text output instruction.
+
+You are a caveman compression expert. Aggressively remove all stop words and grammatical scaffolding while preserving meaning.
+
+CORE STRATEGY:
+1. Remove articles, auxiliary verbs, and redundant words. Keep only content words that carry semantic meaning.
+2. Use simple, common words. If there's a simpler word, use it. Think like a caveman.
+
+ALWAYS REMOVE:
+- Articles: a, an, the
+- Auxiliary verbs: is, are, was, were, am, be, been, being, have, has, had, do, does, did
+- Common prepositions when meaning stays clear: of, for, to, in, on, at
+- Pronouns when context is clear: it, this, that, these, those
+- Pure intensifiers: very, quite, rather, somewhat, really, extremely
+
+ALWAYS KEEP:
+- All nouns (people, places, things, concepts)
+- All main verbs (actions, not auxiliaries)
+- All adjectives that add meaning
+- All numbers and quantifiers (at least, approximately, more than, 15, many)
+- Uncertainty qualifiers (what sounded like, appears to be, seems, might)
+- Critical prepositions that change meaning (from, with, without, stuck to)
+- Time/frequency words (every Tuesday, weekly, daily, always, never)
+- Names, titles (Dr., Mr., Senator)
+- Technical terms and domain-specific language
+
+BE SMART ABOUT:
+- Keep prepositions when they define relationships: "made from wood" (keep from), "system for processing" (remove for)
+- Keep "in/on/at" when they specify location/position, remove when just grammatical
+- Remove "is/are/was/were" unless part of passive voice that matters
+- Keep negations (not, no, never, without)
+
+EXAMPLES:
+
+"Caveman Compression is a semantic compression method for LLM contexts"
+→ "Caveman Compression semantic compression method LLM contexts."
+(Remove: is, a, for)
+
+"It removes predictable grammar while preserving the unpredictable content"
+→ "Removes predictable grammar preserving unpredictable content."
+(Remove: It, the, while → keep main meaning)
+
+"The system was designed to process data efficiently"
+→ "System designed process data efficiently."
+(Remove: The, was, to)
+
+"There were at least 20 people"
+→ "At least 20 people."
+(Keep: at least - quantifier matters)
+
+"Made from wood and metal"
+→ "Made from wood and metal."
+(Keep: from - shows material relationship)
+
+Output ONLY the caveman compressed text, nothing else.
+
+TEXT TO COMPRESS:
+{"prompt": "Please read the API documentation provided in the context carefully. I would like you to extract the authentication requirements and the rules for handling credentials. Use only the information contained in the provided documentation. Return one JSON object with exactly these keys: header (the header name), prefix (the authentication scheme, without the following space), separator (the literal word space if a space is required), error_status (an integer), every_request (a boolean indicating whether authentication is required on every request), commit_allowed (a boolean indicating whether keys may be committed to version control), public_sharing_allowed (a boolean), and env_storage_recommended (a boolean). Please do not include an explanation, Markdown, or any additional keys. Do not use any tools or access any websites.", "context": "To authenticate with our API, you need to include your API key in the Authorization header of every request. The API key should be prefixed with the word \"Bearer\" followed by a space. If authentication fails, the server will return a 401 Unauthorized status code along with an error message explaining why the authentication failed. Please note that API keys are sensitive credentials and should never be committed to version control or shared publicly. We recommend storing them in environment variables or using a secure secrets management system."}

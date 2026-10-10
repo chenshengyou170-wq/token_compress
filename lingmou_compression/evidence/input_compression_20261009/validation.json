@@ -1,0 +1,12 @@
+{
+  "command": ".venv/bin/python -m pytest tests -m 'not external' -q",
+  "result": "626 passed in 49.97s",
+  "cli_modes": [
+    "off",
+    "caveman",
+    "hybrid",
+    "kimi"
+  ],
+  "real_tool_probe": "tool_roundtrip/results.json",
+  "local_tests_are_not_real_provider_evidence": true
+}

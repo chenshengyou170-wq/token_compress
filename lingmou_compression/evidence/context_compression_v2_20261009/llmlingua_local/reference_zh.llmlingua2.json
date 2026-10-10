@@ -1,0 +1,28 @@
+{
+  "provider": "local_only",
+  "mode": "llmlingua2",
+  "observation": {
+    "status": "compressed",
+    "reason": "data_regions_only",
+    "text_tokens_before_estimate": 3590,
+    "text_tokens_after_estimate": 2022,
+    "changed_fields": 1,
+    "changed_roles": [
+      "user"
+    ],
+    "tokenizer_source": "tokenizer-proxy-o200k-est",
+    "latency_ms": 12299.321,
+    "compression_model_calls": 0,
+    "cache_hits": 0,
+    "rejected_fields": 0,
+    "full_request_tokens_before_estimate": 3643,
+    "full_request_tokens_after_estimate": 2077,
+    "compression_calls": [],
+    "local_model_calls": 1,
+    "lossy_fields": 1
+  },
+  "request_sha256": "270779597b458cdf3d859bb021d8e7b2c2e4c14f142c731ab9834c1a4d5f64d5",
+  "protected_instructions_exact": true,
+  "official_usage": null,
+  "quality_passed": null
+}

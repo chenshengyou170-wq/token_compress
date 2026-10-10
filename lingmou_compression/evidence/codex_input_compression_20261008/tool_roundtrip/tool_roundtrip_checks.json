@@ -1,0 +1,54 @@
+{
+  "off": {
+    "usage": {
+      "input_tokens": 32261,
+      "cached_input_tokens": 25472,
+      "output_tokens": 157,
+      "reasoning_output_tokens": 83
+    },
+    "passed": true,
+    "observed_request_count": 2,
+    "caller_prompt_sha256": "e43fc4072aeb5ddd80102dbf4ff8e93b09074b1c0a0ee76bbbf2611f8131fa9c",
+    "compression_observations": []
+  },
+  "caveman": {
+    "usage": {
+      "input_tokens": 31187,
+      "cached_input_tokens": 20864,
+      "output_tokens": 76,
+      "reasoning_output_tokens": 0
+    },
+    "passed": true,
+    "observed_request_count": 2,
+    "caller_prompt_sha256": "e43fc4072aeb5ddd80102dbf4ff8e93b09074b1c0a0ee76bbbf2611f8131fa9c",
+    "compression_observations": [
+      {
+        "status": "compressed",
+        "reason": "shorter_text",
+        "text_tokens_before_estimate": 12177,
+        "text_tokens_after_estimate": 11771,
+        "changed_fields": 7,
+        "changed_roles": [
+          "developer",
+          "user"
+        ],
+        "tokenizer_source": "heuristic-est",
+        "latency_ms": 15.806
+      },
+      {
+        "status": "compressed",
+        "reason": "shorter_text",
+        "text_tokens_before_estimate": 12185,
+        "text_tokens_after_estimate": 11778,
+        "changed_fields": 8,
+        "changed_roles": [
+          "assistant",
+          "developer",
+          "user"
+        ],
+        "tokenizer_source": "heuristic-est",
+        "latency_ms": 15.267
+      }
+    ]
+  }
+}

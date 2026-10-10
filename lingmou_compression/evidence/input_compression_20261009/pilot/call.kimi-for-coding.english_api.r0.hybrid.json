@@ -1,0 +1,82 @@
+{
+  "model": "kimi-for-coding",
+  "case": "english_api",
+  "repeat": 0,
+  "mode": "hybrid",
+  "started_at": "2026-10-09T02:31:43.264462+00:00",
+  "status": "completed",
+  "prompt_sha256": "9f7719536508e3e8fb6ea42ee682cdb1b85e6507ce423d6c63115bf710efef5d",
+  "transport": "kimi_official_api",
+  "response_model": "kimi-for-coding",
+  "raw_usage": {
+    "prompt_tokens": 312,
+    "completion_tokens": 112,
+    "total_tokens": 424,
+    "completion_tokens_details": {
+      "reasoning_tokens": 56
+    }
+  },
+  "response_id": "chatcmpl-9uj4zwBfW2ahI3LGfALEWlJA",
+  "usage": {
+    "input_tokens": 312,
+    "output_tokens": 112,
+    "total_tokens": 424,
+    "cached_input_tokens": null,
+    "reasoning_output_tokens": 56
+  },
+  "response": "{\"header\":\"Authorization\",\"prefix\":\"Bearer\",\"separator\":\" \",\"error_status\":401,\"every_request\":true,\"commit_allowed\":false,\"public_sharing_allowed\":false,\"env_storage_recommended\":true}",
+  "checks": {
+    "header": true,
+    "prefix": true,
+    "separator": false,
+    "error_status": true,
+    "every_request": true,
+    "commit_allowed": true,
+    "public_sharing_allowed": true,
+    "env_storage_recommended": true
+  },
+  "checks_passed": 7,
+  "checks_total": 8,
+  "quality_passed": false,
+  "latency_s": 3.518,
+  "request_usage": [
+    {
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T02:31:43.278788+00:00",
+      "model": "kimi-for-coding",
+      "input_tokens_before_estimate": 271,
+      "input_tokens_after_estimate": 243,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 312,
+        "output_tokens": 112,
+        "total_tokens": 424,
+        "cached_input_tokens": null,
+        "reasoning_output_tokens": 56
+      },
+      "usage_source": "provider_json_usage",
+      "status": "completed",
+      "compression": {
+        "status": "compressed",
+        "reason": "shorter_text",
+        "text_tokens_before_estimate": 255,
+        "text_tokens_after_estimate": 227,
+        "changed_fields": 1,
+        "changed_roles": [
+          "user"
+        ],
+        "tokenizer_source": "tokenizer-proxy-o200k-est",
+        "latency_ms": 1.688,
+        "compression_model_calls": 0,
+        "cache_hits": 0,
+        "rejected_fields": 0
+      },
+      "http_status": 200,
+      "response_model": "kimi-for-coding",
+      "latency_ms": 3325.953
+    }
+  ],
+  "compression_model_usage_excluded": true,
+  "compression_calls": []
+}

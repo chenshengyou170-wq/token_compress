@@ -1,0 +1,16 @@
+{
+  "model_id": "microsoft/llmlingua-2-xlm-roberta-large-meetingbank",
+  "revision": "ebaba9b0e874dadd3003ffcff828e4397e568089",
+  "device": "cpu",
+  "rate": 0.6,
+  "local_files_only": true,
+  "trust_remote_code": false,
+  "python": "3.11.9",
+  "packages": {
+    "llmlingua": "0.2.2",
+    "torch": "2.14.1+cpu",
+    "transformers": "5.19.0",
+    "tiktoken": "0.14.0",
+    "huggingface-hub": "1.33.0"
+  }
+}

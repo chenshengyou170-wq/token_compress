@@ -1,0 +1,94 @@
+{
+  "provider": "codex_chatgpt",
+  "mode": "extract",
+  "model": "gpt-6-astra",
+  "returncode": 0,
+  "error": null,
+  "latency_s": 8.627,
+  "response": "{\"allowed\":false,\"function\":\"refund_allowed\"}",
+  "requests": [
+    {
+      "task_id": "code",
+      "purpose": "unclassified",
+      "attempt": 1,
+      "accounting_labelled": false,
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T07:23:56.238397+00:00",
+      "model": "gpt-6-astra",
+      "input_tokens_before_estimate": 20432,
+      "input_tokens_after_estimate": 18918,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 17117,
+        "output_tokens": 14,
+        "total_tokens": 17131,
+        "cached_input_tokens": 0,
+        "reasoning_output_tokens": 0
+      },
+      "usage_source": "provider_sse_usage",
+      "status": "completed",
+      "compression": {
+        "status": "compressed",
+        "reason": "data_regions_only",
+        "text_tokens_before_estimate": 13550,
+        "text_tokens_after_estimate": 12112,
+        "changed_fields": 1,
+        "changed_roles": [
+          "user"
+        ],
+        "tokenizer_source": "tokenizer-proxy-o200k-est",
+        "latency_ms": 16.616,
+        "compression_model_calls": 0,
+        "cache_hits": 0,
+        "rejected_fields": 0,
+        "full_request_tokens_before_estimate": 21071,
+        "full_request_tokens_after_estimate": 19557,
+        "compression_calls": [],
+        "local_model_calls": 0,
+        "lossy_fields": 0
+      },
+      "http_status": 200,
+      "response_content_type": "",
+      "response_content_encoding": "identity",
+      "response_model": "gpt-6-astra",
+      "latency_ms": 3078.241
+    }
+  ],
+  "compression_observations": [
+    {
+      "status": "compressed",
+      "reason": "data_regions_only",
+      "text_tokens_before_estimate": 13550,
+      "text_tokens_after_estimate": 12112,
+      "changed_fields": 1,
+      "changed_roles": [
+        "user"
+      ],
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "latency_ms": 16.616,
+      "compression_model_calls": 0,
+      "cache_hits": 0,
+      "rejected_fields": 0,
+      "full_request_tokens_before_estimate": 21071,
+      "full_request_tokens_after_estimate": 19557,
+      "compression_calls": [],
+      "local_model_calls": 0,
+      "lossy_fields": 0
+    }
+  ],
+  "tool_items": [],
+  "codex_usage": {
+    "input_tokens": 17117,
+    "output_tokens": 14,
+    "total_tokens": 17131,
+    "cached_input_tokens": 0,
+    "reasoning_output_tokens": 0
+  },
+  "prompt_sha256": "5627f4a7187f73d04b6145652a1f21494d93bba027c627d7ede441287d0a9658",
+  "checks": {
+    "exact_fields": true,
+    "allowed": true,
+    "function": true
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "model": "k3",
+  "case": "synthetic_diagnostics",
+  "repeat": 0,
+  "mode": "hybrid",
+  "started_at": "2026-10-09T02:50:41.258994+00:00",
+  "status": "completed",
+  "prompt_sha256": "37f7859a9284b4ddf64269096a7658b45f49848be33691009b9b4fa1542c35d4",
+  "transport": "kimi_official_api",
+  "response_model": "k3",
+  "raw_usage": {
+    "prompt_tokens": 1708,
+    "completion_tokens": 109,
+    "total_tokens": 1817,
+    "completion_tokens_details": {
+      "reasoning_tokens": 41
+    }
+  },
+  "response_id": "chatcmpl-SaWuQGC4aebyzpgKwrBwkJjH",
+  "usage": {
+    "input_tokens": 1708,
+    "output_tokens": 109,
+    "total_tokens": 1817,
+    "cached_input_tokens": null,
+    "reasoning_output_tokens": 41
+  },
+  "response": "{\"batch_count\":24,\"invalid_batch\":13,\"accepted_records\":2587,\"retry_authorized\":false,\"retry_executed\":false,\"first_checksum\":\"C01X\",\"last_checksum\":\"C24X\",\"remediation\":\"repair --batch 13 --dry-run\"}",
+  "checks": {
+    "batch_count": true,
+    "invalid_batch": true,
+    "accepted_records": true,
+    "retry_authorized": true,
+    "retry_executed": true,
+    "first_checksum": true,
+    "last_checksum": true,
+    "remediation": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "quality_passed": true,
+  "latency_s": 5.014,
+  "request_usage": [
+    {
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T02:50:41.269701+00:00",
+      "model": "k3",
+      "input_tokens_before_estimate": 1834,
+      "input_tokens_after_estimate": 1689,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 1708,
+        "output_tokens": 109,
+        "total_tokens": 1817,
+        "cached_input_tokens": null,
+        "reasoning_output_tokens": 41
+      },
+      "usage_source": "provider_json_usage",
+      "status": "completed",
+      "compression": {
+        "status": "compressed",
+        "reason": "shorter_text",
+        "text_tokens_before_estimate": 1770,
+        "text_tokens_after_estimate": 1625,
+        "changed_fields": 1,
+        "changed_roles": [
+          "user"
+        ],
+        "tokenizer_source": "tokenizer-proxy-o200k-est",
+        "latency_ms": 9.682,
+        "compression_model_calls": 0,
+        "cache_hits": 0,
+        "rejected_fields": 0
+      },
+      "http_status": 200,
+      "response_content_type": "application/json; charset=utf-8",
+      "response_content_encoding": "identity",
+      "response_model": "k3",
+      "latency_ms": 4919.137
+    }
+  ],
+  "compression_model_usage_excluded": true,
+  "compression_calls": []
+}

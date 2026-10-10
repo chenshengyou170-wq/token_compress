@@ -1,0 +1,26 @@
+[
+  {
+    "case": "chinese_bank",
+    "text_tokens_estimate": 2372,
+    "masked_tokens_estimate": 1982,
+    "protected_spans": 71,
+    "protected_chars": 2256,
+    "text_chars": 4512
+  },
+  {
+    "case": "english_api",
+    "text_tokens_estimate": 255,
+    "masked_tokens_estimate": 161,
+    "protected_spans": 9,
+    "protected_chars": 960,
+    "text_chars": 1403
+  },
+  {
+    "case": "synthetic_diagnostics",
+    "text_tokens_estimate": 1770,
+    "masked_tokens_estimate": 2432,
+    "protected_spans": 107,
+    "protected_chars": 685,
+    "text_chars": 10352
+  }
+]

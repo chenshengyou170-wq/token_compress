@@ -1,0 +1,49 @@
+{
+  "label": "english_api.prompt_only",
+  "returncode": 0,
+  "latency_s": 10.11,
+  "usage_source": "codex_exec_turn_completed",
+  "usage": {
+    "input_tokens": 15565,
+    "cached_input_tokens": 8960,
+    "output_tokens": 46,
+    "reasoning_output_tokens": 0
+  },
+  "upstream": "https://chatgpt.com/backend-api/codex",
+  "observed_models": [
+    "gpt-6-astra"
+  ],
+  "observed_request_count": 1,
+  "tap_stats": {
+    "running": false,
+    "request_count": 3,
+    "observed_request_count": 1,
+    "multimodal_request_count": 0,
+    "provider_count_attempt_count": 0,
+    "provider_count_success_count": 0,
+    "provider_count_error_count": 0,
+    "provider_breakdown_attempt_count": 0,
+    "provider_breakdown_success_count": 0,
+    "provider_breakdown_error_count": 0,
+    "sse_event_count": 0,
+    "error_count": 0,
+    "upstream_origin": "https://chatgpt.com",
+    "upstream_path": "/backend-api/codex"
+  },
+  "completed_turn_count": 1,
+  "tool_item_types": [],
+  "response": "{\"header\":\"Authorization\",\"prefix\":\"Bearer\",\"separator\":\"space\",\"error_status\":401,\"every_request\":true,\"commit_allowed\":false,\"public_sharing_allowed\":false,\"env_storage_recommended\":true}",
+  "prompt_sha256": "68741a163e0b3cae2c08d151e09bdee4070a7f9dff0a65765561f75e57c12960",
+  "raw_completion_events": [
+    {
+      "type": "turn.completed",
+      "usage": {
+        "input_tokens": 15565,
+        "cached_input_tokens": 8960,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 46,
+        "reasoning_output_tokens": 0
+      }
+    }
+  ]
+}

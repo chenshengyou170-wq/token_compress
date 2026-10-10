@@ -1,0 +1,4 @@
+﻿model,case,mode,n,paired_n,quality_passes,mean_input_tokens,mean_output_tokens,input_reduction_pct,total_reduction_pct,local_reduction_pct,median_latency_s
+gpt-6-astra,english_api,hybrid,1,1,1,15285,46,1.91,1.91,1.73,8.91
+gpt-6-astra,english_api,kimi,1,1,1,15467,46,0.74,0.74,0.86,150.45
+gpt-6-astra,english_api,off,1,1,1,15583,46,0.0,0.0,0.0,13.01

@@ -1,0 +1,99 @@
+{
+  "model": "gpt-5.6-sol",
+  "case": "chinese_bank",
+  "repeat": 0,
+  "mode": "kimi",
+  "started_at": "2026-10-09T03:00:44.576776+00:00",
+  "status": "completed",
+  "prompt_sha256": "7d1012e407b8e127b55eee060d0654a23ebe6a26daddc9f9aea4610e786c5079",
+  "transport": "codex",
+  "codex_version": "0.161.0",
+  "observed_models": [
+    "gpt-5.6-sol"
+  ],
+  "raw_completion_events": [
+    {
+      "type": "turn.completed",
+      "usage": {
+        "input_tokens": 16063,
+        "cached_input_tokens": 7936,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 320,
+        "reasoning_output_tokens": 137
+      }
+    }
+  ],
+  "usage": {
+    "input_tokens": 16063,
+    "output_tokens": 320,
+    "total_tokens": 16383,
+    "cached_input_tokens": 7936,
+    "reasoning_output_tokens": 137
+  },
+  "response": "{\n  \"channel_success_cny\": 501000,\n  \"core_settled_cny\": 221000,\n  \"gap_cny\": 280000,\n  \"gap_payment_id\": \"P1002\",\n  \"anomaly_face_value_cny\": 399000,\n  \"held_payment_id\": \"P1004\",\n  \"held_amount_cny\": 510000,\n  \"duplicate_payment_id\": \"P1003\",\n  \"duplicate_charge_proven\": false,\n  \"replay_authorized\": false,\n  \"raw_upload_authorized\": false,\n  \"report_send_action\": \"需人工复核，未放行\",\n  \"generic_dlp_implemented\": false,\n  \"real_bank_system_connected\": false,\n  \"secret_directory\": \"secrets/，禁止访问\",\n  \"approved_domain_count\": 3\n}",
+  "checks": {
+    "channel_success_cny": true,
+    "core_settled_cny": true,
+    "gap_cny": true,
+    "gap_payment_id": true,
+    "anomaly_face_value_cny": true,
+    "held_payment_id": true,
+    "held_amount_cny": true,
+    "duplicate_payment_id": true,
+    "duplicate_charge_proven": true,
+    "replay_authorized": true,
+    "raw_upload_authorized": true,
+    "report_send_action": false,
+    "generic_dlp_implemented": true,
+    "real_bank_system_connected": true,
+    "secret_directory": false,
+    "approved_domain_count": true
+  },
+  "checks_passed": 14,
+  "checks_total": 16,
+  "quality_passed": false,
+  "latency_s": 14.75,
+  "request_usage": [
+    {
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T03:00:47.323624+00:00",
+      "model": "gpt-5.6-sol",
+      "input_tokens_before_estimate": 18348,
+      "input_tokens_after_estimate": 17639,
+      "tokenizer_source": "tokenizer-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 16063,
+        "output_tokens": 320,
+        "total_tokens": 16383,
+        "cached_input_tokens": 7936,
+        "reasoning_output_tokens": 137
+      },
+      "usage_source": "provider_sse_usage",
+      "status": "completed",
+      "compression": {
+        "status": "compressed",
+        "reason": "shorter_text",
+        "text_tokens_before_estimate": 12091,
+        "text_tokens_after_estimate": 11460,
+        "changed_fields": 4,
+        "changed_roles": [
+          "developer",
+          "user"
+        ],
+        "tokenizer_source": "tokenizer-est",
+        "latency_ms": 25.681,
+        "compression_model_calls": 0,
+        "cache_hits": 5,
+        "rejected_fields": 2
+      },
+      "http_status": 200,
+      "response_content_type": "",
+      "response_content_encoding": "identity",
+      "response_model": "gpt-5.6-sol",
+      "latency_ms": 9774.115
+    }
+  ],
+  "compression_model_usage_excluded": true,
+  "compression_calls": []
+}

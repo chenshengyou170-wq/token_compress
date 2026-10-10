@@ -1,0 +1,364 @@
+[
+  [
+    {
+      "type": "additional_tools",
+      "role": "developer",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "tools"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "message",
+      "role": "developer",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "content",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "message",
+      "role": "developer",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "content",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "message",
+      "role": "developer",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "content",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "message",
+      "role": "developer",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "content",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "message",
+      "role": "user",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "content",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "message",
+      "role": "user",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "content",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    }
+  ],
+  [
+    {
+      "type": "additional_tools",
+      "role": "developer",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "tools"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "message",
+      "role": "developer",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "content",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "message",
+      "role": "developer",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "content",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "message",
+      "role": "developer",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "content",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "message",
+      "role": "developer",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "content",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "message",
+      "role": "user",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "content",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "message",
+      "role": "user",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "content",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "message",
+      "role": "assistant",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "content",
+        "phase",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "custom_tool_call",
+      "name": "exec",
+      "call_id": "call_df3884a198c148769a95c9e36efab2dc",
+      "keys": [
+        "type",
+        "id",
+        "status",
+        "call_id",
+        "name",
+        "input",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": true
+    },
+    {
+      "type": "custom_tool_call_output",
+      "call_id": "call_df3884a198c148769a95c9e36efab2dc",
+      "keys": [
+        "type",
+        "id",
+        "call_id",
+        "output",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    }
+  ],
+  [
+    {
+      "type": "additional_tools",
+      "role": "developer",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "tools"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "message",
+      "role": "developer",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "content",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "message",
+      "role": "developer",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "content",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "message",
+      "role": "developer",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "content",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "message",
+      "role": "developer",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "content",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "message",
+      "role": "user",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "content",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "message",
+      "role": "user",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "content",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "message",
+      "role": "assistant",
+      "keys": [
+        "type",
+        "id",
+        "role",
+        "content",
+        "phase",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "custom_tool_call",
+      "name": "exec",
+      "call_id": "call_df3884a198c148769a95c9e36efab2dc",
+      "keys": [
+        "type",
+        "id",
+        "status",
+        "call_id",
+        "name",
+        "input",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": true
+    },
+    {
+      "type": "custom_tool_call_output",
+      "call_id": "call_df3884a198c148769a95c9e36efab2dc",
+      "keys": [
+        "type",
+        "id",
+        "call_id",
+        "output",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    },
+    {
+      "type": "custom_tool_call",
+      "name": "exec",
+      "call_id": "call_356d67eeaeb24d7298bcc3a5884636c1",
+      "keys": [
+        "type",
+        "id",
+        "status",
+        "call_id",
+        "name",
+        "input",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": true
+    },
+    {
+      "type": "custom_tool_call_output",
+      "call_id": "call_356d67eeaeb24d7298bcc3a5884636c1",
+      "keys": [
+        "type",
+        "id",
+        "call_id",
+        "output",
+        "internal_chat_message_metadata_passthrough"
+      ],
+      "source_read_in_call": false
+    }
+  ]
+]

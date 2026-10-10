@@ -1,0 +1,99 @@
+{
+  "provider": "codex_chatgpt",
+  "mode": "extract",
+  "model": "gpt-6-astra",
+  "returncode": 0,
+  "error": null,
+  "latency_s": 10.842,
+  "response": "{\"status\":\"needs_review\",\"approved\":false,\"amount_cents\":12343,\"currency\":\"CNY\"}",
+  "requests": [
+    {
+      "task_id": "table_en",
+      "purpose": "generation",
+      "attempt": 1,
+      "accounting_labelled": true,
+      "task_source": "codex_turn_metadata",
+      "purpose_source": "request",
+      "attempt_source": "repeated_body_inference",
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T07:31:23.601075+00:00",
+      "model": "gpt-6-astra",
+      "input_tokens_before_estimate": 24748,
+      "input_tokens_after_estimate": 20352,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 18505,
+        "output_tokens": 26,
+        "total_tokens": 18531,
+        "cached_input_tokens": 8960,
+        "reasoning_output_tokens": 0
+      },
+      "usage_source": "provider_sse_usage",
+      "status": "completed",
+      "compression": {
+        "status": "compressed",
+        "reason": "data_regions_only",
+        "text_tokens_before_estimate": 17062,
+        "text_tokens_after_estimate": 13500,
+        "changed_fields": 1,
+        "changed_roles": [
+          "user"
+        ],
+        "tokenizer_source": "tokenizer-proxy-o200k-est",
+        "latency_ms": 41.943,
+        "compression_model_calls": 0,
+        "cache_hits": 0,
+        "rejected_fields": 0,
+        "full_request_tokens_before_estimate": 25326,
+        "full_request_tokens_after_estimate": 20930,
+        "compression_calls": [],
+        "local_model_calls": 0,
+        "lossy_fields": 0
+      },
+      "http_status": 200,
+      "response_content_type": "",
+      "response_content_encoding": "identity",
+      "response_model": "gpt-6-astra",
+      "latency_ms": 6000.936
+    }
+  ],
+  "compression_observations": [
+    {
+      "status": "compressed",
+      "reason": "data_regions_only",
+      "text_tokens_before_estimate": 17062,
+      "text_tokens_after_estimate": 13500,
+      "changed_fields": 1,
+      "changed_roles": [
+        "user"
+      ],
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "latency_ms": 41.943,
+      "compression_model_calls": 0,
+      "cache_hits": 0,
+      "rejected_fields": 0,
+      "full_request_tokens_before_estimate": 25326,
+      "full_request_tokens_after_estimate": 20930,
+      "compression_calls": [],
+      "local_model_calls": 0,
+      "lossy_fields": 0
+    }
+  ],
+  "tool_items": [],
+  "codex_usage": {
+    "input_tokens": 18505,
+    "output_tokens": 26,
+    "total_tokens": 18531,
+    "cached_input_tokens": 8960,
+    "reasoning_output_tokens": 0
+  },
+  "prompt_sha256": "c6edad3e3db8dfeb883385eff14fb7c1524d3f335e4e65b38659b347915d61f3",
+  "checks": {
+    "exact_fields": true,
+    "status": true,
+    "approved": true,
+    "amount_cents": true,
+    "currency": true
+  }
+}

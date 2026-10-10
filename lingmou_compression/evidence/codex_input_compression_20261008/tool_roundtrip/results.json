@@ -1,0 +1,70 @@
+{
+  "schema_version": "lingmou.codex-input-compression-ab.v1",
+  "started_at": "2026-10-08T13:24:18.692100+00:00",
+  "model": "gpt-6-astra",
+  "method": "local Caveman-style rules in RequestTokenTap, after Codex assembles the complete request",
+  "compression_model_calls": 0,
+  "usage_source": "codex_exec_turn_completed",
+  "cases": [],
+  "limitations": [
+    "Two fixtures and fixed-answer retention checks are not general semantic-equivalence evidence.",
+    "Official input_tokens includes cached_input_tokens; these are token counts, not monetary costs.",
+    "Local compressor counters are labelled estimates and never substitute for official usage."
+  ],
+  "codex_version": "0.161.0",
+  "tool_roundtrip": {
+    "off": {
+      "usage": {
+        "input_tokens": 32261,
+        "cached_input_tokens": 25472,
+        "output_tokens": 157,
+        "reasoning_output_tokens": 83
+      },
+      "passed": true,
+      "observed_request_count": 2,
+      "caller_prompt_sha256": "e43fc4072aeb5ddd80102dbf4ff8e93b09074b1c0a0ee76bbbf2611f8131fa9c",
+      "compression_observations": []
+    },
+    "caveman": {
+      "usage": {
+        "input_tokens": 31187,
+        "cached_input_tokens": 20864,
+        "output_tokens": 76,
+        "reasoning_output_tokens": 0
+      },
+      "passed": true,
+      "observed_request_count": 2,
+      "caller_prompt_sha256": "e43fc4072aeb5ddd80102dbf4ff8e93b09074b1c0a0ee76bbbf2611f8131fa9c",
+      "compression_observations": [
+        {
+          "status": "compressed",
+          "reason": "shorter_text",
+          "text_tokens_before_estimate": 12177,
+          "text_tokens_after_estimate": 11771,
+          "changed_fields": 7,
+          "changed_roles": [
+            "developer",
+            "user"
+          ],
+          "tokenizer_source": "heuristic-est",
+          "latency_ms": 15.806
+        },
+        {
+          "status": "compressed",
+          "reason": "shorter_text",
+          "text_tokens_before_estimate": 12185,
+          "text_tokens_after_estimate": 11778,
+          "changed_fields": 8,
+          "changed_roles": [
+            "assistant",
+            "developer",
+            "user"
+          ],
+          "tokenizer_source": "heuristic-est",
+          "latency_ms": 15.267
+        }
+      ]
+    }
+  },
+  "completed_at": "2026-10-08T13:24:57.916333+00:00"
+}

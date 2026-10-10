@@ -1,0 +1,65 @@
+{
+  "model": "gpt-6-astra",
+  "case": "english_api",
+  "repeat": 0,
+  "mode": "off",
+  "started_at": "2026-10-09T02:36:11.146788+00:00",
+  "status": "completed",
+  "prompt_sha256": "9f7719536508e3e8fb6ea42ee682cdb1b85e6507ce423d6c63115bf710efef5d",
+  "transport": "codex",
+  "codex_version": "0.161.0",
+  "observed_models": [
+    "gpt-6-astra"
+  ],
+  "raw_completion_events": [
+    {
+      "type": "turn.completed",
+      "usage": {
+        "input_tokens": 15585,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 46,
+        "reasoning_output_tokens": 0
+      }
+    }
+  ],
+  "usage": {
+    "input_tokens": 15585,
+    "cached_input_tokens": 0,
+    "output_tokens": 46,
+    "reasoning_output_tokens": 0
+  },
+  "response": "{\"header\":\"Authorization\",\"prefix\":\"Bearer\",\"separator\":\"space\",\"error_status\":401,\"every_request\":true,\"commit_allowed\":false,\"public_sharing_allowed\":false,\"env_storage_recommended\":true}",
+  "checks": {
+    "header": true,
+    "prefix": true,
+    "separator": true,
+    "error_status": true,
+    "every_request": true,
+    "commit_allowed": true,
+    "public_sharing_allowed": true,
+    "env_storage_recommended": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "quality_passed": true,
+  "latency_s": 8.324,
+  "request_usage": [
+    {
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T02:36:13.975136+00:00",
+      "model": "gpt-6-astra",
+      "input_tokens_before_estimate": 17242,
+      "input_tokens_after_estimate": 17242,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": null,
+      "usage_source": "unavailable",
+      "status": "completed",
+      "http_status": 200,
+      "latency_ms": 3250.387
+    }
+  ],
+  "compression_model_usage_excluded": true,
+  "compression_calls": []
+}

@@ -1,0 +1,4 @@
+﻿model,case,repeat,mode,status,checks_passed,checks_total,quality_passed,local_before,local_after,input_tokens,output_tokens,total_tokens,cached_input_tokens,reasoning_output_tokens,latency_s,compression_model_calls
+kimi-for-coding,english_api,0,hybrid,completed,7,8,False,271,243,312,112,424,,56,3.518,0
+kimi-for-coding,english_api,0,kimi,error,0,0,False,,,,,,,,120.131,0
+kimi-for-coding,english_api,0,off,completed,8,8,True,271,271,340,119,459,,62,3.535,0

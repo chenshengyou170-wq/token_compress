@@ -1,0 +1,9 @@
+{
+  "provider": "local_only",
+  "mode": "off",
+  "observation": null,
+  "request_sha256": "44b209fd073fcdd761209065a1fea163337690795cb291965c5e3a348b928937",
+  "protected_instructions_exact": true,
+  "official_usage": null,
+  "quality_passed": null
+}

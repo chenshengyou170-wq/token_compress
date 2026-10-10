@@ -1,0 +1,9 @@
+﻿model,mode,paired_n,local_before,local_after,local_reduction_pct,official_input_before,official_input_after,official_input_reduction_pct,official_output_before,official_output_after,official_total_before,official_total_after,official_total_reduction_pct,quality_passes,median_latency_s
+gpt-6-astra,hybrid,4,73390,72189,1.64,66566,65388,1.77,432,432,66998,65820,1.76,4,10.4
+gpt-6-astra,kimi,4,73390,71533,2.53,66566,64974,2.39,432,486,66998,65460,2.3,2,12.06
+gpt-5.6-sol,hybrid,4,68949,67813,1.65,62542,61364,1.88,346,474,62888,61838,1.67,4,9.75
+gpt-5.6-sol,kimi,4,68949,67203,2.53,62542,60938,2.56,346,737,62888,61675,1.93,2,13.47
+kimi-for-coding,hybrid,4,5486,5472,0.26,4970,4956,0.28,861,1139,5831,6095,-4.53,4,7.02
+kimi-for-coding,kimi,4,5486,4284,21.91,4970,4034,18.83,861,1518,5831,5552,4.78,3,15.27
+k3,hybrid,4,5486,5472,0.26,4970,4956,0.28,930,713,5900,5669,3.92,4,6.52
+k3,kimi,4,5486,4284,21.91,4970,4034,18.83,930,1283,5900,5317,9.88,2,10.02

@@ -1,0 +1,7 @@
+﻿model,case,repeat,mode,status,checks_passed,checks_total,quality_passed,local_before,local_after,input_tokens,output_tokens,total_tokens,cached_input_tokens,reasoning_output_tokens,latency_s,compression_model_calls
+gpt-6-astra,english_api,0,hybrid,completed,8,8,True,17248,16950,15287,46,15333,0,0,9.037,0
+gpt-6-astra,english_api,0,kimi,completed,8,8,True,17239,16770,15131,46,15177,4864,0,195.909,4
+gpt-6-astra,english_api,0,off,completed,8,8,True,17242,17242,15585,46,15631,0,0,8.324,0
+kimi-for-coding,english_api,0,hybrid,completed,8,8,True,271,264,333,176,509,,119,4.514,0
+kimi-for-coding,english_api,0,kimi,completed,8,8,True,271,243,313,129,442,,72,8.521,1
+kimi-for-coding,english_api,0,off,completed,8,8,True,271,271,340,158,498,340,101,4.536,0

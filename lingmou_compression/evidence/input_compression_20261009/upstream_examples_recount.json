@@ -1,0 +1,31 @@
+{
+  "kind": "local tokenizer recount of repository examples; not new model inference or official usage",
+  "revision": "2a11efbf74863449e3392322ea0bf8d7ebe55357",
+  "rows": [
+    {
+      "case": "system-prompt",
+      "encoding": "o200k_base",
+      "original": 113,
+      "compressed": 51,
+      "reduction_pct": 54.87,
+      "quality_tested": false
+    },
+    {
+      "case": "api-documentation",
+      "encoding": "o200k_base",
+      "original": 99,
+      "compressed": 57,
+      "reduction_pct": 42.42,
+      "quality_tested": false
+    },
+    {
+      "case": "resume",
+      "encoding": "o200k_base",
+      "original": 153,
+      "compressed": 126,
+      "reduction_pct": 17.65,
+      "quality_tested": false
+    }
+  ],
+  "weighted_reduction_pct": 35.89
+}

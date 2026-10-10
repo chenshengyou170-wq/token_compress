@@ -1,0 +1,14 @@
+{
+  "model": "gpt-5.6-sol",
+  "case": "synthetic_diagnostics",
+  "repeat": 1,
+  "mode": "hybrid",
+  "started_at": "2026-10-09T03:03:02.507630+00:00",
+  "status": "error",
+  "prompt_sha256": "37f7859a9284b4ddf64269096a7658b45f49848be33691009b9b4fa1542c35d4",
+  "error_type": "RuntimeError",
+  "latency_s": 32.279,
+  "request_usage": [],
+  "compression_model_usage_excluded": true,
+  "compression_calls": []
+}

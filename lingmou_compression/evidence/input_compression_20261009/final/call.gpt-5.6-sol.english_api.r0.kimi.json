@@ -1,0 +1,140 @@
+{
+  "model": "gpt-5.6-sol",
+  "case": "english_api",
+  "repeat": 0,
+  "mode": "kimi",
+  "started_at": "2026-10-09T02:58:45.947021+00:00",
+  "status": "completed",
+  "prompt_sha256": "9f7719536508e3e8fb6ea42ee682cdb1b85e6507ce423d6c63115bf710efef5d",
+  "transport": "codex",
+  "codex_version": "0.161.0",
+  "observed_models": [
+    "gpt-5.6-sol"
+  ],
+  "raw_completion_events": [
+    {
+      "type": "turn.completed",
+      "usage": {
+        "input_tokens": 14406,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 46,
+        "reasoning_output_tokens": 0
+      }
+    }
+  ],
+  "usage": {
+    "input_tokens": 14406,
+    "output_tokens": 46,
+    "total_tokens": 14452,
+    "cached_input_tokens": 0,
+    "reasoning_output_tokens": 0
+  },
+  "response": "{\"header\":\"Authorization\",\"prefix\":\"Bearer\",\"separator\":\"space\",\"error_status\":401,\"every_request\":true,\"commit_allowed\":false,\"public_sharing_allowed\":false,\"env_storage_recommended\":true}",
+  "checks": {
+    "header": true,
+    "prefix": true,
+    "separator": true,
+    "error_status": true,
+    "every_request": true,
+    "commit_allowed": true,
+    "public_sharing_allowed": true,
+    "env_storage_recommended": true
+  },
+  "checks_passed": 8,
+  "checks_total": 8,
+  "quality_passed": true,
+  "latency_s": 118.621,
+  "request_usage": [
+    {
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T02:58:48.958789+00:00",
+      "model": "gpt-5.6-sol",
+      "input_tokens_before_estimate": 16132,
+      "input_tokens_after_estimate": 15944,
+      "tokenizer_source": "tokenizer-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 14406,
+        "output_tokens": 46,
+        "total_tokens": 14452,
+        "cached_input_tokens": 0,
+        "reasoning_output_tokens": 0
+      },
+      "usage_source": "provider_sse_usage",
+      "status": "completed",
+      "compression": {
+        "status": "compressed",
+        "reason": "shorter_text",
+        "text_tokens_before_estimate": 9974,
+        "text_tokens_after_estimate": 9803,
+        "changed_fields": 4,
+        "changed_roles": [
+          "developer",
+          "user"
+        ],
+        "tokenizer_source": "tokenizer-est",
+        "latency_ms": 111269.06,
+        "compression_model_calls": 4,
+        "cache_hits": 1,
+        "rejected_fields": 2
+      },
+      "http_status": 200,
+      "response_content_type": "",
+      "response_content_encoding": "identity",
+      "response_model": "gpt-5.6-sol",
+      "latency_ms": 114374.425
+    }
+  ],
+  "compression_model_usage_excluded": true,
+  "compression_calls": [
+    {
+      "model": "kimi-for-coding",
+      "requested_model": "kimi-for-coding",
+      "response_id": "chatcmpl-ECRzIhlpspEIRx6NWPl41RmA",
+      "finish_reason": "stop",
+      "usage": {
+        "input_tokens": 414,
+        "output_tokens": 556,
+        "total_tokens": 970,
+        "cached_input_tokens": 256,
+        "reasoning_output_tokens": 410
+      },
+      "raw_usage": {
+        "prompt_tokens": 414,
+        "completion_tokens": 556,
+        "total_tokens": 970,
+        "cached_tokens": 256,
+        "completion_tokens_details": {
+          "reasoning_tokens": 410
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 256
+        }
+      },
+      "latency_s": 13.453
+    },
+    {
+      "model": "kimi-for-coding",
+      "requested_model": "kimi-for-coding",
+      "response_id": "chatcmpl-QhDKjG3wiMTVz0O1cGzrciAX",
+      "finish_reason": "stop",
+      "usage": {
+        "input_tokens": 633,
+        "output_tokens": 280,
+        "total_tokens": 913,
+        "cached_input_tokens": null,
+        "reasoning_output_tokens": 16
+      },
+      "raw_usage": {
+        "prompt_tokens": 633,
+        "completion_tokens": 280,
+        "total_tokens": 913,
+        "completion_tokens_details": {
+          "reasoning_tokens": 16
+        }
+      },
+      "latency_s": 7.311
+    }
+  ]
+}

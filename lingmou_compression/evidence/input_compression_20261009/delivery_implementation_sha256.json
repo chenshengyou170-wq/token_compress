@@ -1,0 +1,15 @@
+{
+  "src/codexscope/input_compression.py": "45b156f180f682b107440283d0acdba6bee06bee568aaa6b4f479a03bd393cb9",
+  "src/codexscope/context_compression.py": "d1ae67ad2cf8fb1792873440657913f528566c4f8155965bde83fb053aa1aec9",
+  "src/codexscope/compression_models.py": "b6e3583b1dd8544833d8d527e094c67ccfcf57b24ac9b9fa1d92ed728bc8a272",
+  "src/codexscope/request_usage_ledger.py": "83ffb183b64cf115f8ddffddacaee768ebfbae9b46e580946a555e7541056322",
+  "src/codexscope/request_token_tap.py": "b9588fe208c029dcbbd6b5770ef72e95d462a3cc045741b65be388d4a4d93442",
+  "src/codexscope/proxy_usage.py": "6b795e5ad7f4e0425318c818c622993c59e1612f528477983dada235a9d6b119",
+  "src/codexscope/monitor.py": "08c47ca935d369625edcebff55d1b7bebf67aa6f386d63bfb5af5640727f9984",
+  "src/codexscope/cli.py": "347ccf0cd7f776078c65bd57708598b118aa7ebbda459c8e25853ceed37694b9",
+  "scripts/benchmark_input_compression.py": "fd71ccffc2620cd33c6b43a5bf7497779bed2f90e1b8d245d5930386009e644b",
+  "scripts/benchmark_tool_result_compression.py": "d3d1e27499ba8c9c917d9fe2e4eacb820d855099ad81c26bfa436bfd93e92b9f",
+  "scripts/codex_usage_probe.py": "6f9d0e5d0f0ecc506b5402f753fc5490b87d10e4441f7005402522c78b91850b",
+  "scripts/compare_prompt_compression.py": "8bc4e4bd32ef6c712df195e3a29c282504ef175e53569a240f5e03e9debd2250",
+  "scripts/verify_codex_input_compression.py": "fa71a86b029a46cf3131b5952e0a1b12dda96475bc4fa068a4075e03b07e9518"
+}

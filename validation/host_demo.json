@@ -1,0 +1,113 @@
+{
+  "simulated": true,
+  "text": "Approval is required before refund.\n",
+  "trace": [
+    {
+      "event": "load",
+      "names": [
+        "lingmou_source_read"
+      ]
+    },
+    {
+      "event": "reread",
+      "start_line": 2,
+      "end_line": 2
+    }
+  ],
+  "requests": [
+    {
+      "task_id": "source-demo",
+      "purpose": "generation",
+      "attempt": 1,
+      "attempt_source": "host",
+      "accounting_labelled": true,
+      "official_usage": null,
+      "status": "completed"
+    },
+    {
+      "task_id": "source-demo",
+      "purpose": "generation",
+      "attempt": 1,
+      "attempt_source": "host",
+      "accounting_labelled": true,
+      "official_usage": null,
+      "status": "completed"
+    },
+    {
+      "task_id": "source-demo",
+      "purpose": "reread",
+      "attempt": 1,
+      "attempt_source": "host",
+      "accounting_labelled": true,
+      "official_usage": null,
+      "status": "completed"
+    }
+  ],
+  "usage": {
+    "requests": 3,
+    "failed_requests": 0,
+    "local_model_calls": 0,
+    "inferred_retry_requests": 0,
+    "unlabelled_requests": 0,
+    "input_tokens_before_estimate": 0,
+    "input_tokens_after_estimate": 0,
+    "downstream": {
+      "calls": 3,
+      "calls_with_usage": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "known_cached_input_tokens": 0,
+      "calls_with_cache_detail": 0,
+      "usage_complete": false,
+      "missing_usage_calls": 3,
+      "official_total_tokens": null,
+      "cached_input_tokens": null
+    },
+    "compression": {
+      "calls": 0,
+      "calls_with_usage": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "known_cached_input_tokens": 0,
+      "calls_with_cache_detail": 0,
+      "usage_complete": true,
+      "missing_usage_calls": 0,
+      "official_total_tokens": 0,
+      "cached_input_tokens": 0
+    },
+    "reread": {
+      "calls": 1,
+      "calls_with_usage": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "known_cached_input_tokens": 0,
+      "calls_with_cache_detail": 0,
+      "usage_complete": false,
+      "missing_usage_calls": 1,
+      "official_total_tokens": null,
+      "cached_input_tokens": null
+    },
+    "retry": {
+      "calls": 0,
+      "calls_with_usage": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "known_cached_input_tokens": 0,
+      "calls_with_cache_detail": 0,
+      "usage_complete": true,
+      "missing_usage_calls": 0,
+      "official_total_tokens": 0,
+      "cached_input_tokens": 0
+    },
+    "usage_complete": false,
+    "known_official_total_tokens": 0,
+    "official_total_tokens": null,
+    "checks": {},
+    "quality_passed": null,
+    "breakdown_note": "reread/retry are overlapping subsets of downstream; local model inference has no provider token charge; unknown usage is never zero."
+  }
+}

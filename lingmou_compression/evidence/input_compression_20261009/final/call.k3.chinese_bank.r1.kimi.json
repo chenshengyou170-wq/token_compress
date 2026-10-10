@@ -1,0 +1,96 @@
+{
+  "model": "k3",
+  "case": "chinese_bank",
+  "repeat": 1,
+  "mode": "kimi",
+  "started_at": "2026-10-09T02:51:50.930700+00:00",
+  "status": "completed",
+  "prompt_sha256": "7d1012e407b8e127b55eee060d0654a23ebe6a26daddc9f9aea4610e786c5079",
+  "transport": "kimi_official_api",
+  "response_model": "k3",
+  "raw_usage": {
+    "prompt_tokens": 1712,
+    "completion_tokens": 500,
+    "total_tokens": 2212,
+    "cached_tokens": 1712,
+    "completion_tokens_details": {
+      "reasoning_tokens": 118
+    },
+    "prompt_tokens_details": {
+      "cached_tokens": 1712
+    }
+  },
+  "response_id": "chatcmpl-S1w2ZZsl9dXPiWKlum6bkL9z",
+  "usage": {
+    "input_tokens": 1712,
+    "output_tokens": 500,
+    "total_tokens": 2212,
+    "cached_input_tokens": 1712,
+    "reasoning_output_tokens": 118
+  },
+  "response": "```json\n{\n  \"channel_success_cny\": 501000,\n  \"core_settled_cny\": 221000,\n  \"gap_cny\": 280000,\n  \"gap_payment_id\": \"P1002\",\n  \"anomaly_face_value_cny\": 399000,\n  \"held_payment_id\": \"P1004\",\n  \"held_amount_cny\": 510000,\n  \"duplicate_payment_id\": \"P1003\",\n  \"duplicate_charge_proven\": false,\n  \"replay_authorized\": false,\n  \"raw_upload_authorized\": false,\n  \"report_send_action\": \"review\",\n  \"generic_dlp_implemented\": false,\n  \"real_bank_system_connected\": false,\n  \"secret_directory\": \"secrets/\",\n  \"approved_domain_count\": 3\n}\n```\n\n说明（依据资料口径）：\n- 渠道成功为去重后 501000 元；核心 settled 221000 元；差额 280000 元对应 P1002（渠道成功、核心 pending，属未证明已入账，需核对，未授权重放）。\n- 异常三笔面额合计 399000 元（P1002 280000 + P1003 96000 + P1005 23000），仅为涉及面额，非资金损失。\n- P1003 仅证明通知重复投递，未证明第二笔扣款已发生（duplicate_charge_proven=false）。\n- P1004 为人工管控未提交，510000 元单列，不算漏付补发。\n- 报告发送（即使发往批准域名）按 BANK-RELEASE-006 为需复核，非已放行；无通用内容 DLP；未连接真实银行系统；负责人未授权重付或上传原始数据。",
+  "checks": {
+    "channel_success_cny": false,
+    "core_settled_cny": false,
+    "gap_cny": false,
+    "gap_payment_id": false,
+    "anomaly_face_value_cny": false,
+    "held_payment_id": false,
+    "held_amount_cny": false,
+    "duplicate_payment_id": false,
+    "duplicate_charge_proven": false,
+    "replay_authorized": false,
+    "raw_upload_authorized": false,
+    "report_send_action": false,
+    "generic_dlp_implemented": false,
+    "real_bank_system_connected": false,
+    "secret_directory": false,
+    "approved_domain_count": false
+  },
+  "checks_passed": 0,
+  "checks_total": 16,
+  "quality_passed": false,
+  "latency_s": 16.525,
+  "request_usage": [
+    {
+      "request_id": "tap-1",
+      "started_at": "2026-10-09T02:51:50.942126+00:00",
+      "model": "k3",
+      "input_tokens_before_estimate": 2472,
+      "input_tokens_after_estimate": 1911,
+      "tokenizer_source": "tokenizer-proxy-o200k-est",
+      "context_complete": true,
+      "official_usage": {
+        "input_tokens": 1712,
+        "output_tokens": 500,
+        "total_tokens": 2212,
+        "cached_input_tokens": 1712,
+        "reasoning_output_tokens": 118
+      },
+      "usage_source": "provider_json_usage",
+      "status": "completed",
+      "compression": {
+        "status": "compressed",
+        "reason": "shorter_text",
+        "text_tokens_before_estimate": 2372,
+        "text_tokens_after_estimate": 1876,
+        "changed_fields": 1,
+        "changed_roles": [
+          "user"
+        ],
+        "tokenizer_source": "tokenizer-proxy-o200k-est",
+        "latency_ms": 6.357,
+        "compression_model_calls": 0,
+        "cache_hits": 1,
+        "rejected_fields": 0
+      },
+      "http_status": 200,
+      "response_content_type": "application/json; charset=utf-8",
+      "response_content_encoding": "identity",
+      "response_model": "k3",
+      "latency_ms": 16097.935
+    }
+  ],
+  "compression_model_usage_excluded": true,
+  "compression_calls": []
+}

@@ -1,0 +1,114 @@
+{
+  "label": "call.gpt-5.6-sol.synthetic_diagnostics.r0.kimi.transport",
+  "returncode": 0,
+  "latency_s": 9.51,
+  "usage_source": "codex_exec_turn_completed",
+  "usage": {
+    "input_tokens": 15092,
+    "output_tokens": 110,
+    "total_tokens": 15202,
+    "cached_input_tokens": 13440,
+    "reasoning_output_tokens": 48
+  },
+  "upstream": "https://chatgpt.com/backend-api/codex",
+  "observed_models": [
+    "gpt-5.6-sol"
+  ],
+  "observed_request_count": 1,
+  "tap_stats": {
+    "running": false,
+    "request_count": 3,
+    "observed_request_count": 1,
+    "multimodal_request_count": 0,
+    "provider_count_attempt_count": 0,
+    "provider_count_success_count": 0,
+    "provider_count_error_count": 0,
+    "provider_breakdown_attempt_count": 0,
+    "provider_breakdown_success_count": 0,
+    "provider_breakdown_error_count": 0,
+    "sse_event_count": 0,
+    "error_count": 0,
+    "upstream_origin": "https://chatgpt.com",
+    "upstream_path": "/backend-api/codex",
+    "usage_ledger": {
+      "totals": {
+        "requests": 1,
+        "requests_with_official_usage": 1,
+        "official_input_tokens": 15092,
+        "official_output_tokens": 110,
+        "official_total_tokens": 15202
+      },
+      "recent_requests": [
+        {
+          "request_id": "tap-1",
+          "started_at": "2026-10-09T03:01:44.206866+00:00",
+          "model": "gpt-5.6-sol",
+          "input_tokens_before_estimate": 17691,
+          "input_tokens_after_estimate": 16653,
+          "tokenizer_source": "tokenizer-est",
+          "context_complete": true,
+          "official_usage": {
+            "input_tokens": 15092,
+            "output_tokens": 110,
+            "total_tokens": 15202,
+            "cached_input_tokens": 13440,
+            "reasoning_output_tokens": 48
+          },
+          "usage_source": "provider_sse_usage",
+          "status": "completed",
+          "compression": {
+            "status": "compressed",
+            "reason": "shorter_text",
+            "text_tokens_before_estimate": 11489,
+            "text_tokens_after_estimate": 10489,
+            "changed_fields": 4,
+            "changed_roles": [
+              "developer",
+              "user"
+            ],
+            "tokenizer_source": "tokenizer-est",
+            "latency_ms": 28.573,
+            "compression_model_calls": 0,
+            "cache_hits": 5,
+            "rejected_fields": 2
+          },
+          "http_status": 200,
+          "response_content_type": "",
+          "response_content_encoding": "identity",
+          "response_model": "gpt-5.6-sol",
+          "latency_ms": 4511.236
+        }
+      ],
+      "recent_request_limit": 200
+    },
+    "input_compression": {
+      "mode": "kimi",
+      "requests": 21,
+      "compressed_requests": 17,
+      "skipped_requests": 4,
+      "error_requests": 0,
+      "changed_fields": 44,
+      "text_tokens_before_estimate": 121868,
+      "text_tokens_after_estimate": 114352,
+      "compression_model_calls": 12,
+      "cache_hits": 45,
+      "rejected_fields": 22
+    }
+  },
+  "completed_turn_count": 1,
+  "tool_item_types": [],
+  "response": "{\"batch_count\":24,\"invalid_batch\":13,\"accepted_records\":2587,\"retry_authorized\":false,\"retry_executed\":false,\"first_checksum\":\"C01X\",\"last_checksum\":\"C24X\",\"remediation\":\"repair --batch 13 --dry-run\"}",
+  "prompt_sha256": "37f7859a9284b4ddf64269096a7658b45f49848be33691009b9b4fa1542c35d4",
+  "raw_completion_events": [
+    {
+      "type": "turn.completed",
+      "usage": {
+        "input_tokens": 15092,
+        "cached_input_tokens": 13440,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 110,
+        "reasoning_output_tokens": 48
+      }
+    }
+  ]
+}
