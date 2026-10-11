@@ -1,0 +1,39 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.9, pytest-9.1.1, pluggy-1.6.0
+rootdir: /home/abc/zju/lingmou/token_compression/reference_projects/headroom
+configfile: pyproject.toml
+plugins: anyio-4.14.2
+collected 129 items / 1 deselected / 128 selected
+
+tests/test_ccr_feedback.py ....................F                         [ 16%]
+tests/test_tool_schema_savings_policy.py .........                       [ 23%]
+tests/test_cache/test_prefix_tracker.py ................................ [ 48%]
+...............................................                          [ 85%]
+tests/test_cache_prefix_overlay.py ...................                   [100%]
+
+=================================== FAILURES ===================================
+__ TestFeedbackIntegrationWithStore.test_store_notifies_feedback_on_retrieval __
+tests/test_ccr_feedback.py:401: in test_store_notifies_feedback_on_retrieval
+    store = CompressionStore()
+            ^^^^^^^^^^^^^^^^^^
+headroom/cache/compression_store.py:252: in __init__
+    from .backends import InMemoryBackend
+headroom/cache/backends/__init__.py:31: in <module>
+    from .sqlite import SQLiteBackend
+headroom/cache/backends/sqlite.py:24: in <module>
+    import sqlite3
+/usr/local/lib/python3.11/sqlite3/__init__.py:57: in <module>
+    from sqlite3.dbapi2 import *
+/usr/local/lib/python3.11/sqlite3/dbapi2.py:27: in <module>
+    from _sqlite3 import *
+E   ModuleNotFoundError: No module named '_sqlite3'
+=============================== warnings summary ===============================
+../../../.venv/lib/python3.11/site-packages/_pytest/config/__init__.py:1464
+  /home/abc/zju/lingmou/.venv/lib/python3.11/site-packages/_pytest/config/__init__.py:1464: PytestConfigWarning: Unknown config option: asyncio_mode
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_ccr_feedback.py::TestFeedbackIntegrationWithStore::test_store_notifies_feedback_on_retrieval
+============ 1 failed, 127 passed, 1 deselected, 1 warning in 7.12s ============

@@ -3,7 +3,7 @@
   "created_at": "2026-10-10T07:33:37.656086+00:00",
   "source_root": "/home/abc/zju/lingmou",
   "collection_root_at_creation": "/home/abc/zju/lingmou/token_compression",
-  "operation": "copy; originals retained; no automatic synchronization",
+  "operation": "copy; originals retained; no automatic synchronization; additional pinned Git submodules recorded in reference_projects",
   "reference_projects": [
     {
       "name": "caveman-compression",
@@ -24,6 +24,20 @@
       "revision": "f308ee7eb079cc402edf5a934fa65f6d71a4c7ad",
       "tracked_files": 366,
       "git_metadata_included": false
+    },
+    {
+      "name": "headroom",
+      "path": "reference_projects/headroom",
+      "upstream": "https://github.com/headroomlabs-ai/headroom.git",
+      "revision": "8c1beb20aeb8f0576095ae4893176ce16c2ede2a",
+      "storage": "git_submodule",
+      "shallow_clone": true,
+      "tracked_files": 2635,
+      "git_metadata_included": true,
+      "package_version": "0.40.0",
+      "license": "Apache-2.0",
+      "added_at": "2026-10-10T08:09:10.334491+00:00",
+      "review": "reference_projects/HEADROOM_REVIEW.md"
     }
   ],
   "external_model": {
@@ -36,7 +50,7 @@
   "exclusions": [
     "credential files",
     "virtual environments",
-    "git metadata",
+    "git metadata from copied snapshots (Headroom uses a Git submodule)",
     "compiled caches",
     "downloaded model weights",
     "independent hidden/multimodal token research"

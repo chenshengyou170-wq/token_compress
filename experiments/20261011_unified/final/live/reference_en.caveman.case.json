@@ -1,0 +1,75 @@
+{
+  "case": "reference_en",
+  "method": "caveman",
+  "answer": {
+    "status": "needs_review",
+    "amount_cents": 2700,
+    "requires_approval": true
+  },
+  "expected": {
+    "status": "needs_review",
+    "amount_cents": 2700,
+    "requires_approval": true
+  },
+  "checks": {
+    "exact_answer": true
+  },
+  "error": null,
+  "rereads": [],
+  "compression": {
+    "method": "caveman",
+    "status": "compressed",
+    "tokens_before": 4214,
+    "tokens_after": 3317,
+    "tokenizer": "tokenizer-proxy-o200k-est",
+    "elapsed_ms": 18.203,
+    "stages": [
+      {
+        "name": "material",
+        "tokens_before": 4214,
+        "tokens_after": 3317
+      }
+    ],
+    "calls": [],
+    "issues": [],
+    "source_ids": [
+      "36d9c2e6c8f3283a7433fb8e55eee3e097c991c182da8fa0b6ab6539c2c684a3"
+    ],
+    "lossy": true,
+    "prefix_messages_reused": 0,
+    "cache_hits": 0,
+    "backend_attempts": 1,
+    "changed_fields": 1,
+    "changed_roles": [
+      "user"
+    ],
+    "tokens_saved": 897,
+    "savings_percent": 21.286,
+    "measurement": "local serialized-request token estimate; not provider usage or cost"
+  },
+  "requests": [
+    {
+      "task_id": "reference_en",
+      "purpose": "generation",
+      "attempt": 1,
+      "accounting_labelled": true,
+      "status": "completed",
+      "official_usage": {
+        "input_tokens": 3367,
+        "output_tokens": 119,
+        "total_tokens": 3486,
+        "cached_input_tokens": null,
+        "reasoning_output_tokens": 85
+      },
+      "compression": {
+        "compression_calls": []
+      },
+      "input_tokens_before_estimate": 4214,
+      "input_tokens_after_estimate": 3317,
+      "model": "kimi-for-coding",
+      "finish_reason": "stop",
+      "latency_s": 3.038
+    }
+  ],
+  "generation_elapsed_s": 3.038
+}

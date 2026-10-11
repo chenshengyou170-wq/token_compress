@@ -1,0 +1,4 @@
+method,requests,tokens_before,tokens_after,saved_percent,median_ms,issues,evidence_passed,remote_calls,known_remote_tokens,remote_calls_missing_usage,official_net_savings_percent
+off,6,25632,25632,0.0,1.012,0,6,0,0,0,
+llmlingua2,6,25632,14402,43.812,7.052,0,6,0,0,0,
+caveman_nlp,6,25632,19544,23.752,14.949,0,6,0,0,0,

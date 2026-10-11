@@ -1,5 +1,10 @@
 # 灵眸 Token 压缩代码包
 
+2026-10-11 新增统一的 `token_compression` 包和 `token-compress` 命令，推荐从
+[仓库根目录](../README.md)安装和运行。此目录仍可独立安装，提供同一份实现。
+新 API 与可选后端见[模块说明](../docs/UNIFIED_MODULE.md)，实验见[本次报告](../experiments/20261011_unified/REPORT.md)。
+以下 `codexscope` 入口保留兼容，历史说明不代表新模块只能使用这些入口。
+
 这是从当前灵眸源码抽出的可运行副本，包含压缩、工具懒加载、来源补读、请求代理和计量的完整本地模块依赖。
 Python 包名仍为 `codexscope`。安装时使用独立虚拟环境；原产品从原目录运行，两份源码不自动同步。
 

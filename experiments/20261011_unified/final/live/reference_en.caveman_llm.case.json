@@ -1,0 +1,105 @@
+{
+  "case": "reference_en",
+  "method": "caveman_llm",
+  "answer": {
+    "status": "needs_review",
+    "amount_cents": 2700,
+    "requires_approval": true
+  },
+  "expected": {
+    "status": "needs_review",
+    "amount_cents": 2700,
+    "requires_approval": true
+  },
+  "checks": {
+    "exact_answer": true
+  },
+  "error": null,
+  "rereads": [],
+  "compression": {
+    "method": "caveman_llm",
+    "status": "compressed",
+    "tokens_before": 4214,
+    "tokens_after": 257,
+    "tokenizer": "tokenizer-proxy-o200k-est",
+    "elapsed_ms": 18030.234,
+    "stages": [
+      {
+        "name": "material",
+        "tokens_before": 4214,
+        "tokens_after": 257
+      }
+    ],
+    "calls": [
+      {
+        "provider": "chat",
+        "purpose": "rewrite",
+        "status": "completed",
+        "official_usage": {
+          "input_tokens": 4766,
+          "output_tokens": 724,
+          "total_tokens": 5490,
+          "cached_input_tokens": 512,
+          "reasoning_output_tokens": 657
+        },
+        "model": "kimi-for-coding",
+        "latency_ms": 18015.988
+      }
+    ],
+    "issues": [],
+    "source_ids": [
+      "36d9c2e6c8f3283a7433fb8e55eee3e097c991c182da8fa0b6ab6539c2c684a3"
+    ],
+    "lossy": true,
+    "prefix_messages_reused": 0,
+    "cache_hits": 0,
+    "backend_attempts": 1,
+    "changed_fields": 1,
+    "changed_roles": [
+      "user"
+    ],
+    "tokens_saved": 3957,
+    "savings_percent": 93.901,
+    "measurement": "local serialized-request token estimate; not provider usage or cost"
+  },
+  "requests": [
+    {
+      "task_id": "reference_en",
+      "purpose": "generation",
+      "attempt": 1,
+      "accounting_labelled": true,
+      "status": "completed",
+      "official_usage": {
+        "input_tokens": 324,
+        "output_tokens": 124,
+        "total_tokens": 448,
+        "cached_input_tokens": 256,
+        "reasoning_output_tokens": 90
+      },
+      "compression": {
+        "compression_calls": [
+          {
+            "provider": "chat",
+            "purpose": "rewrite",
+            "status": "completed",
+            "official_usage": {
+              "input_tokens": 4766,
+              "output_tokens": 724,
+              "total_tokens": 5490,
+              "cached_input_tokens": 512,
+              "reasoning_output_tokens": 657
+            },
+            "model": "kimi-for-coding",
+            "latency_ms": 18015.988
+          }
+        ]
+      },
+      "input_tokens_before_estimate": 4214,
+      "input_tokens_after_estimate": 257,
+      "model": "kimi-for-coding",
+      "finish_reason": "stop",
+      "latency_s": 2.863
+    }
+  ],
+  "generation_elapsed_s": 2.863
+}

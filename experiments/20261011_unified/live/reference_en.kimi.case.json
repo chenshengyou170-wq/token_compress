@@ -1,0 +1,88 @@
+{
+  "case": "reference_en",
+  "method": "kimi",
+  "answer": null,
+  "expected": {
+    "status": "needs_review",
+    "amount_cents": 2700,
+    "requires_approval": true
+  },
+  "checks": {
+    "exact_answer": false
+  },
+  "error": "ConnectTimeout",
+  "rereads": [],
+  "compression": {
+    "method": "kimi",
+    "status": "compressed",
+    "tokens_before": 4217,
+    "tokens_after": 891,
+    "tokenizer": "tokenizer-proxy-o200k-est",
+    "elapsed_ms": 6034.641,
+    "stages": [
+      {
+        "name": "material",
+        "tokens_before": 4217,
+        "tokens_after": 891
+      }
+    ],
+    "calls": [
+      {
+        "provider": "kimi",
+        "purpose": "selection",
+        "official_usage": {
+          "input_tokens": 4889,
+          "output_tokens": 193,
+          "total_tokens": 5082,
+          "cached_input_tokens": null,
+          "reasoning_output_tokens": 172
+        },
+        "status": "completed",
+        "model": "kimi-for-coding",
+        "latency_ms": 6025.601
+      }
+    ],
+    "issues": [],
+    "source_ids": [
+      "ebe507cd42b4648f90ce7b14e9a41b7c47bfe5c27cf15d6fae2a195bcb259325"
+    ],
+    "lossy": true,
+    "prefix_messages_reused": 0,
+    "cache_hits": 0,
+    "backend_attempts": 1,
+    "tokens_saved": 3326,
+    "savings_percent": 78.871,
+    "measurement": "local serialized-request token estimate; not provider usage or cost"
+  },
+  "requests": [
+    {
+      "task_id": "reference_en",
+      "purpose": "generation",
+      "attempt": 1,
+      "accounting_labelled": true,
+      "status": "failed",
+      "official_usage": null,
+      "compression": {
+        "compression_calls": [
+          {
+            "provider": "kimi",
+            "purpose": "selection",
+            "official_usage": {
+              "input_tokens": 4889,
+              "output_tokens": 193,
+              "total_tokens": 5082,
+              "cached_input_tokens": null,
+              "reasoning_output_tokens": 172
+            },
+            "status": "completed",
+            "model": "kimi-for-coding",
+            "latency_ms": 6025.601
+          }
+        ]
+      },
+      "input_tokens_before_estimate": 4217,
+      "input_tokens_after_estimate": 891
+    }
+  ],
+  "generation_elapsed_s": 60.062
+}

@@ -1,0 +1,16 @@
+{
+  "methods": [
+    "off",
+    "caveman_mlm"
+  ],
+  "repeats": 2,
+  "cases": [
+    "prose_short"
+  ],
+  "live": false,
+  "model_path": null,
+  "reference_path": "reference_projects/caveman-compression",
+  "mlm_model_path": "/home/abc/.cache/huggingface/hub/models--FacebookAI--roberta-base/snapshots/e2da8e2f811d1448a5b465c236feacd80ffbac7b",
+  "spacy_model": "en_core_web_sm",
+  "fixtures_sha256": "2ecf97c419452dbe0df4682a6697b308e77c971cd33b3b3549c8b4eca741d36c"
+}

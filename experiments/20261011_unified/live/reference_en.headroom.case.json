@@ -1,0 +1,56 @@
+{
+  "case": "reference_en",
+  "method": "headroom",
+  "answer": null,
+  "expected": {
+    "status": "needs_review",
+    "amount_cents": 2700,
+    "requires_approval": true
+  },
+  "checks": {
+    "exact_answer": false
+  },
+  "error": "ConnectTimeout",
+  "rereads": [],
+  "compression": {
+    "method": "headroom",
+    "status": "unchanged",
+    "tokens_before": 4217,
+    "tokens_after": 4217,
+    "tokenizer": "tokenizer-proxy-o200k-est",
+    "elapsed_ms": 78.253,
+    "stages": [
+      {
+        "name": "material",
+        "tokens_before": 4217,
+        "tokens_after": 4217
+      }
+    ],
+    "calls": [],
+    "issues": [],
+    "source_ids": [],
+    "lossy": false,
+    "prefix_messages_reused": 0,
+    "cache_hits": 0,
+    "backend_attempts": 1,
+    "tokens_saved": 0,
+    "savings_percent": 0.0,
+    "measurement": "local serialized-request token estimate; not provider usage or cost"
+  },
+  "requests": [
+    {
+      "task_id": "reference_en",
+      "purpose": "generation",
+      "attempt": 1,
+      "accounting_labelled": true,
+      "status": "failed",
+      "official_usage": null,
+      "compression": {
+        "compression_calls": []
+      },
+      "input_tokens_before_estimate": 4217,
+      "input_tokens_after_estimate": 4217
+    }
+  ],
+  "generation_elapsed_s": 60.063
+}

@@ -4,21 +4,25 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lingmou-token-compression"
-version = "0.1.0"
-description = "Collected Lingmou input compression, deferred tools and task usage accounting"
+version = "0.2.0"
+description = "Unified token compression, deferred tools and task usage accounting"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = ["httpx>=0.28,<1", "mcp>=2,<3"]
+dependencies = ["httpx>=0.28,<1", "mcp>=2,<3", "tiktoken>=0.13,<1"]
 
 [project.optional-dependencies]
 proxy = ["tiktoken>=0.13,<1"]
 test = ["pytest>=8,<10"]
 compression = [
   "llmlingua>=0.2.2,<0.3",
+  "transformers>=4.26,<5",
   "pysqlite3-binary==0.5.4.post2; implementation_name == 'cpython' and platform_system == 'Linux' and platform_machine == 'x86_64'",
 ]
+nlp = ["spacy>=3.8,<4"]
+headroom = ["headroom-ai==0.40.0"]
 
 [project.scripts]
+token-compress = "token_compression.cli:main"
 codexscope-context = "codexscope.context_tools:main"
 
 [tool.setuptools.packages.find]

@@ -1,0 +1,96 @@
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - setuptools>=69
+  - wheel
+* Getting build dependencies for wheel...
+running egg_info
+writing lingmou_compression/src/lingmou_token_compression.egg-info/PKG-INFO
+writing dependency_links to lingmou_compression/src/lingmou_token_compression.egg-info/dependency_links.txt
+writing entry points to lingmou_compression/src/lingmou_token_compression.egg-info/entry_points.txt
+writing requirements to lingmou_compression/src/lingmou_token_compression.egg-info/requires.txt
+writing top-level names to lingmou_compression/src/lingmou_token_compression.egg-info/top_level.txt
+reading manifest file 'lingmou_compression/src/lingmou_token_compression.egg-info/SOURCES.txt'
+writing manifest file 'lingmou_compression/src/lingmou_token_compression.egg-info/SOURCES.txt'
+* Installed build dependency versions:
+  - setuptools==84.0.0
+  - wheel==0.48.0
+* Building wheel...
+running bdist_wheel
+running build
+running build_py
+copying lingmou_compression/src/token_compression/history.py -> build/lib/token_compression
+copying lingmou_compression/src/token_compression/engine.py -> build/lib/token_compression
+running egg_info
+writing lingmou_compression/src/lingmou_token_compression.egg-info/PKG-INFO
+writing dependency_links to lingmou_compression/src/lingmou_token_compression.egg-info/dependency_links.txt
+writing entry points to lingmou_compression/src/lingmou_token_compression.egg-info/entry_points.txt
+writing requirements to lingmou_compression/src/lingmou_token_compression.egg-info/requires.txt
+writing top-level names to lingmou_compression/src/lingmou_token_compression.egg-info/top_level.txt
+reading manifest file 'lingmou_compression/src/lingmou_token_compression.egg-info/SOURCES.txt'
+writing manifest file 'lingmou_compression/src/lingmou_token_compression.egg-info/SOURCES.txt'
+installing to build/bdist.linux-x86_64/wheel
+running install
+running install_lib
+creating build/bdist.linux-x86_64/wheel
+creating build/bdist.linux-x86_64/wheel/codexscope
+copying build/lib/codexscope/structural_compression.py -> build/bdist.linux-x86_64/wheel/./codexscope
+copying build/lib/codexscope/input_compression.py -> build/bdist.linux-x86_64/wheel/./codexscope
+copying build/lib/codexscope/request_usage_ledger.py -> build/bdist.linux-x86_64/wheel/./codexscope
+copying build/lib/codexscope/proxy_usage.py -> build/bdist.linux-x86_64/wheel/./codexscope
+copying build/lib/codexscope/media_token_task.py -> build/bdist.linux-x86_64/wheel/./codexscope
+copying build/lib/codexscope/context_tools.py -> build/bdist.linux-x86_64/wheel/./codexscope
+copying build/lib/codexscope/__init__.py -> build/bdist.linux-x86_64/wheel/./codexscope
+copying build/lib/codexscope/deferred_tools.py -> build/bdist.linux-x86_64/wheel/./codexscope
+copying build/lib/codexscope/compression_boundary.py -> build/bdist.linux-x86_64/wheel/./codexscope
+copying build/lib/codexscope/request_token_tap.py -> build/bdist.linux-x86_64/wheel/./codexscope
+copying build/lib/codexscope/context_compression.py -> build/bdist.linux-x86_64/wheel/./codexscope
+copying build/lib/codexscope/compression_models.py -> build/bdist.linux-x86_64/wheel/./codexscope
+copying build/lib/codexscope/reference_selection.py -> build/bdist.linux-x86_64/wheel/./codexscope
+copying build/lib/codexscope/llmlingua_compression.py -> build/bdist.linux-x86_64/wheel/./codexscope
+creating build/bdist.linux-x86_64/wheel/token_compression
+copying build/lib/token_compression/history.py -> build/bdist.linux-x86_64/wheel/./token_compression
+copying build/lib/token_compression/experiment.py -> build/bdist.linux-x86_64/wheel/./token_compression
+copying build/lib/token_compression/backends.py -> build/bdist.linux-x86_64/wheel/./token_compression
+copying build/lib/token_compression/__init__.py -> build/bdist.linux-x86_64/wheel/./token_compression
+copying build/lib/token_compression/live_experiment.py -> build/bdist.linux-x86_64/wheel/./token_compression
+copying build/lib/token_compression/methods.py -> build/bdist.linux-x86_64/wheel/./token_compression
+copying build/lib/token_compression/engine.py -> build/bdist.linux-x86_64/wheel/./token_compression
+copying build/lib/token_compression/__main__.py -> build/bdist.linux-x86_64/wheel/./token_compression
+copying build/lib/token_compression/transport.py -> build/bdist.linux-x86_64/wheel/./token_compression
+copying build/lib/token_compression/cli.py -> build/bdist.linux-x86_64/wheel/./token_compression
+running install_egg_info
+Copying lingmou_compression/src/lingmou_token_compression.egg-info to build/bdist.linux-x86_64/wheel/./lingmou_token_compression-0.2.0-py3.11.egg-info
+running install_scripts
+creating build/bdist.linux-x86_64/wheel/lingmou_token_compression-0.2.0.dist-info/WHEEL
+creating '/tmp/token-compression-wheel-final/.tmp-s3cqrti_/lingmou_token_compression-0.2.0-py3-none-any.whl' and adding 'build/bdist.linux-x86_64/wheel' to it
+adding 'codexscope/__init__.py'
+adding 'codexscope/compression_boundary.py'
+adding 'codexscope/compression_models.py'
+adding 'codexscope/context_compression.py'
+adding 'codexscope/context_tools.py'
+adding 'codexscope/deferred_tools.py'
+adding 'codexscope/input_compression.py'
+adding 'codexscope/llmlingua_compression.py'
+adding 'codexscope/media_token_task.py'
+adding 'codexscope/proxy_usage.py'
+adding 'codexscope/reference_selection.py'
+adding 'codexscope/request_token_tap.py'
+adding 'codexscope/request_usage_ledger.py'
+adding 'codexscope/structural_compression.py'
+adding 'token_compression/__init__.py'
+adding 'token_compression/__main__.py'
+adding 'token_compression/backends.py'
+adding 'token_compression/cli.py'
+adding 'token_compression/engine.py'
+adding 'token_compression/experiment.py'
+adding 'token_compression/history.py'
+adding 'token_compression/live_experiment.py'
+adding 'token_compression/methods.py'
+adding 'token_compression/transport.py'
+adding 'lingmou_token_compression-0.2.0.dist-info/METADATA'
+adding 'lingmou_token_compression-0.2.0.dist-info/WHEEL'
+adding 'lingmou_token_compression-0.2.0.dist-info/entry_points.txt'
+adding 'lingmou_token_compression-0.2.0.dist-info/top_level.txt'
+adding 'lingmou_token_compression-0.2.0.dist-info/RECORD'
+removing build/bdist.linux-x86_64/wheel
+Successfully built lingmou_token_compression-0.2.0-py3-none-any.whl

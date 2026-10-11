@@ -1,0 +1,27 @@
+{"case": "prose_short", "method": "off", "repeat": 0, "tokens_saved": 0, "elapsed_ms": 0.378, "issues": []}
+{"case": "prose_short", "method": "off", "repeat": 1, "tokens_saved": 0, "elapsed_ms": 0.239, "issues": []}
+{"case": "prose_short", "method": "caveman_mlm", "repeat": 0, "tokens_saved": 66, "elapsed_ms": 15886.751, "issues": []}
+{"case": "prose_short", "method": "caveman_mlm", "repeat": 1, "tokens_saved": 66, "elapsed_ms": 1.149, "issues": []}
+Traceback (most recent call last):
+  File "/home/abc/zju/lingmou/token_compression/lingmou_compression/src/token_compression/experiment.py", line 161, in _metadata
+    versions[name] = importlib.metadata.version(name)
+                     ^^^^^^^^^
+UnboundLocalError: cannot access local variable 'importlib' where it is not associated with a value
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/abc/zju/lingmou/token_compression/lingmou_compression/src/token_compression/__main__.py", line 3, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/abc/zju/lingmou/token_compression/lingmou_compression/src/token_compression/cli.py", line 61, in main
+    run_benchmark(args.out, methods=args.methods, repeats=args.repeats, model_path=args.model_path,
+  File "/home/abc/zju/lingmou/token_compression/lingmou_compression/src/token_compression/experiment.py", line 231, in run_benchmark
+    report = {"metadata": _metadata(), "config": config, "summary": summaries, "sessions": session_experiments(),
+                          ^^^^^^^^^^^
+  File "/home/abc/zju/lingmou/token_compression/lingmou_compression/src/token_compression/experiment.py", line 162, in _metadata
+    except importlib.metadata.PackageNotFoundError:
+           ^^^^^^^^^
+UnboundLocalError: cannot access local variable 'importlib' where it is not associated with a value

@@ -1,0 +1,8 @@
+method,requests,tokens_before,tokens_after,saved_percent,median_ms,issues,evidence_passed,remote_calls,known_remote_tokens,remote_calls_missing_usage,official_net_savings_percent
+off,30,136422,136422,0.0,0.754,0,30,0,0,0,
+structure,30,136422,71037,47.928,4.537,3,30,0,0,0,
+caveman,30,136422,68157,50.04,5.881,3,30,0,0,0,
+extract,30,136422,44232,67.577,5.035,3,30,0,0,0,
+auto,30,136422,44232,67.577,4.845,3,30,0,0,0,
+generic_agent,30,136422,67140,50.785,4.553,3,30,0,0,0,
+headroom,30,136422,61326,55.047,6.774,0,30,0,0,0,

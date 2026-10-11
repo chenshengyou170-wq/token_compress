@@ -1,0 +1,75 @@
+{
+  "case": "reference_zh",
+  "method": "headroom",
+  "answer": {
+    "status": "needs_review",
+    "amount_cents": 2700,
+    "requires_approval": true
+  },
+  "expected": {
+    "status": "needs_review",
+    "amount_cents": 2700,
+    "requires_approval": true
+  },
+  "checks": {
+    "exact_answer": true
+  },
+  "error": null,
+  "rereads": [],
+  "compression": {
+    "method": "headroom",
+    "status": "compressed",
+    "tokens_before": 6874,
+    "tokens_after": 3228,
+    "tokenizer": "tokenizer-proxy-o200k-est",
+    "elapsed_ms": 20.17,
+    "stages": [
+      {
+        "name": "material",
+        "tokens_before": 6874,
+        "tokens_after": 3228
+      }
+    ],
+    "calls": [],
+    "issues": [],
+    "source_ids": [
+      "851fa06b662b2b8d76adb63b618b2220e21b8cbb044e022ea29d3fbb6ed5bd20"
+    ],
+    "lossy": true,
+    "prefix_messages_reused": 0,
+    "cache_hits": 0,
+    "backend_attempts": 1,
+    "changed_fields": 1,
+    "changed_roles": [
+      "user"
+    ],
+    "tokens_saved": 3646,
+    "savings_percent": 53.04,
+    "measurement": "local serialized-request token estimate; not provider usage or cost"
+  },
+  "requests": [
+    {
+      "task_id": "reference_zh",
+      "purpose": "generation",
+      "attempt": 1,
+      "accounting_labelled": true,
+      "status": "completed",
+      "official_usage": {
+        "input_tokens": 2460,
+        "output_tokens": 136,
+        "total_tokens": 2596,
+        "cached_input_tokens": 256,
+        "reasoning_output_tokens": 102
+      },
+      "compression": {
+        "compression_calls": []
+      },
+      "input_tokens_before_estimate": 6874,
+      "input_tokens_after_estimate": 3228,
+      "model": "kimi-for-coding",
+      "finish_reason": "stop",
+      "latency_s": 3.375
+    }
+  ],
+  "generation_elapsed_s": 3.375
+}

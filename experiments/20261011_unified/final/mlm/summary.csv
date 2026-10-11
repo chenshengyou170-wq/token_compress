@@ -1,0 +1,3 @@
+method,requests,tokens_before,tokens_after,saved_percent,median_ms,issues,evidence_passed,remote_calls,known_remote_tokens,remote_calls_missing_usage,official_net_savings_percent
+off,2,1254,1254,0.0,0.308,0,2,0,0,0,
+caveman_mlm,2,1254,1122,10.526,11636.59,0,2,0,0,0,

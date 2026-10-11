@@ -1,0 +1,24 @@
+{
+  "command": [
+    "/home/abc/zju/lingmou/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "tests/test_openai_tool_search_deferral.py",
+    "tests/test_tool_search_client_deferral.py",
+    "tests/test_ccr_feedback.py",
+    "tests/test_tool_schema_savings_policy.py",
+    "-k",
+    "not test_tool_schema_compaction_saves_real_tokens_not_just_bytes"
+  ],
+  "exit_code": 2,
+  "elapsed_seconds": 0.888,
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "HEADROOM_BEACON": "off",
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1"
+  }
+}

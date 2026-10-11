@@ -1,0 +1,24 @@
+{
+  "command": [
+    "/home/abc/zju/lingmou/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "tests/test_ccr_feedback.py",
+    "tests/test_tool_schema_savings_policy.py",
+    "tests/test_cache/test_prefix_tracker.py",
+    "tests/test_cache_prefix_overlay.py",
+    "-k",
+    "not test_tool_schema_compaction_saves_real_tokens_not_just_bytes"
+  ],
+  "exit_code": 1,
+  "elapsed_seconds": 7.375,
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "HEADROOM_BEACON": "off",
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1"
+  }
+}

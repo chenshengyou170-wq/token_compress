@@ -1,0 +1,27 @@
+{
+  "methods": [
+    "off",
+    "structure",
+    "caveman",
+    "extract",
+    "auto",
+    "generic_agent",
+    "headroom"
+  ],
+  "repeats": 3,
+  "cases": [
+    "json_table",
+    "logs",
+    "repeat_delta",
+    "reference_en",
+    "reference_zh",
+    "code",
+    "search",
+    "history_tags",
+    "malformed_json"
+  ],
+  "live": false,
+  "model_path": null,
+  "reference_path": null,
+  "fixtures_sha256": "4e81e3e3fd8b43182793e4d27d1976d8ecb48c78ef851ab9d178b5a7afd07617"
+}

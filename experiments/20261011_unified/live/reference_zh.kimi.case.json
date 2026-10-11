@@ -1,0 +1,101 @@
+{
+  "case": "reference_zh",
+  "method": "kimi",
+  "answer": {
+    "status": "needs_review",
+    "amount_cents": 2700,
+    "requires_approval": true
+  },
+  "expected": {
+    "status": "needs_review",
+    "amount_cents": 2700,
+    "requires_approval": true
+  },
+  "checks": {
+    "exact_answer": true
+  },
+  "error": null,
+  "rereads": [],
+  "compression": {
+    "method": "kimi",
+    "status": "compressed",
+    "tokens_before": 6875,
+    "tokens_after": 1257,
+    "tokenizer": "tokenizer-proxy-o200k-est",
+    "elapsed_ms": 5304.168,
+    "stages": [
+      {
+        "name": "material",
+        "tokens_before": 6875,
+        "tokens_after": 1257
+      }
+    ],
+    "calls": [
+      {
+        "provider": "kimi",
+        "purpose": "selection",
+        "official_usage": {
+          "input_tokens": 5543,
+          "output_tokens": 158,
+          "total_tokens": 5701,
+          "cached_input_tokens": null,
+          "reasoning_output_tokens": 137
+        },
+        "status": "completed",
+        "model": "kimi-for-coding",
+        "latency_ms": 5293.708
+      }
+    ],
+    "issues": [],
+    "source_ids": [
+      "213548cdd480a5fd6ad15dabc154ad31c17504eaa591324a15c4f76a718128ce"
+    ],
+    "lossy": true,
+    "prefix_messages_reused": 0,
+    "cache_hits": 0,
+    "backend_attempts": 1,
+    "tokens_saved": 5618,
+    "savings_percent": 81.716,
+    "measurement": "local serialized-request token estimate; not provider usage or cost"
+  },
+  "requests": [
+    {
+      "task_id": "reference_zh",
+      "purpose": "generation",
+      "attempt": 1,
+      "accounting_labelled": true,
+      "status": "completed",
+      "official_usage": {
+        "input_tokens": 1039,
+        "output_tokens": 334,
+        "total_tokens": 1373,
+        "cached_input_tokens": 1039,
+        "reasoning_output_tokens": 300
+      },
+      "compression": {
+        "compression_calls": [
+          {
+            "provider": "kimi",
+            "purpose": "selection",
+            "official_usage": {
+              "input_tokens": 5543,
+              "output_tokens": 158,
+              "total_tokens": 5701,
+              "cached_input_tokens": null,
+              "reasoning_output_tokens": 137
+            },
+            "status": "completed",
+            "model": "kimi-for-coding",
+            "latency_ms": 5293.708
+          }
+        ]
+      },
+      "input_tokens_before_estimate": 6875,
+      "input_tokens_after_estimate": 1257,
+      "model": "kimi-for-coding",
+      "finish_reason": "stop",
+      "latency_s": 7.629
+    }
+  ],
+  "generation_elapsed_s": 7.629
+}

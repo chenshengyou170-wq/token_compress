@@ -1,0 +1,52 @@
+{
+  "methods_covered": [
+    "auto",
+    "caveman",
+    "caveman_llm",
+    "caveman_mlm",
+    "caveman_nlp",
+    "extract",
+    "generic_agent",
+    "headroom",
+    "jev",
+    "kimi",
+    "llm_rewrite",
+    "llmlingua2",
+    "off",
+    "structure"
+  ],
+  "local_records_verified": 232,
+  "live_qa_passed": 30,
+  "live_task_comparisons_recalculated": 27,
+  "current_source_hashes_match_local_replay": true,
+  "wheel_source_matches_checkout": true,
+  "wheel_sha256": "dfb479c635d86ba79c3f2e360cfe7af584b6ccfe512eea8659e5e2a9da42dfec",
+  "pilot_qa_passed": 18,
+  "pilot_qa_total": 27,
+  "pilot_errors": [
+    {
+      "case": "reference_en",
+      "method": "kimi",
+      "error": "ConnectTimeout"
+    },
+    {
+      "case": "reference_zh",
+      "method": "jev",
+      "error": "JSONDecodeError"
+    },
+    {
+      "case": "reference_en",
+      "method": "headroom",
+      "error": "ConnectTimeout"
+    }
+  ],
+  "late_history_fix": {
+    "files": [
+      "token_compression/engine.py",
+      "token_compression/history.py"
+    ],
+    "change": "Only generated tool-result envelopes can be expanded before history trimming; count call IDs across full history.",
+    "live_scope": "Live requests contain one marked user source, no tool call IDs, prefix replay or history trimming. Changed branches do not affect these runs.",
+    "verification": "Current checkout passed 139 tests; all 210 local output hashes and token counts match the preceding run."
+  }
+}

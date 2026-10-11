@@ -1,0 +1,56 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.9, pytest-9.1.1, pluggy-1.6.0
+rootdir: /home/abc/zju/lingmou/token_compression/reference_projects/headroom
+configfile: pyproject.toml
+plugins: anyio-4.14.2
+collected 31 items / 2 errors / 1 deselected / 30 selected
+
+==================================== ERRORS ====================================
+__________ ERROR collecting tests/test_openai_tool_search_deferral.py __________
+ImportError while importing test module '/home/abc/zju/lingmou/token_compression/reference_projects/headroom/tests/test_openai_tool_search_deferral.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_openai_tool_search_deferral.py:15: in <module>
+    from headroom.proxy.helpers import (
+headroom/proxy/helpers.py:29: in <module>
+    from headroom import fileperms as _fileperms
+headroom/fileperms.py:52: in <module>
+    import sqlite3
+/usr/local/lib/python3.11/sqlite3/__init__.py:57: in <module>
+    from sqlite3.dbapi2 import *
+/usr/local/lib/python3.11/sqlite3/dbapi2.py:27: in <module>
+    from _sqlite3 import *
+E   ModuleNotFoundError: No module named '_sqlite3'
+__________ ERROR collecting tests/test_tool_search_client_deferral.py __________
+ImportError while importing test module '/home/abc/zju/lingmou/token_compression/reference_projects/headroom/tests/test_tool_search_client_deferral.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_tool_search_client_deferral.py:39: in <module>
+    from headroom.proxy.helpers import (
+headroom/proxy/helpers.py:29: in <module>
+    from headroom import fileperms as _fileperms
+headroom/fileperms.py:52: in <module>
+    import sqlite3
+/usr/local/lib/python3.11/sqlite3/__init__.py:57: in <module>
+    from sqlite3.dbapi2 import *
+/usr/local/lib/python3.11/sqlite3/dbapi2.py:27: in <module>
+    from _sqlite3 import *
+E   ModuleNotFoundError: No module named '_sqlite3'
+=============================== warnings summary ===============================
+../../../.venv/lib/python3.11/site-packages/_pytest/config/__init__.py:1464
+  /home/abc/zju/lingmou/.venv/lib/python3.11/site-packages/_pytest/config/__init__.py:1464: PytestConfigWarning: Unknown config option: asyncio_mode
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR tests/test_openai_tool_search_deferral.py
+ERROR tests/test_tool_search_client_deferral.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!!
+================== 1 deselected, 1 warning, 2 errors in 0.67s ==================

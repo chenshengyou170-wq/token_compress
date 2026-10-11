@@ -1,0 +1,6 @@
+# Experiment bytes and source hashes must survive checkout on every platform.
+experiments/** -text
+experiments/**/sources/*.txt -whitespace
+experiments/**/*.csv whitespace=cr-at-eol
+# Preserve captured upstream diagnostic output, including its original spacing.
+validation/**/*.log -text -whitespace

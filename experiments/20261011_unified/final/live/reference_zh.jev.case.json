@@ -1,0 +1,105 @@
+{
+  "case": "reference_zh",
+  "method": "jev",
+  "answer": {
+    "status": "needs_review",
+    "amount_cents": 2700,
+    "requires_approval": true
+  },
+  "expected": {
+    "status": "needs_review",
+    "amount_cents": 2700,
+    "requires_approval": true
+  },
+  "checks": {
+    "exact_answer": true
+  },
+  "error": null,
+  "rereads": [],
+  "compression": {
+    "method": "jev",
+    "status": "compressed",
+    "tokens_before": 6874,
+    "tokens_after": 1261,
+    "tokenizer": "tokenizer-proxy-o200k-est",
+    "elapsed_ms": 832.52,
+    "stages": [
+      {
+        "name": "material",
+        "tokens_before": 6874,
+        "tokens_after": 1261
+      }
+    ],
+    "calls": [
+      {
+        "provider": "typesafe",
+        "purpose": "selection",
+        "official_usage": {
+          "input_tokens": 11391,
+          "output_tokens": 266,
+          "total_tokens": 11657,
+          "cached_input_tokens": null,
+          "reasoning_output_tokens": null
+        },
+        "status": "completed",
+        "model": "jev-1.13.0",
+        "latency_ms": 821.984
+      }
+    ],
+    "issues": [],
+    "source_ids": [
+      "851fa06b662b2b8d76adb63b618b2220e21b8cbb044e022ea29d3fbb6ed5bd20"
+    ],
+    "lossy": true,
+    "prefix_messages_reused": 0,
+    "cache_hits": 0,
+    "backend_attempts": 1,
+    "changed_fields": 1,
+    "changed_roles": [
+      "user"
+    ],
+    "tokens_saved": 5613,
+    "savings_percent": 81.656,
+    "measurement": "local serialized-request token estimate; not provider usage or cost"
+  },
+  "requests": [
+    {
+      "task_id": "reference_zh",
+      "purpose": "generation",
+      "attempt": 1,
+      "accounting_labelled": true,
+      "status": "completed",
+      "official_usage": {
+        "input_tokens": 1043,
+        "output_tokens": 128,
+        "total_tokens": 1171,
+        "cached_input_tokens": 1043,
+        "reasoning_output_tokens": 94
+      },
+      "compression": {
+        "compression_calls": [
+          {
+            "provider": "typesafe",
+            "purpose": "selection",
+            "official_usage": {
+              "input_tokens": 11391,
+              "output_tokens": 266,
+              "total_tokens": 11657,
+              "cached_input_tokens": null,
+              "reasoning_output_tokens": null
+            },
+            "status": "completed",
+            "model": "jev-1.13.0",
+            "latency_ms": 821.984
+          }
+        ]
+      },
+      "input_tokens_before_estimate": 6874,
+      "input_tokens_after_estimate": 1261,
+      "model": "kimi-for-coding",
+      "finish_reason": "stop",
+      "latency_s": 2.711
+    }
+  ],
+  "generation_elapsed_s": 2.711
+}

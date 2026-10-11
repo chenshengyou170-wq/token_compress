@@ -1,0 +1,133 @@
+{
+  "metadata": {
+    "created_at": "2026-10-11T03:12:19.582229+00:00",
+    "python": "3.11.9",
+    "platform": "Linux-5.10.240-x86_64-with-glibc2.31",
+    "packages": {
+      "lingmou-token-compression": "0.2.0",
+      "tiktoken": "0.14.0",
+      "llmlingua": "0.2.2",
+      "torch": "2.14.1+cpu",
+      "transformers": "4.57.6",
+      "headroom-ai": "0.40.0",
+      "spacy": "3.8.16"
+    },
+    "source_sha256": {
+      "token_compression/__init__.py": "c6c589d7509f8452ed159e9068bb8245802807a36ef93d07177572a5c33454df",
+      "token_compression/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+      "token_compression/backends.py": "e9250e4bfad9eff9be6bba661442740c00124c76683367b23ad25c259926e741",
+      "token_compression/cli.py": "bce77ecbb6febfc61ea53071707dc7e846e820ffb900e403366a112967e62aaf",
+      "token_compression/engine.py": "b4bcbf9aca088267fc131c9bf35c012d45681f3d615ce908362ad7d87d5772d7",
+      "token_compression/experiment.py": "c72ce7a9d172e083889c9e5c2fc033b95f2bee000db091ab1fca9bee827b7332",
+      "token_compression/history.py": "adefb9387b35caebda43cfffdd37eca050e709761bca4deeac1fe1bd17e3e8cd",
+      "token_compression/live_experiment.py": "374ed82170d4ab7668eeee82235f8eb0cece6e387264486009a1d3756518df3c",
+      "token_compression/methods.py": "920c069cc3dbdd7a8f0ab418358790698396fe3c6f62721d20a42424a8ae43cc",
+      "token_compression/transport.py": "6e27a3a6378f4c83dcadc008a3324da989dab1298e41dff055468cb09987b01f",
+      "codexscope/__init__.py": "13c2f5627dff62433b087e1564925a2d5bcf7562027eeb2bc94c196ff770aa7d",
+      "codexscope/compression_boundary.py": "4ea25dbf60eb29e99ed9295e00a968f4fe0c37dd638800e3aa6be1755003b074",
+      "codexscope/compression_models.py": "365f710b9c2589a6b092152503b7ef8d9186529c12875343b2726eef3e1c24b6",
+      "codexscope/context_compression.py": "73be825649e1b871406e88fcdbd4891c68dd58fe9505be0b2574b198f27b327a",
+      "codexscope/context_tools.py": "50a0984cb9356bebd61fa021d037c214d9741304afddb112dbbab1ee5e39b601",
+      "codexscope/deferred_tools.py": "cec4f1adb43b7272a057695b05be07be2e6291d2377c92b98d477abc0b8dd829",
+      "codexscope/input_compression.py": "80b697460616943fdd3fb3392f0add9568bc569cd6355af0c6da8843388e23d2",
+      "codexscope/llmlingua_compression.py": "b63b77633251ba2e54fe0b318df966b1ea27776afdcdbbda53bf8f627b442d95",
+      "codexscope/media_token_task.py": "44f764a6d49f512b326dc514c2d39cc1029a03998fb8a6b78658c495a3d1621d",
+      "codexscope/proxy_usage.py": "6b795e5ad7f4e0425318c818c622993c59e1612f528477983dada235a9d6b119",
+      "codexscope/reference_selection.py": "87221f33831efe121151502d243d759be52e3f08a457bc18fff584119545c01e",
+      "codexscope/request_token_tap.py": "fd95e4f89c8f67388d3e75e21036bdf0bab0f777034a1ea77c599f5a8c8a25bf",
+      "codexscope/request_usage_ledger.py": "2ecc33098a69370bd13502cdd0dd1772d7a5c51e4c3b6fdb62c2fd6142ad565c",
+      "codexscope/structural_compression.py": "1bff984c503261dea461777c8ac227a4fac708ed7620d6bce938cd93e5ee5402"
+    }
+  },
+  "config": {
+    "methods": [
+      "off",
+      "llmlingua2"
+    ],
+    "repeats": 2,
+    "cases": [
+      "reference_en",
+      "reference_zh",
+      "code"
+    ],
+    "live": false,
+    "model_path": "/home/abc/.cache/huggingface/hub/models--microsoft--llmlingua-2-xlm-roberta-large-meetingbank/snapshots/ebaba9b0e874dadd3003ffcff828e4397e568089",
+    "reference_path": null,
+    "mlm_model_path": null,
+    "spacy_model": "en_core_web_sm",
+    "fixtures_sha256": "a95223a4e9835c10333c16ac631019785d3b8bd0db5424d0d9818379c8f0bd81"
+  },
+  "summary": [
+    {
+      "method": "off",
+      "requests": 6,
+      "tokens_before": 25612,
+      "tokens_after": 25612,
+      "saved_percent": 0.0,
+      "median_ms": 0.974,
+      "issues": 0,
+      "evidence_passed": 6,
+      "remote_calls": 0,
+      "known_remote_tokens": 0,
+      "remote_calls_missing_usage": 0,
+      "official_net_savings_percent": null
+    },
+    {
+      "method": "llmlingua2",
+      "requests": 6,
+      "tokens_before": 25612,
+      "tokens_after": 14366,
+      "saved_percent": 43.909,
+      "median_ms": 6.874,
+      "issues": 0,
+      "evidence_passed": 6,
+      "remote_calls": 0,
+      "known_remote_tokens": 0,
+      "remote_calls_missing_usage": 0,
+      "official_net_savings_percent": null
+    }
+  ],
+  "sessions": {
+    "stable_prefix": {
+      "reused_messages": 3,
+      "forwarded_prefix_exact": true,
+      "edited_branch_reused": 0,
+      "provider_cache_hit": null
+    },
+    "reread_feedback": {
+      "counters": {
+        "fetch": {
+          "compressions": 5,
+          "rereads": 5
+        }
+      },
+      "next_request_lossy": false,
+      "reason": [
+        "reread_feedback_structure_only"
+      ]
+    },
+    "deferred_tools": {
+      "all_schemas_tokens": 8012,
+      "catalog_and_resident_tokens": 1000,
+      "loaded_schema_tokens": 297,
+      "initial_tokens_saved": 7012,
+      "schema_exact_after_load": true,
+      "note": "Schema estimates only. Discovery/reload round trips require whole-task provider accounting."
+    },
+    "history_window": {
+      "tokens_before": 6559,
+      "tokens_after": 1651,
+      "latest_two_turns_exact": true,
+      "pinned_system_exact": true,
+      "archives": [
+        "04a7a14f5cf7eb89935ab595a26630bf9eef0c96e730c3d1a8bfff4c5b49a47c"
+      ]
+    }
+  },
+  "limits": [
+    "Synthetic corpus; local serialized JSON estimates, not provider billing.",
+    "Evidence retention checks do not establish downstream answer accuracy.",
+    "Repeated runs reuse each method's cache; first run includes lazy initialization.",
+    "Remote compression usage is counted even for rejected candidates; no downstream usage in this benchmark."
+  ]
+}

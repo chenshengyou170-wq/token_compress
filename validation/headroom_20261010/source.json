@@ -1,0 +1,31 @@
+{
+  "name": "headroom",
+  "path": "reference_projects/headroom",
+  "upstream": "https://github.com/headroomlabs-ai/headroom.git",
+  "revision": "8c1beb20aeb8f0576095ae4893176ce16c2ede2a",
+  "storage": "git_submodule",
+  "shallow_clone": true,
+  "tracked_files": 2635,
+  "git_metadata_included": true,
+  "package_version": "0.40.0",
+  "license": "Apache-2.0",
+  "added_at": "2026-10-10T08:09:10.334491+00:00",
+  "review": "reference_projects/HEADROOM_REVIEW.md",
+  "record_type": "local_source_review",
+  "submodule_worktree_clean": true,
+  "license_sha256": "f14dd440c8e3152b4d4d324615de8251ddb011dc81f484daad0b6902093539cc",
+  "notice_sha256": "88dc0f4a90a8742dcdd1c61e19050b73a9dba7e45ec9ac41a62ba0ae005aa6aa",
+  "validation": {
+    "python": "/home/abc/zju/lingmou/.venv/bin/python",
+    "python_version": "3.11.9",
+    "offline_passed": 127,
+    "offline_failed": 1,
+    "offline_deselected": 1,
+    "failure": "Current Python interpreter does not provide _sqlite3",
+    "initial_collection_errors": 2,
+    "native_extension_available": false,
+    "native_compression_executed": false,
+    "real_upstream_model_calls": false,
+    "original_product_integration_changed": false
+  }
+}

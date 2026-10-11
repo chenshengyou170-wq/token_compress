@@ -1,0 +1,18 @@
+{
+  "methods": [
+    "off",
+    "llmlingua2"
+  ],
+  "repeats": 2,
+  "cases": [
+    "reference_en",
+    "reference_zh",
+    "code"
+  ],
+  "live": false,
+  "model_path": "/home/abc/.cache/huggingface/hub/models--microsoft--llmlingua-2-xlm-roberta-large-meetingbank/snapshots/ebaba9b0e874dadd3003ffcff828e4397e568089",
+  "reference_path": null,
+  "mlm_model_path": null,
+  "spacy_model": "en_core_web_sm",
+  "fixtures_sha256": "a95223a4e9835c10333c16ac631019785d3b8bd0db5424d0d9818379c8f0bd81"
+}

@@ -1,0 +1,19 @@
+{
+  "methods": [
+    "off",
+    "llmlingua2",
+    "caveman_nlp"
+  ],
+  "repeats": 2,
+  "cases": [
+    "reference_en",
+    "reference_zh",
+    "code"
+  ],
+  "live": false,
+  "model_path": "/home/abc/.cache/huggingface/hub/models--microsoft--llmlingua-2-xlm-roberta-large-meetingbank/snapshots/ebaba9b0e874dadd3003ffcff828e4397e568089",
+  "reference_path": "reference_projects/caveman-compression",
+  "mlm_model_path": null,
+  "spacy_model": "en_core_web_sm",
+  "fixtures_sha256": "8ad0092fed7300ea1e582c9923c2eb4a36ffbf83f4b8836b6c616db747a4c2f3"
+}
