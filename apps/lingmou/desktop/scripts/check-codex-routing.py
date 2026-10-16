@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'src'))
 
-import json,os,re,shutil,subprocess,tempfile,threading
+import asyncio,json,os,re,shutil,subprocess,tempfile,threading
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from codexscope.desktop_companion import Companion, _source_available
 
@@ -78,7 +78,8 @@ with tempfile.TemporaryDirectory(prefix='lingmou-codex-smoke-') as temporary:
          ('PATH','HOME','USERPROFILE','HOMEDRIVE','HOMEPATH','TMPDIR','TEMP','TMP',
           'SYSTEMROOT','WINDIR','COMSPEC','PATHEXT','APPDATA','LOCALAPPDATA')}
     env.update(CODEX_HOME=str(codex_home),CODEX_API_KEY='synthetic-smoke-api-key',OPENAI_API_KEY='synthetic-smoke-api-key',
-               HTTP_PROXY='http://127.0.0.1:1',HTTPS_PROXY='http://127.0.0.1:1',NO_PROXY='127.0.0.1,localhost')
+               HTTP_PROXY='http://127.0.0.1:1',HTTPS_PROXY='http://127.0.0.1:1',NO_PROXY='127.0.0.1,localhost',
+               RUST_LOG='warn,codex_core::mcp_connection_manager=debug,codex_rmcp_client=debug')
     diagnostics=[]
     def execute(arguments):
         result=subprocess.run([*codex_command,'exec',*arguments],cwd=work,env=env,text=True,capture_output=True,timeout=70)
@@ -89,6 +90,21 @@ with tempfile.TemporaryDirectory(prefix='lingmou-codex-smoke-') as temporary:
     try:
         companion.connect(config_path=str(target),auth_kind='existing',mode='off')
         source_server=companion.connection.record['source_server']
+        async def check_reader_process():
+            from mcp.client.stdio import StdioServerParameters, stdio_client
+            from mcp.client.session import ClientSession
+            record=companion.connection.record
+            parameters=StdioServerParameters(command=record['source_command'],
+                args=[*record['source_args'],'--store',str(companion.connection.directory/'sources')],
+                env=env,cwd=work)
+            async with stdio_client(parameters) as streams:
+                async with ClientSession(*streams,read_timeout_seconds=20) as session:
+                    await session.initialize()
+                    listing=await session.list_tools()
+                    names=[tool.name for tool in listing.tools]
+                    assert 'lingmou_source_read' in names,names
+                    print(json.dumps({'stage':'source_reader_process','tools':names}))
+        asyncio.run(check_reader_process())
         events=execute(['--skip-git-repo-check','--sandbox','read-only','--strict-config','--json','Reply only OK. Do not use tools.'])
         print(json.dumps({'stage':'connected','events':events},ensure_ascii=False))
         thread_id=next(event['thread_id'] for event in events if event['type']=='thread.started')
