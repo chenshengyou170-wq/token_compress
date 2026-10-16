@@ -31,7 +31,7 @@ jobs:
           "LINGMOU_ROOT=$root" >> $env:GITHUB_ENV
       - uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: '24.13.0'
       - uses: astral-sh/setup-uv@v6
         with:
           version: '0.11.21'
@@ -43,7 +43,7 @@ jobs:
             $log = Join-Path $env:RUNNER_TEMP 'lingmou-dependencies.log'
             & $program @arguments 2>&1 | Tee-Object -FilePath $log
             if ($LASTEXITCODE -ne 0) {
-              $details = ((Get-Content $log -Tail 40) -join "`n").Replace('%', '%25').Replace("`r", '%0D').Replace("`n", '%0A')
+              $details = ((Get-Content $log -Head 80) -join "`n").Replace('%', '%25').Replace("`r", '%0D').Replace("`n", '%0A')
               Write-Output "::error title=Dependency installation failed::$details"
               exit 1
             }
