@@ -39,12 +39,18 @@ jobs:
         working-directory: ${{ env.LINGMOU_ROOT }}
         shell: pwsh
         run: |
-          uv sync --locked --python 3.13 --extra desktop --extra test
-          if ($LASTEXITCODE -ne 0) { throw 'Python dependencies failed' }
-          npm ci --prefix web
-          if ($LASTEXITCODE -ne 0) { throw 'Web dependencies failed' }
-          npm ci --prefix desktop
-          if ($LASTEXITCODE -ne 0) { throw 'Desktop dependencies failed' }
+          function Install-Checked([string]$program, [string[]]$arguments) {
+            $log = Join-Path $env:RUNNER_TEMP 'lingmou-dependencies.log'
+            & $program @arguments 2>&1 | Tee-Object -FilePath $log
+            if ($LASTEXITCODE -ne 0) {
+              $details = ((Get-Content $log -Tail 40) -join "`n").Replace('%', '%25').Replace("`r", '%0D').Replace("`n", '%0A')
+              Write-Output "::error title=Dependency installation failed::$details"
+              exit 1
+            }
+          }
+          Install-Checked uv @('sync', '--locked', '--python', '3.13', '--extra', 'desktop', '--extra', 'test')
+          Install-Checked npm @('ci', '--prefix', 'web')
+          Install-Checked npm @('ci', '--prefix', 'desktop')
       - name: Validate version and run isolated regressions
         working-directory: ${{ env.LINGMOU_ROOT }}
         shell: pwsh
