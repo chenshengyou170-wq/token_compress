@@ -84,6 +84,14 @@ def check(executable):
             assert received[0]["input"][:2] == body["input"][:2]
             state = command("status")
             assert state["tokens"]["official"]["total_tokens"] == 256
+            local = state["tokens"]["local"]
+            assert local["requests"] == 2 and local["compressed_requests"] == 1
+            assert local["before"] > local["after"] > 0
+            assert local["saved"] == local["before"] - local["after"]
+            assert local["savings_percent"] == round(100 * local["saved"] / local["before"], 1)
+            recent = state["tokens"]["recent_requests"]
+            assert recent[0]["before"] > recent[0]["after"]
+            assert recent[1]["before"] == recent[1]["after"]
             command("set_mode", mode="full", remote_enabled=True)
             state = command("restart")
             assert state["connection"]["remote_enabled"] and state["connection"]["mode"] == "full"
@@ -94,6 +102,7 @@ def check(executable):
             assert process.returncode == 0
             print(json.dumps({"frozen_companion": "passed", "full_compression": "passed",
                               "stable_provider_identity": "passed",
+                              "compression_savings_projection": "passed",
                               "mode_switch": "passed", "sse_and_usage": "passed", "restart": "passed",
                               "config_restore_unicode_path": "passed", "real_model_calls": 0}))
         finally:

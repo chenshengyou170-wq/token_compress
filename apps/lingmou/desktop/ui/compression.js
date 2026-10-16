@@ -3,6 +3,8 @@
 const api = window.lingmouCompression;
 const element = (id) => document.getElementById(id);
 const number = (value) => typeof value === "number" && Number.isFinite(value) ? value.toLocaleString("zh-CN") : "—";
+const savings = (before, after) => typeof before === "number" && Number.isFinite(before)
+  && typeof after === "number" && Number.isFinite(after) ? before - after : null;
 const DEFAULT_UPSTREAM = { chatgpt: "https://chatgpt.com/backend-api/codex", api: "https://api.openai.com/v1" };
 const MODE_LABELS = { off: "仅采集用量", structure: "结构压缩", extract: "按任务选段", auto: "本地自动", full: "完整压缩" };
 const MODE_HINTS = {
@@ -108,6 +110,29 @@ function rows(targetId, data, columns, empty) {
   target.replaceChildren(fragment);
 }
 
+function renderCompression(tokens) {
+  const local = tokens.local || {};
+  const measured = local.requests > 0 && savings(local.before, local.after) !== null;
+  const saved = measured ? number(local.saved) : "—";
+  const percent = measured ? number(local.savings_percent) : "—";
+  element("compression-saved").textContent = saved;
+  element("compression-percent").textContent = percent === "—" ? percent : `${percent}%`;
+  element("compression-before").textContent = number(measured ? local.before : null);
+  element("compression-after").textContent = number(measured ? local.after : null);
+  element("connection-saved").textContent = `${saved} tokens · 本地估算`;
+  element("compression-summary").textContent = measured
+    ? `已统计 ${number(local.requests)} 次请求 · ${number(local.compressed_requests)} 次输入缩短${tokens.processing ? " · 正在处理新请求" : ""}`
+    : tokens.processing ? "正在处理请求，压缩效果即将更新。"
+      : state.request_count > 0 ? "已收到请求，暂无可用的压缩前后估算。" : "等待请求后显示压缩效果。";
+  element("compression-hint").textContent = (state.connection?.mode || tokens.requested_mode) === "off"
+    ? "当前已关闭压缩，仅采集用量；本次运行已有的压缩统计会保留。可在应用接入页开启压缩。"
+    : measured ? local.saved > 0
+      ? "按本次后台运行累计；未缩短的请求也计入压缩前后总量。"
+      : "当前记录尚无累计节省。没有可压缩内容或压缩未产生收益时，会保留原文转发。"
+      : state.running ? "继续在 Codex 中工作，收到可统计的请求后自动更新。"
+        : "接入 Codex 并发起任务后显示压缩效果；缺失的历史统计保持未知。";
+}
+
 function render(next) {
   state = next;
   const connection = state.connection;
@@ -148,6 +173,7 @@ function render(next) {
   element("error-banner").textContent = error;
   element("error-banner").hidden = !error;
   const tokens = state.tokens || {};
+  renderCompression(tokens);
   const official = tokens.official || {};
   element("official-total").textContent = number(official.total_tokens);
   element("official-input").textContent = number(official.input_tokens);
@@ -165,11 +191,17 @@ function render(next) {
     : "最近一次保存的后台运行记录。缺失记录时显示未知。";
   const components = tokens.breakdown?.requests ? tokens.breakdown.components || [] : [];
   rows("component-rows", components, [
-    { value: (row) => row.label }, { value: (row) => number(row.after), numeric: true },
+    { value: (row) => row.label },
+    { value: (row) => number(row.before), numeric: true },
+    { value: (row) => number(row.after), numeric: true },
+    { value: (row) => number(row.saved), numeric: true },
   ], "尚未收到可统计的请求。继续在 Codex 中工作后，这里会显示实际发送的组件。");
   const statusLabels = { completed: "已结束", failed: "失败", interrupted: "中断", pending: "进行中" };
   rows("request-rows", [...(tokens.recent_requests || [])].reverse(), [
     { value: (row) => row.request_id }, { value: (row) => statusLabels[row.status] || "未知" },
+    { value: (row) => number(row.before), numeric: true },
+    { value: (row) => number(row.after), numeric: true },
+    { value: (row) => number(savings(row.before, row.after)), numeric: true },
     { value: (row) => number(row.official_input), numeric: true },
     { value: (row) => number(row.official_output), numeric: true },
   ], "还没有请求记录。用量来自模型返回的数据，未返回的数值保持未知。");
@@ -216,6 +248,7 @@ function updateUpstream() {
 }
 
 document.querySelectorAll("[data-page]").forEach((button) => button.addEventListener("click", () => page(button.dataset.page)));
+element("view-compression").addEventListener("click", () => page("usage"));
 element("security-home").addEventListener("click", () => api.securityHome());
 element("auth-kind").addEventListener("change", updateUpstream);
 element("inspect-config").addEventListener("click", () => { void action(inspect); });

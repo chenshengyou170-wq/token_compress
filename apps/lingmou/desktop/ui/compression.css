@@ -38,7 +38,7 @@ button, input, select { font: inherit; }
 button, select, input { caret-color: var(--brand); }
 button { cursor: pointer; }
 button:disabled { cursor: not-allowed; opacity: .55; }
-button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; }
+button:focus-visible, input:focus-visible, select:focus-visible, .table-scroll:focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; }
 ::selection { color: #fff; background: var(--brand); }
 * { scrollbar-width: thin; scrollbar-color: #a9bdb4 transparent; }
 svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex: none; }
@@ -107,7 +107,12 @@ dd { margin: 0; overflow-wrap: anywhere; }
 .usage-totals { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; gap: 20px; }
 .usage-totals dt { font-size: 12px; }
 .usage-totals dd { font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; margin-top: 8px; letter-spacing: -.02em; }
+.compression-totals > div:first-child dd { color: var(--brand-dark); }
+.compression-summary { margin-top: 20px; font-size: 13px; }
+.compression-link { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 4px 16px; }
 .table-scroll { overflow-x: auto; }
+.request-table { min-width: 680px; }
+.request-table td:first-child { max-width: 200px; overflow-wrap: anywhere; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th { text-align: left; background: #f6f9f8; font-weight: 600; color: #485e54; }
 th, td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
