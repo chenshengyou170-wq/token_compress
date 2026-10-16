@@ -61,6 +61,9 @@ def check(executable):
             connected = tomllib.loads(config.read_text(encoding="utf-8"))
             assert connected.get("model_provider", "openai") == "openai"
             assert "model_providers" not in connected
+            reader_namespace = f'mcp__{record["source_server"]}'
+            assert len(reader_namespace + "__lingmou_source_read") <= 64
+            assert reader_namespace in connected["features"]["code_mode"]["direct_only_tool_namespaces"]
             assert state["connection"]["mode"] == "full" and state["connection"]["remote_enabled"]
             material = json.dumps([{"warehouse_region_identifier": f"region-{i}",
                                     "warehouse_inventory_description": "stable inventory",
@@ -102,6 +105,7 @@ def check(executable):
             assert process.returncode == 0
             print(json.dumps({"frozen_companion": "passed", "full_compression": "passed",
                               "stable_provider_identity": "passed",
+                              "source_reader_visibility_config": "passed",
                               "compression_savings_projection": "passed",
                               "mode_switch": "passed", "sse_and_usage": "passed", "restart": "passed",
                               "config_restore_unicode_path": "passed", "real_model_calls": 0}))

@@ -23,6 +23,8 @@ CHATGPT_UPSTREAM = "https://chatgpt.com/backend-api/codex"
 API_UPSTREAM = "https://api.openai.com/v1"
 MAX_CONFIG_BYTES = 2 * 1024 * 1024
 RELAY_PATH = "/lingmou-relay/"
+CODE_MODE_PATH = ("features", "code_mode")
+DIRECT_TOOLS_PATH = (*CODE_MODE_PATH, "direct_only_tool_namespaces")
 
 
 class ConnectionError(ValueError):
@@ -175,6 +177,28 @@ def _remove(document, parts):
     node.pop(parts[-1], None)
 
 
+def _reader_visibility(document, server_name):
+    """Keep the recovery tool visible when Codex defers MCP tools in code mode.
+
+    A running MCP process alone does not establish request-level recoverability.
+    Pin just this namespace so DesktopCompressor can still require an advertised
+    reader. Preserve other direct namespaces and the legacy boolean feature flag.
+    """
+    exists, code_mode = _lookup(document, CODE_MODE_PATH)
+    if exists and type(code_mode) is bool:
+        return CODE_MODE_PATH, {"enabled": code_mode,
+                                "direct_only_tool_namespaces": [f"mcp__{server_name}"]}
+    if exists and not isinstance(code_mode, dict):
+        raise ConnectionError("features.code_mode 必须是布尔值或 TOML 表。")
+    _, namespaces = _lookup(document, DIRECT_TOOLS_PATH)
+    if namespaces is None:
+        namespaces = []
+    if not isinstance(namespaces, list) or any(not isinstance(item, str) for item in namespaces):
+        raise ConnectionError("code_mode.direct_only_tool_namespaces 必须是字符串列表。")
+    reader = f"mcp__{server_name}"
+    return DIRECT_TOOLS_PATH, [*namespaces, *([] if reader in namespaces else [reader])]
+
+
 class CodexConnection:
     def __init__(self, root: Path):
         self.root = root
@@ -254,8 +278,12 @@ class CodexConnection:
         if RELAY_PATH in upstream:
             raise ConnectionError("此配置已接入灵眸，请使用原来的数据目录解除接入，避免重复代理。")
         identifier = secrets.token_hex(12)
-        source_server = f"lingmou_desktop_sources_{identifier}"
+        # Older Codex versions hash qualified MCP names longer than 64 chars.
+        # Keep the advertised read tool identifiable on both old and new clients.
+        source_server = f"lingmou_src_{identifier}"
         owned_paths += [("mcp_servers", source_server), ("features", "enable_request_compression")]
+        visibility_path, _ = _reader_visibility(original, source_server)
+        owned_paths.append(visibility_path)
         self.record = {
             "version": 2, "id": identifier, "phase": "prepared", "config_path": str(target),
             "config_existed": target.exists(), "original_digest": hashlib.sha256(raw).hexdigest(),
@@ -297,6 +325,8 @@ class CodexConnection:
                 "args": [*self.record["source_args"], "--store", str(self.directory / "sources")],
                 "startup_timeout_sec": 20,
             })
+            visibility_path, visibility = _reader_visibility(document, self.record["source_server"])
+            _set(document, visibility_path, visibility)
             applied = tomlkit.dumps(document).encode("utf-8")
             # Persist the recovery journal before switching the user's config.
             atomic_bytes(self.directory / "applied.toml", applied)

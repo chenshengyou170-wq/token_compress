@@ -2,7 +2,7 @@
 
 Windows 10/11 x64 下载：[最新 GitHub Release](https://github.com/chenshengyou170-wq/token_compress/releases/latest)。
 安装器为 `Lingmou-Setup.exe`，便携版为 `Lingmou-win-x64.zip`。
-0.1.3 新增累计节省 Token、压缩率及压缩前后对比，保留 0.1.2 的连接恢复修复；升级步骤见 [发行说明](RELEASE_NOTES.md)。
+0.1.4 修复 Codex 延迟加载及工具名长度导致的补读工具误判，保留累计节省和压缩前后对比；升级前需解除旧接入，步骤见 [发行说明](RELEASE_NOTES.md)。
 以后推送与 `desktop/package.json` 版本一致的 `lingmou-vX.Y.Z` 标签，会自动在 Windows 上
 测试、打包并发布；构建或冻结后端检查失败时不发布安装包。
 
@@ -12,7 +12,7 @@ Windows 10/11 x64 下载：[最新 GitHub Release](https://github.com/chenshengy
 | 平台 | 提供的功能 | 状态 |
 |---|---|---|
 | Linux x64（Ubuntu / Debian） | 完整安全工作台 | 已交付 `.deb` 和 ZIP |
-| Windows x64 | Token 压缩伴侣：给自己的 Codex 接入压缩和用量统计 | 有未签名测试包，**尚未在真实 Windows 上安装和验收** |
+| Windows x64 | Token 压缩伴侣：给自己的 Codex 接入压缩和用量统计 | 未签名；已做真实 Windows 压缩对照，完整桌面交互验收未完成 |
 | macOS | — | 未适配 |
 
 ## Linux：安装与使用

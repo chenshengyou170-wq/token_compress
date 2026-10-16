@@ -6,8 +6,9 @@
 内置 Python 后端和 Electron；需要用户自己的 Codex 安装及登录。本包未签名。
 
 灵眸在本机接入 Codex 模型请求，提供输入压缩、原文补读和用量展示。
+0.1.4 修复补读工具被延迟加载或工具名过长，导致完整压缩一直回退的问题；保留 0.1.3 的压缩节省明细。
 0.1.2 保持线程原来的 provider 身份，修复退出后无法恢复线程的问题；旧版本连接通过恢复记录保留直连兼容项。
-升级前结束任务并完全退出 Codex，安装后启动一次灵眸，再重新打开 Codex。
+升级前结束任务并关闭 Codex，在旧版灵眸中解除接入并退出；安装新版后重新接入，再打开 Codex。
 
 本目录是灵眸产品的独立发行源码，与仓库根目录的压缩模块分别维护。未纳入独立多模态/隐藏 Token 调研、
 历史运行日志或用户配置。`src/codexscope` 保留产品公共运行依赖；Windows 本地入口使用压缩伴侣，
@@ -37,5 +38,7 @@ npm --prefix desktop run make:windows
 - [安装器](https://github.com/chenshengyou170-wq/token_compress/releases/latest/download/Lingmou-Setup.exe)
 - [便携 ZIP](https://github.com/chenshengyou170-wq/token_compress/releases/latest/download/Lingmou-win-x64.zip)
 
-自动检查使用隔离配置和本机模拟上游，不等于真实 ChatGPT 上游或桌面交互验收。
+自动检查使用隔离配置和本机模拟上游，包含实际 Codex CLI 的补读工具声明及线程恢复验证。
+真实 Windows 材料问答对照曾测得官方输入减少 26.7%、答案正确；该单例不代表所有编程任务的收益，
+也不等于完成整个桌面交互验收。详见[对照记录](evidence/windows_compression_live_20261016/validation.json)。
 配置、旧版本恢复及使用边界见 [Windows 接入说明](doc/WINDOWS_COMPRESSION_COMPANION.md)。

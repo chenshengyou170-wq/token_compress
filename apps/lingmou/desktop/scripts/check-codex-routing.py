@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'src'))
 
 import json,os,shutil,subprocess,tempfile,threading
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
-from codexscope.desktop_companion import Companion
+from codexscope.desktop_companion import Companion, _source_available
 
 codex_entry = shutil.which('codex')
 if not codex_entry:
@@ -24,6 +24,7 @@ if sys.platform == 'win32' and Path(codex_entry).suffix.lower() in {'.cmd', '.ba
     codex_command = [node, str(npm_entry)]
 
 seen=[]
+source_server=''
 item={'type':'message','id':'msg_test','role':'assistant','content':[{'type':'output_text','text':'OK','annotations':[]}]}
 events=[{'type':'response.created','response':{'id':'resp_test','status':'in_progress','output':[]}},
         {'type':'response.output_item.added','output_index':0,'item':{**item,'content':[]}},
@@ -40,7 +41,9 @@ class Upstream(BaseHTTPRequestHandler):
         self.end_headers()
     def do_POST(self):
         body=self.rfile.read(int(self.headers.get('Content-Length',0)))
-        seen.append({'path':self.path,'authorization':self.headers.get('Authorization'),'relay':self.headers.get('X-Lingmou-Relay-Token')})
+        seen.append({'path':self.path,'authorization':self.headers.get('Authorization'),
+                     'relay':self.headers.get('X-Lingmou-Relay-Token'),
+                     'source_reader_advertised':_source_available(json.loads(body), source_server)})
         self.send_response(200)
         self.send_header('Content-Type','text/event-stream')
         self.send_header('Content-Length',str(len(wire)))
@@ -69,6 +72,7 @@ with tempfile.TemporaryDirectory(prefix='lingmou-codex-smoke-') as temporary:
         return [json.loads(line) for line in result.stdout.splitlines() if line.startswith('{')]
     try:
         companion.connect(config_path=str(target),auth_kind='existing',mode='off')
+        source_server=companion.connection.record['source_server']
         events=execute(['--skip-git-repo-check','--sandbox','read-only','--strict-config','--json','Reply only OK. Do not use tools.'])
         print(json.dumps({'stage':'connected','events':events},ensure_ascii=False))
         thread_id=next(event['thread_id'] for event in events if event['type']=='thread.started')
@@ -81,9 +85,11 @@ with tempfile.TemporaryDirectory(prefix='lingmou-codex-smoke-') as temporary:
         resumed=execute(['resume','--skip-git-repo-check','--json',thread_id,'Reply only OK again. Do not use tools.'])
         assert any(e.get('type')=='turn.completed' for e in resumed),resumed
         assert len(seen)==2, seen
-        assert all(e=={'path':'/v1/responses','authorization':'Bearer synthetic-smoke-api-key','relay':None} for e in seen),seen
+        assert seen==[{'path':'/v1/responses','authorization':'Bearer synthetic-smoke-api-key','relay':None,
+                       'source_reader_advertised':reader} for reader in (True,False)],seen
         print(json.dumps({'codex_version':subprocess.check_output([*codex_command,'--version'],text=True).strip(),
                           'provider':'openai','resume_after_disconnect':'passed','auth_forwarding':'passed',
+                          'source_reader_advertised':'passed',
                           'requests_to_local_mock':len(seen),'real_model_requests':0}))
     finally:
         companion.connection.restore(); companion.stop()

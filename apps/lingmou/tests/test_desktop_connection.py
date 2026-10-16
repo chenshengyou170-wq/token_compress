@@ -61,6 +61,57 @@ def test_builtin_existing_upstream_is_used_and_restored(tmp_path):
 
 
 @pytest.mark.parametrize('original', [
+    '',
+    '[features]\ncode_mode = true\n',
+    '[features]\ncode_mode = false\n',
+    '[features.code_mode]\nenabled = false\ndirect_only_tool_namespaces = ["existing_tool"]\n',
+])
+def test_reader_is_directly_advertised_and_code_mode_preferences_restore(tmp_path, original):
+    connection, target = prepare(tmp_path, original)
+    connection.apply(12345)
+    connected = tomlkit.parse(target.read_text())
+    mode = connected['features']['code_mode']
+    reader = 'mcp__' + connection.record['source_server']
+    assert len(reader + '__lingmou_source_read') <= 64
+    assert reader in mode['direct_only_tool_namespaces']
+    if 'existing_tool' in original:
+        assert mode['direct_only_tool_namespaces'] == ['existing_tool', reader]
+    if 'false' in original:
+        assert mode['enabled'] is False
+    elif 'true' in original:
+        assert mode['enabled'] is True
+    connected['model'] = 'user-changed-model'
+    target.write_text(tomlkit.dumps(connected))
+    CodexConnection(connection.root).restore()
+    expected = tomlkit.parse(original)
+    expected['model'] = 'user-changed-model'
+    assert tomlkit.parse(target.read_text()) == expected
+
+
+def test_reader_pin_restoration_preserves_other_code_mode_edits(tmp_path):
+    connection, target = prepare(tmp_path)
+    connection.apply(12345)
+    connected = tomlkit.parse(target.read_text())
+    connected['features']['code_mode']['excluded_tool_namespaces'] = ['other_tool']
+    target.write_text(tomlkit.dumps(connected))
+    connection.restore()
+    assert tomlkit.parse(target.read_text()) == {
+        'features': {'code_mode': {'excluded_tool_namespaces': ['other_tool']}}}
+
+
+def test_changed_direct_tool_list_blocks_restore_without_losing_user_edits(tmp_path):
+    connection, target = prepare(tmp_path)
+    connection.apply(12345)
+    connected = tomlkit.parse(target.read_text())
+    connected['features']['code_mode']['direct_only_tool_namespaces'].append('user_added_tool')
+    edited = tomlkit.dumps(connected)
+    target.write_text(edited)
+    with pytest.raises(ConnectionError, match='direct_only_tool_namespaces'):
+        connection.restore()
+    assert target.read_text() == edited
+
+
+@pytest.mark.parametrize('original', [
     'model_provider = "company"\n[model_providers.company]\nname = "Company"\n'
     'base_url = "https://gateway.example/v1"\nenv_key = "COMPANY_API_KEY"\n',
     'model_provider = "company"\n[model_providers.company]\nname = "Company"\n'
