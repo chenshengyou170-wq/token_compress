@@ -1,0 +1,23 @@
+# Linux build host for the Windows Python freezer and Squirrel installer.
+# Application code and credentials are not copied into this image.
+FROM python:3.12-slim-bookworm
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN dpkg --add-architecture i386 \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+       ca-certificates wine wine64 wine32:i386 mono-devel xvfb xauth \
+       unzip zip p7zip-full \
+    && rm -rf /var/lib/apt/lists/*
+
+# Current Rust-based Windows wheels use bcryptprimitives.ProcessPrng, which
+# Debian bookworm's Wine 8 does not provide. Use WineHQ's stable packages.
+RUN python -c "from pathlib import Path; from urllib.request import urlopen; p=Path('/etc/apt/keyrings'); p.mkdir(exist_ok=True); (p/'winehq-archive.asc').write_bytes(urlopen('https://dl.winehq.org/wine-builds/winehq.key').read()); Path('/etc/apt/sources.list.d/winehq.sources').write_text(urlopen('https://dl.winehq.org/wine-builds/debian/dists/bookworm/winehq-bookworm.sources').read().decode().replace('winehq-archive.key', 'winehq-archive.asc'))" \
+    && apt-get update \
+    && apt-get install -y --install-recommends winehq-stable \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV WINEDEBUG=-all \
+    WINEDLLOVERRIDES=mscoree,mshtml= \
+    PYTHONUTF8=1
+WORKDIR /work

@@ -1,0 +1,532 @@
+{
+  "schema_version": "lingmou.policy-catalog.v1",
+  "policies": [
+    {
+      "id": "LING-CRED-001",
+      "name": "敏感凭证访问",
+      "risk_level": "high",
+      "action": "记录并告警",
+      "enabled": true,
+      "match": {
+        "min_risk": "notice",
+        "contains_any": [".env", "secret", "credential", "凭证", "密钥", "敏感路径", "private_key"]
+      }
+    },
+    {
+      "id": "LING-EGRESS-002",
+      "name": "异常外部连接",
+      "risk_level": "warning",
+      "action": "检查出口目标",
+      "enabled": true,
+      "match": {
+        "min_risk": "warning",
+        "contains_any": ["connect", "sendto", "sendmsg", "外部网络", "进程访问网络", "https://", "http://"]
+      }
+    },
+    {
+      "id": "LING-UPLOAD-003",
+      "name": "文件或数据上传",
+      "risk_level": "high",
+      "action": "进入执行前审批",
+      "enabled": true,
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["文件或数据上传", "外部上传通道", "--data", "--upload-file", "scp ", "rsync "]
+      }
+    },
+    {
+      "id": "LING-EXFIL-004",
+      "name": "敏感数据外泄",
+      "risk_level": "critical",
+      "action": "阻断并保全证据",
+      "enabled": true,
+      "mode": "deny",
+      "stage": "pre_execution_approval",
+      "evidence_source": "deterministic_command_analysis",
+      "enforceable_now": true,
+      "stateful": false,
+      "tested": "real_upstream",
+      "match": {
+        "min_risk": "critical",
+        "contains_any": ["敏感数据可能离开工作区", "支付密钥外泄", "pay-exfil-004"]
+      }
+    },
+    {
+      "id": "LING-DESTRUCT-005",
+      "name": "高破坏性操作",
+      "risk_level": "critical",
+      "action": "阻断并要求复核",
+      "enabled": true,
+      "mode": "deny",
+      "stage": "pre_execution_approval",
+      "evidence_source": "deterministic_command_analysis",
+      "enforceable_now": true,
+      "stateful": false,
+      "tested": "local",
+      "match": {
+        "min_risk": "warning",
+        "contains_any": ["高破坏性命令", "删除文件", "unlink", "mkfs", "shutdown", "reboot"]
+      }
+    },
+    {
+      "id": "LING-PRIV-006",
+      "name": "权限与属主变更",
+      "risk_level": "warning",
+      "action": "记录权限变更",
+      "enabled": true,
+      "match": {
+        "min_risk": "notice",
+        "contains_any": ["chmod", "chown", "setuid", "capset", "sudo ", "修改权限"]
+      }
+    },
+    {
+      "id": "LING-SCAN-007",
+      "name": "网络扫描行为",
+      "risk_level": "high",
+      "action": "限制网络并告警",
+      "enabled": true,
+      "mode": "deny",
+      "stage": "pre_execution_approval",
+      "evidence_source": "deterministic_command_analysis",
+      "enforceable_now": true,
+      "stateful": false,
+      "tested": "local",
+      "match": {
+        "min_risk": "warning",
+        "contains_any": ["端口扫描", "nmap", "masscan", "连续端口", "内网探测"]
+      }
+    },
+    {
+      "id": "LING-INJECT-008",
+      "name": "内存注入前兆",
+      "risk_level": "critical",
+      "action": "记录关键系统调用并告警",
+      "enabled": true,
+      "mode": "observe",
+      "stage": "post_execution_observation",
+      "evidence_source": "linux_strace",
+      "enforceable_now": false,
+      "stateful": false,
+      "tested": "local",
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["mprotect", "ptrace", "process_vm_writev", "rwx", "内存注入"]
+      }
+    },
+    {
+      "id": "LING-PERSIST-009",
+      "name": "持久化落点修改",
+      "risk_level": "high",
+      "action": "进入审批并告警",
+      "enabled": true,
+      "match": {
+        "min_risk": "warning",
+        "contains_any": ["crontab", "systemd", "authorized_keys", ".profile", "开机自启", ".github/workflows", ".git/hooks", "持久化落点修改"]
+      }
+    },
+    {
+      "id": "LING-BLOCK-010",
+      "name": "执行前安全阻断",
+      "risk_level": "high",
+      "action": "拒绝执行",
+      "enabled": true,
+      "match": {
+        "blocked": true
+      }
+    },
+    {
+      "id": "LING-ENCODE-011",
+      "name": "敏感内容编码与派生",
+      "risk_level": "high",
+      "action": "告警并跟踪派生文件",
+      "enabled": true,
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["敏感内容编码", "base64", "openssl enc", "内容编码"]
+      }
+    },
+    {
+      "id": "LING-CLOUD-012",
+      "name": "云凭证文件访问",
+      "risk_level": "high",
+      "action": "告警并限制后续使用",
+      "enabled": true,
+      "match": {
+        "min_risk": "high",
+        "contains_any": [".aws/", "aws_access_key_id", "云凭证"]
+      }
+    },
+    {
+      "id": "LING-CMDINJ-013",
+      "name": "命令注入利用载荷",
+      "risk_level": "high",
+      "action": "告警并关联子进程与文件影响",
+      "enabled": true,
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["命令注入利用载荷", "command injection", "shell injection", "; /bin/sh", "| /bin/sh"]
+      }
+    },
+    {
+      "id": "LING-TRAVERSAL-014",
+      "name": "路径穿越访问",
+      "risk_level": "high",
+      "action": "告警并核验越界读取结果",
+      "enabled": true,
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["路径穿越访问", "路径穿越", "../", "..\\"]
+      }
+    },
+    {
+      "id": "LING-CI-015",
+      "name": "CI 与 Git 执行链投毒",
+      "risk_level": "high",
+      "action": "提升审批并保全工作流变更",
+      "enabled": true,
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["CI 或 Git 持久化落点修改", ".github/workflows", ".git/hooks"]
+      }
+    },
+    {
+      "id": "LING-EVASION-016",
+      "name": "审计与安全证据清除",
+      "risk_level": "critical",
+      "action": "执行前阻断并保全证据",
+      "enabled": true,
+      "mode": "deny",
+      "stage": "pre_execution_approval",
+      "evidence_source": "deterministic_command_analysis",
+      "enforceable_now": true,
+      "stateful": false,
+      "tested": "local",
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["审计或安全证据清除", "history -c", "audit.log", "清除日志", "停用审计"]
+      }
+    },
+    {
+      "id": "LING-REMOTEEXEC-017",
+      "name": "下载脚本直连解释器执行",
+      "risk_level": "critical",
+      "action": "执行前阻断并保留下载目标",
+      "enabled": true,
+      "mode": "deny",
+      "stage": "pre_execution_approval",
+      "evidence_source": "deterministic_command_analysis",
+      "enforceable_now": true,
+      "stateful": false,
+      "tested": "local",
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["LING-REMOTEEXEC-017", "下载脚本直连解释器执行", "curl | sh", "wget | bash"]
+      }
+    },
+    {
+      "id": "LING-REVSHELL-018",
+      "name": "反向或交互式 Shell 通道",
+      "risk_level": "critical",
+      "action": "执行前阻断并隔离连接目标",
+      "enabled": true,
+      "mode": "deny",
+      "stage": "pre_execution_approval",
+      "evidence_source": "deterministic_command_analysis",
+      "enforceable_now": true,
+      "stateful": false,
+      "tested": "local",
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["LING-REVSHELL-018", "反向或交互式 Shell 通道", "reverse shell", "nc -e", "/dev/tcp/"]
+      }
+    },
+    {
+      "id": "LING-METADATA-019",
+      "name": "云实例元数据凭证访问",
+      "risk_level": "critical",
+      "action": "执行前阻断并核验云身份边界",
+      "enabled": true,
+      "mode": "deny",
+      "stage": "pre_execution_approval",
+      "evidence_source": "deterministic_command_analysis",
+      "enforceable_now": true,
+      "stateful": false,
+      "tested": "local",
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["LING-METADATA-019", "访问云实例元数据凭证", "169.254.169.254", "169.254.170.2", "metadata.google.internal"]
+      }
+    },
+    {
+      "id": "LING-CONTAINER-020",
+      "name": "容器逃逸与宿主控制面访问",
+      "risk_level": "critical",
+      "action": "执行前阻断并核验宿主影响",
+      "enabled": true,
+      "mode": "deny",
+      "stage": "pre_execution_approval",
+      "evidence_source": "deterministic_command_analysis",
+      "enforceable_now": true,
+      "stateful": false,
+      "tested": "local",
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["LING-CONTAINER-020", "容器逃逸或宿主控制面访问", "--privileged", "docker.sock", "nsenter"]
+      }
+    },
+    {
+      "id": "LING-GIT-021",
+      "name": "Git 工作区或历史破坏",
+      "risk_level": "critical",
+      "action": "执行前阻断并保留仓库状态",
+      "enabled": true,
+      "mode": "deny",
+      "stage": "pre_execution_approval",
+      "evidence_source": "deterministic_command_analysis",
+      "enforceable_now": true,
+      "stateful": false,
+      "tested": "local",
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["LING-GIT-021", "Git 工作区或历史破坏性变更", "git reset --hard", "git clean -f", "git push --force"]
+      }
+    },
+    {
+      "id": "LING-SECDISABLE-022",
+      "name": "主机安全控制停用",
+      "risk_level": "critical",
+      "action": "执行前阻断并检查控制状态",
+      "enabled": true,
+      "mode": "deny",
+      "stage": "pre_execution_approval",
+      "evidence_source": "deterministic_command_analysis",
+      "enforceable_now": true,
+      "stateful": false,
+      "tested": "local",
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["LING-SECDISABLE-022", "停用主机安全控制", "setenforce 0", "ufw disable", "nft flush ruleset"]
+      }
+    },
+    {
+      "id": "LING-TUNNEL-023",
+      "name": "网络隧道与代理通道",
+      "risk_level": "high",
+      "action": "告警并提升后续网络审批",
+      "enabled": true,
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["LING-TUNNEL-023", "建立网络隧道或代理通道", "RemoteForward", "DynamicForward", "cloudflared tunnel"]
+      }
+    },
+    {
+      "id": "LING-DEVCRED-024",
+      "name": "开发与集群凭证访问",
+      "risk_level": "high",
+      "action": "告警并跟踪后续派生与外发",
+      "enabled": true,
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["LING-DEVCRED-024", "访问开发或集群凭证", ".kube/config", ".docker/config.json", ".config/gh/hosts.yml"]
+      }
+    },
+    {
+      "id": "LING-SECRETSTORE-025",
+      "name": "密钥管理服务读取",
+      "risk_level": "high",
+      "action": "告警并限制明文输出与后续外发",
+      "enabled": true,
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["LING-SECRETSTORE-025", "读取密钥管理服务中的秘密", "get-secret-value", "gcloud secrets versions access", "vault kv get"]
+      }
+    },
+    {
+      "id": "LING-OBFEXEC-026",
+      "name": "解码与混淆载荷执行",
+      "risk_level": "critical",
+      "action": "高置信度时执行前阻断",
+      "enabled": true,
+      "mode": "deny",
+      "stage": "pre_execution_approval",
+      "evidence_source": "deterministic_command_analysis",
+      "enforceable_now": true,
+      "stateful": false,
+      "tested": "local",
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["LING-OBFEXEC-026", "解码、反混淆结果直接进入解释器", "decode_then_execute"]
+      }
+    },
+    {
+      "id": "LING-ENVHARVEST-027",
+      "name": "环境秘密批量枚举",
+      "risk_level": "high",
+      "action": "记录并交由现有审批复核",
+      "enabled": true,
+      "mode": "review",
+      "stage": "pre_execution_approval",
+      "evidence_source": "deterministic_command_analysis",
+      "enforceable_now": true,
+      "stateful": false,
+      "tested": "local",
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["LING-ENVHARVEST-027", "批量枚举环境变量", "broad_secret_enumeration"]
+      }
+    },
+    {
+      "id": "LING-CONTROLPLANE-028",
+      "name": "Agent 控制面与记忆篡改",
+      "risk_level": "high",
+      "action": "保留变更目标并要求文件审批",
+      "enabled": true,
+      "mode": "review",
+      "stage": "pre_execution_file_approval",
+      "evidence_source": "deterministic_file_change_analysis",
+      "enforceable_now": true,
+      "stateful": false,
+      "tested": "local",
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["LING-CONTROLPLANE-028", "Agent 指令、记忆、Skill 或 MCP 配置", "control_plane_write"]
+      }
+    },
+    {
+      "id": "LING-SUPPLYCHAIN-029",
+      "name": "可变远程依赖与未校验安装",
+      "risk_level": "high",
+      "action": "保留来源并交由现有审批复核",
+      "enabled": true,
+      "mode": "review",
+      "stage": "pre_execution_approval",
+      "evidence_source": "deterministic_command_analysis",
+      "enforceable_now": true,
+      "stateful": false,
+      "tested": "local",
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["LING-SUPPLYCHAIN-029", "可变 Git 引用或任意 URL", "mutable_remote_dependency"]
+      }
+    },
+    {
+      "id": "LING-LINEAGE-030",
+      "name": "敏感派生文件跨步骤外发",
+      "risk_level": "critical",
+      "action": "执行前阻断并回放完整数据血缘",
+      "enabled": true,
+      "mode": "deny",
+      "stage": "pre_execution_approval",
+      "evidence_source": "session_command_lineage",
+      "enforceable_now": true,
+      "stateful": true,
+      "tested": "local",
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["LING-LINEAGE-030", "此前由敏感内容生成的派生文件", "explicit_command_lineage"]
+      }
+    },
+    {
+      "id": "LING-EGRESS-BURST-031",
+      "name": "短时集中外联与上传",
+      "risk_level": "high",
+      "action": "沿用现有审批并提示用户复核批量行为",
+      "enabled": true,
+      "mode": "review",
+      "stage": "pre_execution_approval",
+      "evidence_source": "session_rate_window",
+      "enforceable_now": true,
+      "stateful": true,
+      "tested": "local",
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["LING-EGRESS-BURST-031", "窗口内将出现第", "projected_events"]
+      }
+    },
+    {
+      "id": "LING-EGRESS-ALLOWLIST-032",
+      "name": "未登记出口与私网 SSRF 候选",
+      "risk_level": "warning",
+      "action": "不额外阻断；在原审批中展示目标类别",
+      "enabled": true,
+      "mode": "review",
+      "stage": "pre_execution_approval",
+      "evidence_source": "deterministic_network_target_analysis",
+      "enforceable_now": true,
+      "stateful": false,
+      "tested": "local",
+      "match": {
+        "min_risk": "warning",
+        "contains_any": ["LING-EGRESS-ALLOWLIST-032", "尚未登记在工作区允许列表", "SSRF"]
+      }
+    },
+    {
+      "id": "LING-MCP-DRIFT-033",
+      "name": "MCP 工具定义漂移与 Rug Pull",
+      "risk_level": "high",
+      "action": "建立会话基线；发生漂移时记录复核状态",
+      "enabled": true,
+      "mode": "review",
+      "stage": "tool_before",
+      "evidence_source": "mcp_definition_fingerprint",
+      "enforceable_now": false,
+      "stateful": true,
+      "tested": "local",
+      "match": {
+        "min_risk": "notice",
+        "contains_any": ["LING-MCP-DRIFT-033", "MCP 工具定义", "definition_fingerprint"]
+      }
+    },
+    {
+      "id": "LING-MCP-OUTPUT-INJECTION-034",
+      "name": "MCP 与动态工具结果提示注入",
+      "risk_level": "high",
+      "action": "只保存特征与哈希作为复核线索，不持久化策略正文",
+      "enabled": true,
+      "mode": "review",
+      "stage": "tool_after",
+      "evidence_source": "bounded_tool_result_analysis",
+      "enforceable_now": false,
+      "stateful": false,
+      "tested": "local",
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["LING-MCP-OUTPUT-INJECTION-034", "工具结果包含试图覆盖上层指令", "content_sha256"]
+      }
+    },
+    {
+      "id": "LING-PRINCIPAL-035",
+      "name": "子 Agent 高影响能力越界",
+      "risk_level": "high",
+      "action": "记录主体和能力边界并沿用用户审批",
+      "enabled": true,
+      "mode": "review",
+      "stage": "tool_before",
+      "evidence_source": "agent_principal_metadata",
+      "enforceable_now": false,
+      "stateful": false,
+      "tested": "local",
+      "match": {
+        "min_risk": "high",
+        "contains_any": ["LING-PRINCIPAL-035", "子 Agent", "principal_id"]
+      }
+    },
+    {
+      "id": "LING-PROMPT-INJECT-036",
+      "name": "输入侧直接与间接提示注入",
+      "risk_level": "warning",
+      "action": "仅记录模式与内容哈希，不阻止用户提交",
+      "enabled": true,
+      "mode": "observe",
+      "stage": "llm_before",
+      "evidence_source": "bounded_input_analysis",
+      "enforceable_now": false,
+      "stateful": false,
+      "tested": "local",
+      "match": {
+        "min_risk": "warning",
+        "contains_any": ["LING-PROMPT-INJECT-036", "提示注入特征", "content_sha256"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="灵眸">
+  <rect width="512" height="512" rx="132" fill="#0f594e"/>
+  <path d="M256 94c82 0 145 54 180 126-35 72-98 126-180 126S111 292 76 220C111 148 174 94 256 94Z" fill="none" stroke="#dff8ef" stroke-width="34" stroke-linejoin="round"/>
+  <circle cx="256" cy="220" r="68" fill="#dff8ef"/>
+  <circle cx="256" cy="220" r="31" fill="#0f594e"/>
+  <path d="M256 306 350 342v52c0 38-35 71-94 92-59-21-94-54-94-92v-52Z" fill="#27a184" stroke="#eafff7" stroke-width="16" stroke-linejoin="round"/>
+  <path d="m215 389 27 27 55-57" fill="none" stroke="#fff" stroke-width="19" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

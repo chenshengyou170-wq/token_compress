@@ -1,0 +1,28 @@
+{
+  "name": "lingmou-agent-security",
+  "productName": "灵眸 Agent 安全中心",
+  "version": "0.1.2",
+  "description": "Local Agent security monitoring, approvals, blocking, and evidence for Codex.",
+  "private": true,
+  "main": "src/main.cjs",
+  "scripts": {
+    "start": "electron-forge start",
+    "package:shell": "electron-forge package",
+    "make:shell": "electron-forge make",
+    "build:backend": "node scripts/build-backend.mjs",
+    "package": "npm run build:backend && electron-forge package",
+    "make": "npm run build:backend && electron-forge make",
+    "make:windows": "node scripts/make-windows.mjs",
+    "test": "node --test test/*.test.cjs"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.1"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "7.11.2",
+    "@electron-forge/maker-deb": "7.11.2",
+    "@electron-forge/maker-squirrel": "7.11.2",
+    "@electron-forge/maker-zip": "7.11.2",
+    "electron": "43.4.0"
+  }
+}

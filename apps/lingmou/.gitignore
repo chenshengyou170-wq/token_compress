@@ -1,0 +1,34 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+runs/
+comparisons/
+.codexscope/
+
+# Test source belongs in version control; only generated fixtures stay local.
+/test/
+/pytest-of-*/
+/test_*.log
+/artifacts/
+web/node_modules/
+web/*.tsbuildinfo
+desktop/node_modules/
+desktop/out/
+desktop/build/
+desktop/dist/backend/
+
+# Override workspace-wide test ignores for the extracted product sources.
+!tests/
+!tests/**
+!desktop/test/
+!desktop/test/**
+!demo/**/tests/
+!demo/**/tests/**
+!/test/
+!/test/**
+__pycache__/
+*.py[cod]

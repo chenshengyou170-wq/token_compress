@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "agent_id": {
+      "type": "string",
+      "enum": [
+        "behavior_prediction",
+        "vulnerability_behavior",
+        "dangerous_behavior",
+        "overall_behavior"
+      ]
+    },
+    "summary": {"type": "string", "maxLength": 800},
+    "risk_level": {
+      "type": "string",
+      "enum": ["normal", "notice", "warning", "high", "critical"]
+    },
+    "risk_score": {"type": "integer", "minimum": 0, "maximum": 100},
+    "confidence": {
+      "type": "string",
+      "enum": ["low", "medium", "high"]
+    },
+    "current_stage": {"type": "string", "maxLength": 160},
+    "session_verdict": {
+      "type": "string",
+      "enum": [
+        "normal",
+        "suspicious",
+        "high_risk",
+        "attack_attempt",
+        "confirmed_incident"
+      ]
+    },
+    "findings": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {"type": "string", "maxLength": 240},
+          "category": {"type": "string", "maxLength": 120},
+          "target": {"type": "string", "maxLength": 500},
+          "severity": {
+            "type": "string",
+            "enum": ["normal", "notice", "warning", "high", "critical"]
+          },
+          "confidence": {
+            "type": "string",
+            "enum": ["low", "medium", "high"]
+          },
+          "evidence_event_ids": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 8,
+            "items": {"type": "string", "maxLength": 256}
+          },
+          "analysis": {"type": "string", "maxLength": 600},
+          "recommendation": {"type": "string", "maxLength": 400},
+          "possible_cwe": {
+            "type": "array",
+            "maxItems": 4,
+            "items": {"type": "string", "maxLength": 32}
+          },
+          "possible_attack_techniques": {
+            "type": "array",
+            "maxItems": 4,
+            "items": {"type": "string", "maxLength": 32}
+          },
+          "false_positive_factors": {
+            "type": "array",
+            "maxItems": 4,
+            "items": {"type": "string", "maxLength": 300}
+          }
+        },
+        "required": [
+          "title",
+          "category",
+          "target",
+          "severity",
+          "confidence",
+          "evidence_event_ids",
+          "analysis",
+          "recommendation",
+          "possible_cwe",
+          "possible_attack_techniques",
+          "false_positive_factors"
+        ]
+      }
+    },
+    "predictions": {
+      "type": "array",
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "predicted_behavior": {"type": "string", "maxLength": 240},
+          "probability": {"type": "number", "minimum": 0, "maximum": 1},
+          "risk_level": {
+            "type": "string",
+            "enum": ["normal", "notice", "warning", "high", "critical"]
+          },
+          "evidence_event_ids": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 8,
+            "items": {"type": "string", "maxLength": 256}
+          },
+          "reasoning": {"type": "string", "maxLength": 500},
+          "likely_tools": {
+            "type": "array",
+            "maxItems": 6,
+            "items": {"type": "string", "maxLength": 120}
+          },
+          "likely_targets": {
+            "type": "array",
+            "maxItems": 6,
+            "items": {"type": "string", "maxLength": 300}
+          },
+          "recommended_control": {
+            "type": "string",
+            "enum": ["observe", "warn", "review", "block", "isolate"]
+          }
+        },
+        "required": [
+          "predicted_behavior",
+          "probability",
+          "risk_level",
+          "evidence_event_ids",
+          "reasoning",
+          "likely_tools",
+          "likely_targets",
+          "recommended_control"
+        ]
+      }
+    },
+    "confirmed_facts": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "text": {"type": "string", "maxLength": 400},
+          "evidence_event_ids": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 8,
+            "items": {"type": "string", "maxLength": 256}
+          }
+        },
+        "required": ["text", "evidence_event_ids"]
+      }
+    },
+    "inferences": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "text": {"type": "string", "maxLength": 400},
+          "evidence_event_ids": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 8,
+            "items": {"type": "string", "maxLength": 256}
+          }
+        },
+        "required": ["text", "evidence_event_ids"]
+      }
+    },
+    "evidence_gaps": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {"type": "string", "maxLength": 400}
+    },
+    "recommended_actions": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {"type": "string", "maxLength": 400}
+    }
+  },
+  "required": [
+    "agent_id",
+    "summary",
+    "risk_level",
+    "risk_score",
+    "confidence",
+    "current_stage",
+    "session_verdict",
+    "findings",
+    "predictions",
+    "confirmed_facts",
+    "inferences",
+    "evidence_gaps",
+    "recommended_actions"
+  ]
+}

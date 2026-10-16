@@ -1,0 +1,77 @@
+# Merge these tables into ~/.codex/config.toml or a trusted project's
+# .codex/config.toml. Set CODEXSCOPE_HOOK_SPOOL to a private JSONL path outside
+# the observed repository before starting Codex. `codexscope run` sets it for
+# the app-server child automatically. Replace /absolute/path below with the
+# virtual environment where CodexScope is installed. The suppression variable
+# prevents runtime tracing from tracing its own hook telemetry process.
+# Prompt/message fields are hashed and omitted by default. Set
+# CODEXSCOPE_INCLUDE_SENSITIVE=1 before starting Codex only when retaining those
+# fields is explicitly required; credential redaction remains enabled.
+
+[[hooks.SessionStart]]
+matcher = "*"
+[[hooks.SessionStart.hooks]]
+type = "command"
+command = "env CODEXSCOPE_FUNCTION_TRACE_SUPPRESS=1 /absolute/path/to/codexscope/.venv/bin/python -m codexscope.hook_collector"
+timeout = 3
+
+[[hooks.UserPromptSubmit]]
+[[hooks.UserPromptSubmit.hooks]]
+type = "command"
+command = "env CODEXSCOPE_FUNCTION_TRACE_SUPPRESS=1 /absolute/path/to/codexscope/.venv/bin/python -m codexscope.hook_collector"
+timeout = 3
+
+[[hooks.PreToolUse]]
+matcher = "*"
+[[hooks.PreToolUse.hooks]]
+type = "command"
+command = "env CODEXSCOPE_FUNCTION_TRACE_SUPPRESS=1 /absolute/path/to/codexscope/.venv/bin/python -m codexscope.hook_collector"
+timeout = 3
+
+[[hooks.PermissionRequest]]
+matcher = "*"
+[[hooks.PermissionRequest.hooks]]
+type = "command"
+command = "env CODEXSCOPE_FUNCTION_TRACE_SUPPRESS=1 /absolute/path/to/codexscope/.venv/bin/python -m codexscope.hook_collector"
+timeout = 3
+
+[[hooks.PostToolUse]]
+matcher = "*"
+[[hooks.PostToolUse.hooks]]
+type = "command"
+command = "env CODEXSCOPE_FUNCTION_TRACE_SUPPRESS=1 /absolute/path/to/codexscope/.venv/bin/python -m codexscope.hook_collector"
+timeout = 3
+
+[[hooks.PreCompact]]
+matcher = "*"
+[[hooks.PreCompact.hooks]]
+type = "command"
+command = "env CODEXSCOPE_FUNCTION_TRACE_SUPPRESS=1 /absolute/path/to/codexscope/.venv/bin/python -m codexscope.hook_collector"
+timeout = 3
+
+[[hooks.PostCompact]]
+matcher = "*"
+[[hooks.PostCompact.hooks]]
+type = "command"
+command = "env CODEXSCOPE_FUNCTION_TRACE_SUPPRESS=1 /absolute/path/to/codexscope/.venv/bin/python -m codexscope.hook_collector"
+timeout = 3
+
+[[hooks.SubagentStart]]
+matcher = "*"
+[[hooks.SubagentStart.hooks]]
+type = "command"
+command = "env CODEXSCOPE_FUNCTION_TRACE_SUPPRESS=1 /absolute/path/to/codexscope/.venv/bin/python -m codexscope.hook_collector"
+timeout = 3
+
+[[hooks.SubagentStop]]
+matcher = "*"
+[[hooks.SubagentStop.hooks]]
+type = "command"
+command = "env CODEXSCOPE_FUNCTION_TRACE_SUPPRESS=1 /absolute/path/to/codexscope/.venv/bin/python -m codexscope.hook_collector"
+timeout = 3
+
+[[hooks.Stop]]
+[[hooks.Stop.hooks]]
+type = "command"
+command = "env CODEXSCOPE_FUNCTION_TRACE_SUPPRESS=1 /absolute/path/to/codexscope/.venv/bin/python -m codexscope.hook_collector"
+timeout = 3

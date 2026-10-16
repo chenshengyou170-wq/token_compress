@@ -1,5 +1,10 @@
 # Token 压缩模块
 
+> **Windows 桌面应用：** [下载灵眸最新 Release](https://github.com/chenshengyou170-wq/token_compress/releases/latest)
+> · [安装器](https://github.com/chenshengyou170-wq/token_compress/releases/latest/download/Lingmou-Setup.exe)
+> · [便携 ZIP](https://github.com/chenshengyou170-wq/token_compress/releases/latest/download/Lingmou-win-x64.zip)
+> · [独立应用源码与升级说明](apps/lingmou/README.md)。仓库原有压缩模块与历史材料继续保留。
+
 现在可以从仓库根目录安装，通过 `token_compression` Python API 或 `token-compress` CLI
 使用统一模块。材料压缩、工具懒加载、原文补读、历史窗口、前缀复用和任务计量均有公共入口。
 原有代码与历史证据继续保留；原灵眸产品目录不会自动同步。

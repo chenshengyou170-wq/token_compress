@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>CodexScope 统一观测台</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f3f6fb;
+      --panel: #ffffff;
+      --panel-soft: #f8fafc;
+      --text: #172033;
+      --muted: #64748b;
+      --line: #dce3ed;
+      --brand: #2256d8;
+      --brand-soft: #eaf0ff;
+      --green: #087443;
+      --green-soft: #e7f8ef;
+      --red: #b42318;
+      --red-soft: #fff0ee;
+      --amber: #8a4b08;
+      --amber-soft: #fff6df;
+      --violet: #6d3ac1;
+      --violet-soft: #f3ecff;
+      --shadow: 0 8px 28px rgba(25, 42, 70, .08);
+      --radius: 14px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 14px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    code, pre, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    code { overflow-wrap: anywhere; }
+    .shell { max-width: 1680px; margin: 0 auto; padding: 20px; }
+    .topbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 24px 26px;
+      border-radius: var(--radius);
+      color: white;
+      background: linear-gradient(125deg, #142b5f 0%, #2256d8 62%, #527cf0 100%);
+      box-shadow: var(--shadow);
+    }
+    .topbar h1 { margin: 0; font-size: 25px; letter-spacing: -.02em; }
+    .topbar p { margin: 5px 0 0; color: #dbe6ff; }
+    .run-meta { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+    .meta-chip {
+      max-width: 360px;
+      padding: 5px 10px;
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 999px;
+      background: rgba(255,255,255,.11);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .warning {
+      margin: 14px 0;
+      padding: 12px 15px;
+      border: 1px solid #efcc83;
+      border-radius: 10px;
+      color: #68400b;
+      background: var(--amber-soft);
+    }
+    .tabs {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      gap: 7px;
+      margin: 14px 0;
+      padding: 8px;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,.94);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 3px 14px rgba(25,42,70,.06);
+    }
+    .tab {
+      flex: 0 0 auto;
+      padding: 8px 13px;
+      border: 0;
+      border-radius: 8px;
+      color: #45536a;
+      background: transparent;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 650;
+    }
+    .tab:hover { background: #f1f5f9; }
+    .tab.active { color: var(--brand); background: var(--brand-soft); }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .section {
+      margin-bottom: 14px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: 0 3px 16px rgba(25,42,70,.045);
+    }
+    .section-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+    .section h2, .section h3 { margin: 0; }
+    .section h2 { font-size: 18px; }
+    .section h3 { font-size: 15px; }
+    .help { margin-top: 4px; color: var(--muted); }
+    .coverage {
+      flex: 0 0 auto;
+      padding: 5px 9px;
+      border-radius: 999px;
+      color: var(--brand);
+      background: var(--brand-soft);
+      font-size: 12px;
+      font-weight: 650;
+    }
+    .coverage.sampled { color: var(--amber); background: var(--amber-soft); }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 11px; }
+    .card {
+      min-height: 92px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #fff, #f9fbff);
+    }
+    .card .value { font-size: 25px; font-weight: 760; letter-spacing: -.02em; }
+    .card .label { color: var(--muted); }
+    .card .sub { margin-top: 4px; color: #8290a4; font-size: 12px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    input, select {
+      min-height: 36px;
+      padding: 7px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      color: var(--text);
+      background: white;
+      font: inherit;
+    }
+    input[type="search"] { min-width: min(360px, 100%); flex: 1 1 280px; }
+    select { max-width: 310px; }
+    .table-wrap { width: 100%; overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 9px 10px; border-bottom: 1px solid #e8edf4; text-align: left; vertical-align: top; }
+    th { position: sticky; top: 0; z-index: 1; color: #4b5b72; background: #f7f9fc; font-size: 12px; white-space: nowrap; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:hover { background: #fafcff; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      margin: 1px 3px 1px 0;
+      padding: 2px 7px;
+      border: 1px solid #d7deea;
+      border-radius: 999px;
+      color: #46556d;
+      background: #f5f7fa;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+    .badge.completed { color: var(--green); border-color: #b7e2ca; background: var(--green-soft); }
+    .badge.failed, .badge.incomplete { color: var(--red); border-color: #f3c2bc; background: var(--red-soft); }
+    .badge.runtime { color: var(--violet); border-color: #d9c8f5; background: var(--violet-soft); }
+    .badge.hook { color: var(--brand); border-color: #c7d5fb; background: var(--brand-soft); }
+    .badge.os { color: var(--amber); border-color: #efd69a; background: var(--amber-soft); }
+    .muted { color: var(--muted); }
+    .danger { color: var(--red); }
+    .nowrap { white-space: nowrap; }
+    .event-title { font-weight: 680; }
+    .event-op { max-width: 680px; margin-top: 3px; color: #40506a; overflow-wrap: anywhere; }
+    .ids { max-width: 430px; font-size: 12px; }
+    .call-name { padding-left: min(calc(var(--depth, 0) * 17px), 340px); white-space: nowrap; }
+    .call-name::before { content: "↳ "; color: #8d99aa; }
+    details { margin-top: 5px; }
+    details summary { color: var(--brand); cursor: pointer; user-select: none; }
+    pre {
+      max-height: 420px;
+      margin: 8px 0 0;
+      padding: 11px;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: #26344c;
+      background: #f7f9fc;
+      font-size: 12px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .pager { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; color: var(--muted); }
+    .pager-actions { display: flex; align-items: center; gap: 7px; }
+    button.small {
+      padding: 5px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      color: #36455d;
+      background: white;
+      cursor: pointer;
+    }
+    button.small:disabled { opacity: .45; cursor: default; }
+    .empty { padding: 28px; color: var(--muted); text-align: center; }
+    .count-list { display: grid; grid-template-columns: minmax(120px, 1fr) auto; gap: 5px 12px; }
+    .count-list div { padding-bottom: 4px; border-bottom: 1px dashed #e4e9f0; }
+    .bar { height: 7px; margin-top: 3px; border-radius: 99px; background: #e9eef6; overflow: hidden; }
+    .bar > span { display: block; height: 100%; border-radius: inherit; background: var(--brand); }
+    .viz {
+      position: relative;
+      width: 100%;
+      min-height: 310px;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fbfcff;
+    }
+    .viz svg { display: block; width: 100%; min-width: 720px; height: 310px; }
+    .viz-empty { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); }
+    .viz-empty[hidden] { display: none; }
+    .chart-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; color: var(--muted); font-size: 12px; }
+    .legend-key::before { display: inline-block; width: 16px; height: 3px; margin: 0 5px 3px 0; border-radius: 3px; background: var(--legend-color, var(--brand)); content: ""; }
+    .legend-key.band::before { height: 8px; opacity: .25; }
+    .relation-viz svg { height: auto; min-height: 330px; }
+    .calibration-viz { min-height: 220px; margin-top: 12px; }
+    .calibration-viz svg { height: 220px; min-height: 220px; }
+    .graph-meta { margin-top: 7px; color: var(--muted); font-size: 12px; }
+    @media (max-width: 860px) {
+      .shell { padding: 10px; }
+      .topbar { display: block; padding: 18px; }
+      .run-meta { justify-content: flex-start; margin-top: 12px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .section { padding: 14px; }
+      .section-head { display: block; }
+      .coverage { display: inline-block; margin-top: 7px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div>
+        <h1>CodexScope 统一观测台</h1>
+        <p>动作、Hook、运行时调用链与操作系统证据集中展示</p>
+      </div>
+      <div class="run-meta" id="run-meta"></div>
+    </header>
+    <div class="warning" id="safety-warning"></div>
+    <div class="warning" id="showcase-warning" hidden></div>
+
+    <nav class="tabs" aria-label="报告分区">
+      <button class="tab active" data-tab="overview">总览</button>
+      <button class="tab" data-tab="tokens">Token</button>
+      <button class="tab" data-tab="actions">动作时间线</button>
+      <button class="tab" data-tab="hooks">Hook 详情</button>
+      <button class="tab" data-tab="runtime">函数调用链</button>
+      <button class="tab" data-tab="os">系统调用</button>
+      <button class="tab" data-tab="relations">关联关系</button>
+    </nav>
+
+    <main>
+      <section class="panel active" data-panel="overview">
+        <div class="section" id="showcase-sources-section" hidden>
+          <div class="section-head"><div><h2>组合展示的数据来源</h2><div class="help">每个分区保留各自测试内部的关系；不同来源之间不建立因果关联。</div></div></div>
+          <div id="showcase-sources"></div>
+        </div>
+        <div class="section">
+          <div class="section-head">
+            <div><h2>采集概览</h2><div class="help">统计基于全部 canonical 事件；明细量过大时只嵌入代表性样本。</div></div>
+          </div>
+          <div class="cards" id="overview-cards"></div>
+        </div>
+        <div class="grid-2">
+          <div class="section"><h3>Hook 类型覆盖</h3><div class="help">app-server 与 collector 是独立观测，不按时间强行合并。</div><div id="hook-counts"></div></div>
+          <div class="section"><h3>系统调用覆盖</h3><div class="help">按 syscall 聚合全部记录。</div><div id="syscall-counts"></div></div>
+        </div>
+        <div class="section">
+          <div class="section-head"><div><h2>完整性与丢失诊断</h2><div class="help">“未观察到”不等于“没有发生”；invalid、gap、drop 和 limit 信息在这里保留。</div></div></div>
+          <div class="grid-2" id="diagnostics"></div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="tokens">
+        <div class="section">
+          <div class="section-head"><div><h2>Token 用量</h2><div class="help">精确更新来自 canonical token_usage 事件；实时估算历史与校准记录来自同一运行的 live_status.json。</div></div><span id="tokens-coverage"></span></div>
+          <div class="cards" id="token-cards"></div>
+        </div>
+        <div class="section">
+          <div class="section-head"><div><h2>Token 趋势</h2><div class="help" id="token-chart-help">优先回放 estimate → exact 历史；旧运行没有实时历史时显示官方累计值。</div></div></div>
+          <div class="viz"><svg id="offline-token-chart" viewBox="0 0 1000 310" preserveAspectRatio="none" role="img" aria-label="Token 时间线"></svg><div class="viz-empty" id="offline-token-empty">没有 Token 历史</div></div>
+          <div class="chart-legend" id="token-chart-legend"></div>
+        </div>
+        <div class="section">
+          <div class="section-head"><div><h2>估算校准</h2><div class="help">保留每次模型调用的官方值、p50/p90 误差和区间覆盖，不再只显示最后一个样本。</div></div></div>
+          <div class="cards" id="token-recon-cards"></div>
+          <div class="viz calibration-viz"><svg id="offline-recon-chart" viewBox="0 0 1000 220" preserveAspectRatio="none" role="img" aria-label="估算误差分布"></svg><div class="viz-empty" id="offline-recon-empty">没有可计算的校准误差</div></div>
+          <div class="chart-legend"><span class="legend-key" style="--legend-color:#2256d8">p50 误差率</span><span class="legend-key" style="--legend-color:#6d3ac1">p90 误差率</span><span>负值表示低估；柱高为样本数</span></div>
+          <div id="token-recon-table"></div>
+        </div>
+        <div class="section">
+          <div class="section-head"><div><h2>官方 Token 更新</h2><div class="help">按 Thread/Turn 筛选，累计值与本次调用值同时保留。</div></div></div>
+          <div class="filters">
+            <input id="token-search" type="search" placeholder="搜索 event、Thread、Turn">
+            <select id="token-thread"><option value="">全部 Thread</option></select>
+            <select id="token-turn"><option value="">全部 Turn</option></select>
+          </div>
+          <div id="token-table"></div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="actions">
+        <div class="section">
+          <div class="section-head"><div><h2>动作时间线</h2><div class="help">高层 turn、tool、文件、审批与 Hook 动作；runtime 和 syscall 在各自分区展示。</div></div><span id="actions-coverage"></span></div>
+          <div class="filters">
+            <input id="action-search" type="search" placeholder="搜索操作、工具、文件、函数、事件 ID">
+            <select id="action-type"><option value="">全部类型</option></select>
+            <select id="action-status"><option value="">全部状态</option></select>
+          </div>
+          <div id="action-table"></div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="hooks">
+        <div class="section">
+          <div class="section-head"><div><h2>Hook 详情</h2><div class="help">展示已采集且已脱敏的 Hook payload、作用域 ID、异常与精确关联证据。</div></div><span id="hooks-coverage"></span></div>
+          <div class="cards" id="hook-cards"></div>
+        </div>
+        <div class="section">
+          <div class="filters">
+            <input id="hook-search" type="search" placeholder="搜索 Hook、工具、ID、payload">
+            <select id="hook-name"><option value="">全部 Hook</option></select>
+            <select id="hook-source"><option value="">全部来源</option></select>
+            <select id="hook-correlation"><option value="">全部关联状态</option><option value="yes">已关联</option><option value="no">未关联</option></select>
+          </div>
+          <div id="hook-table"></div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="runtime">
+        <div class="section">
+          <div class="section-head"><div><h2>运行时函数调用链</h2><div class="help">按 backend、进程实例和线程隔离；父子关系来自最近已追踪 activation，不代表完整语言栈或业务成功。</div></div><span id="runtime-coverage"></span></div>
+          <div class="cards" id="runtime-cards"></div>
+        </div>
+        <div class="section">
+          <div class="filters">
+            <input id="runtime-search" type="search" placeholder="搜索函数、模块、call ID、命令关联">
+            <select id="runtime-process"><option value="">全部进程实例</option></select>
+            <select id="runtime-thread"><option value="">全部线程</option></select>
+            <select id="runtime-language"><option value="">全部语言</option></select>
+            <select id="runtime-status"><option value="">全部状态</option></select>
+          </div>
+          <div id="runtime-table"></div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="os">
+        <div class="section">
+          <div class="section-head"><div><h2>操作系统证据</h2><div class="help">来自受监控 app-server 后代进程树的有界 strace 记录；工具关联仅为时间窗口证据，不是因果证明。</div></div><span id="os-coverage"></span></div>
+          <div class="cards" id="os-cards"></div>
+        </div>
+        <div class="grid-2">
+          <div class="section"><h3>进程汇总</h3><div id="process-table"></div></div>
+          <div class="section"><h3>网络端点</h3><div id="endpoint-table"></div></div>
+        </div>
+        <div class="section">
+          <div class="filters">
+            <input id="os-search" type="search" placeholder="搜索 syscall、进程、路径、端点、参数">
+            <select id="os-pid"><option value="">全部 PID</option></select>
+            <select id="os-syscall"><option value="">全部 syscall</option></select>
+            <select id="os-category"><option value="">全部类别</option></select>
+            <select id="os-status"><option value="">全部状态</option></select>
+          </div>
+          <div id="os-table"></div>
+        </div>
+      </section>
+
+      <section class="panel" data-panel="relations">
+        <div class="section">
+          <div class="section-head"><div><h2>跨层关联关系</h2><div class="help">集中展示 Hook→工具、runtime→命令、syscall→工具以及 runtime CALLS。关联保留 evidence 与 confidence。</div></div><span id="relation-coverage"></span></div>
+          <div class="cards" id="graph-cards"></div>
+        </div>
+        <div class="section">
+          <div class="filters">
+            <input id="relation-search" type="search" placeholder="搜索 source、target、关系或证据">
+            <select id="relation-type"><option value="">全部关系</option></select>
+          </div>
+          <div class="viz relation-viz"><svg id="relation-graph" viewBox="0 0 1000 420" role="img" aria-label="跨层关系图"></svg><div class="viz-empty" id="relation-graph-empty">没有匹配关系</div></div>
+          <div class="graph-meta" id="relation-graph-meta"></div>
+          <div id="relation-table"></div>
+        </div>
+        <div class="section">
+          <div class="section-head"><div><h2>Hook provenance 边</h2><div class="help">保留涉及 Hook 节点的 CONTAINS、PRECEDES、CORRELATES_WITH 等图关系。</div></div><span id="hook-edge-coverage"></span></div>
+          <div id="hook-edge-table"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script id="trace-data" type="application/json">__CODEXSCOPE_TRACE_DATA__</script>
+  <script>
+    'use strict';
+    const data = JSON.parse(document.getElementById('trace-data').textContent);
+    const events = data.events || [];
+    const hooks = data.hooks || [];
+    const runtimeCalls = data.runtime_calls || [];
+    const osSyscalls = data.os_syscalls || [];
+    const tokenUsageEvents = data.token_usage_events || [];
+    const tokenTrend = data.token_trend || [];
+    const tokenReconciliation = data.token_reconciliation || {};
+    const reports = data.reports || {};
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const pageState = Object.create(null);
+    const renderers = Object.create(null);
+    let activeTab = 'overview';
+
+    const byId = id => document.getElementById(id);
+    const esc = value => String(value ?? '')
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    const lower = value => String(value ?? '').toLowerCase();
+    const fmtNumber = value => Number(value || 0).toLocaleString('zh-CN');
+    const finite = value => { if (value == null || value === '') return null; const number = Number(value); return Number.isFinite(number) ? number : null; };
+    const fmtSigned = value => { const number = finite(value); return number == null ? '-' : `${number > 0 ? '+' : ''}${number.toLocaleString('zh-CN', {maximumFractionDigits: 2})}`; };
+    const shortId = value => { const text = String(value || '-'); return text.length > 22 ? `${text.slice(0, 10)}…${text.slice(-8)}` : text; };
+    const svgNode = (name, attrs = {}) => { const node = document.createElementNS(SVG_NS, name); Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, String(value))); return node; };
+    const fmtTime = (wallNs, monoNs) => {
+      if (wallNs != null && Number.isFinite(Number(wallNs))) {
+        return new Date(Number(wallNs) / 1e6).toISOString().replace('T', ' ').replace('Z', '');
+      }
+      return monoNs == null ? '-' : `mono ${monoNs} ns`;
+    };
+    const fmtDuration = value => value == null ? '-' : `${Number(value).toLocaleString('zh-CN', {maximumFractionDigits: 4})} ms`;
+    const pretty = value => JSON.stringify(value ?? {}, null, 2);
+    const statusBadge = status => `<span class="badge ${esc(status)}">${esc(status || 'unknown')}</span>`;
+    const sourceBadge = (source, kind = '') => `<span class="badge ${esc(kind)}">${esc(source || 'unknown')}</span>`;
+    const coverage = report => {
+      const total = Number(report?.total || 0);
+      const shown = Number(report?.displayed ?? total);
+      const omitted = Number(report?.omitted || 0);
+      const klass = omitted ? 'coverage sampled' : 'coverage';
+      return `<span class="${klass}">总计 ${fmtNumber(total)} · 展示 ${fmtNumber(shown)} · 采样省略 ${fmtNumber(omitted)}</span>`;
+    };
+    const cards = values => values.map(item => `
+      <div class="card"><div class="value">${item.value == null || !Number.isFinite(Number(item.value)) ? '-' : esc(fmtNumber(item.value))}</div><div class="label">${esc(item.label)}</div>${item.sub ? `<div class="sub">${esc(item.sub)}</div>` : ''}</div>
+    `).join('');
+    const optionValues = (selectId, values) => {
+      const select = byId(selectId);
+      const current = select.value;
+      [...new Set(values.filter(value => value !== '' && value != null).map(String))].sort().forEach(value => {
+        const option = document.createElement('option'); option.value = value; option.textContent = value; select.append(option);
+      });
+      select.value = current;
+    };
+    const countList = counts => {
+      const rows = Object.entries(counts || {}).sort((a, b) => Number(b[1]) - Number(a[1]));
+      const max = Math.max(1, ...rows.map(row => Number(row[1]) || 0));
+      return rows.length ? `<div class="count-list">${rows.map(([name, count]) => `
+        <div><span class="mono">${esc(name)}</span><div class="bar"><span style="width:${Math.max(1, 100 * Number(count) / max)}%"></span></div></div><div>${esc(fmtNumber(count))}</div>
+      `).join('')}</div>` : '<div class="empty">没有记录</div>';
+    };
+    const searchable = values => lower(values.map(value => typeof value === 'string' ? value : pretty(value)).join(' '));
+    const resetPage = key => { pageState[key] = {...(pageState[key] || {}), page: 1}; };
+
+    function pagedTable(targetId, key, rows, headerHtml, rowHtml, rerender, defaultSize = 100) {
+      const state = pageState[key] || (pageState[key] = {page: 1, size: defaultSize});
+      const pages = Math.max(1, Math.ceil(rows.length / state.size));
+      state.page = Math.min(Math.max(1, state.page), pages);
+      const start = (state.page - 1) * state.size;
+      const pageRows = rows.slice(start, start + state.size);
+      const target = byId(targetId);
+      target.innerHTML = `
+        <div class="table-wrap"><table><thead>${headerHtml}</thead><tbody>${pageRows.map(rowHtml).join('') || `<tr><td colspan="12" class="empty">没有匹配记录</td></tr>`}</tbody></table></div>
+        <div class="pager"><span>当前 ${fmtNumber(rows.length ? start + 1 : 0)}–${fmtNumber(Math.min(start + state.size, rows.length))} / ${fmtNumber(rows.length)}</span>
+          <div class="pager-actions"><select class="page-size" aria-label="每页条数">${[25,50,100,250,500].map(size => `<option value="${size}" ${state.size === size ? 'selected' : ''}>${size}/页</option>`).join('')}</select><button class="small prev" ${state.page <= 1 ? 'disabled' : ''}>上一页</button><span>${state.page}/${pages}</span><button class="small next" ${state.page >= pages ? 'disabled' : ''}>下一页</button></div>
+        </div>`;
+      target.querySelector('.prev')?.addEventListener('click', () => { state.page--; rerender(); });
+      target.querySelector('.next')?.addEventListener('click', () => { state.page++; rerender(); });
+      target.querySelector('.page-size')?.addEventListener('change', event => { state.size = Number(event.target.value); state.page = 1; rerender(); });
+    }
+
+    function renderMeta() {
+      const manifest = data.manifest || {};
+      const values = [manifest.run_id, manifest.status, manifest.model_resolved || manifest.model_requested, manifest.git_branch, manifest.git_head ? String(manifest.git_head).slice(0, 12) : ''].filter(Boolean);
+      if (data.showcase?.combined) values.unshift('多测试组合展示');
+      byId('run-meta').innerHTML = values.map(value => `<span class="meta-chip">${esc(value)}</span>`).join('');
+      byId('safety-warning').textContent = `敏感数据提示：${data.safety?.warning || '仅在受信环境查看。'} 内网服务不提供认证或 TLS。`;
+      if (data.showcase?.combined) {
+        const warning = byId('showcase-warning');
+        warning.hidden = false;
+        warning.textContent = `组合数据提示：${data.showcase.warning || '此页面来自多个独立测试，跨来源时间与事件不构成同一次运行的因果链。'}`;
+      }
+    }
+
+    function renderOverview() {
+      const h = reports.hooks || {}, r = reports.runtime || {}, o = reports.os || {}, a = reports.actions || {}, g = reports.graph || {};
+      const sourceSection = byId('showcase-sources-section');
+      const sourceRows = data.showcase?.sources || [];
+      if (data.showcase?.combined && sourceRows.length) {
+        sourceSection.hidden = false;
+        byId('showcase-sources').innerHTML = `<div class="table-wrap"><table><thead><tr><th>展示方面</th><th>数据集</th><th>类型 / 数量</th><th>仓库路径与说明</th></tr></thead><tbody>${sourceRows.map(row => `<tr><td><strong>${esc(row.aspect || '-')}</strong></td><td><span class="badge">${esc(row.label || row.id || '-')}</span></td><td>${esc(row.kind || '-')} · ${esc(fmtNumber(row.count))}</td><td><code>${esc(row.path || '-')}</code>${row.description ? `<div class="muted">${esc(row.description)}</div>` : ''}</td></tr>`).join('')}</tbody></table></div>`;
+      }
+      byId('overview-cards').innerHTML = cards([
+        {label:'高层动作', value:a.total, sub:`展示 ${fmtNumber(a.displayed ?? a.total)}`},
+        {label:'Hook 观测', value:h.total, sub:`已关联 ${fmtNumber(h.correlated)}`},
+        {label:'完整 Pre/Post 组', value:h.complete_pre_post_pairs},
+        {label:'函数 activation', value:r.total, sub:`${fmtNumber(r.processes)} 进程 / ${fmtNumber(r.threads)} 线程`},
+        {label:'唯一执行函数', value:r.unique_functions, sub:`最大追踪深度 ${fmtNumber(r.max_depth)}`},
+        {label:'系统调用', value:o.total, sub:`失败 ${fmtNumber(o.failed)}`},
+        {label:'网络调用', value:o.network},
+        {label:'Provenance 边', value:g.edge_count, sub:`节点 ${fmtNumber(g.node_count)}`},
+      ]);
+      byId('hook-counts').innerHTML = countList(h.event_names);
+      byId('syscall-counts').innerHTML = countList(o.syscalls);
+      const diagnostics = [
+        ['Hook correlation', data.normalization?.hook_correlation || h],
+        ['Runtime trace', data.normalization?.function_trace || data.collector_summaries?.function_trace || r],
+        ['OS audit', data.normalization?.os_audit || data.collector_summaries?.os_audit || o],
+        ['File audit', data.normalization?.file_audit || data.collector_summaries?.file_audit || {}],
+      ];
+      byId('diagnostics').innerHTML = diagnostics.map(([label, value]) => `<div><h3>${esc(label)}</h3><pre>${esc(pretty(value))}</pre></div>`).join('');
+    }
+
+    function aggregateTokenPoints() {
+      const latest = new Map(), fields = ['cached_input_tokens','input_tokens','output_tokens','reasoning_output_tokens','total_tokens'];
+      return [...tokenUsageEvents].sort((a, b) => Number(a.wall_start_ns ?? a.start_ns ?? a.seq ?? 0) - Number(b.wall_start_ns ?? b.start_ns ?? b.seq ?? 0)).map((row, index) => {
+        latest.set(row.thread_id || `event:${row.event_id || index}`, row.total || {});
+        const aggregate = Object.fromEntries(fields.map(field => [field, [...latest.values()].reduce((sum, value) => sum + Number(value?.[field] || 0), 0)]));
+        const rawTime = finite(row.wall_start_ns ?? row.start_ns);
+        return {...aggregate, time: rawTime == null ? index : rawTime / 1e9, row};
+      });
+    }
+
+    function tokenTimeLabel(value) {
+      const number = finite(value);
+      if (number == null) return '-';
+      if (number > 1e9) return new Date(number * 1000).toISOString().slice(11, 19);
+      return `${number.toLocaleString('zh-CN', {maximumFractionDigits: 1})}s`;
+    }
+
+    function renderOfflineTokenChart() {
+      const svg = byId('offline-token-chart'), empty = byId('offline-token-empty'), legend = byId('token-chart-legend');
+      svg.replaceChildren();
+      const liveRows = tokenTrend.filter(row => finite(row.recorded_at) != null && [row.session_tokens_likely_p50,row.session_tokens_likely_p90,row.exact_total_tokens].some(value => finite(value) != null));
+      const exactRows = aggregateTokenPoints();
+      const useLive = liveRows.length > 0;
+      const rows = useLive ? liveRows.map(row => ({...row,time:Number(row.recorded_at)})) : exactRows;
+      if (!rows.length) { empty.hidden = false; legend.replaceChildren(); return; }
+      empty.hidden = true;
+      const W = 1000, H = 310, L = 66, R = 20, T = 18, B = 38;
+      let minTime = Math.min(...rows.map(row => row.time)), maxTime = Math.max(...rows.map(row => row.time));
+      if (maxTime <= minTime) maxTime = minTime + 1;
+      const series = useLive
+        ? ['session_tokens_lower_bound','session_tokens_likely_p50','session_tokens_likely_p90','exact_total_tokens']
+        : ['total_tokens','input_tokens','cached_input_tokens','output_tokens'];
+      const values = rows.flatMap(row => series.map(key => finite(row[key])).filter(value => value != null));
+      let minValue = Math.min(...values), maxValue = Math.max(...values);
+      const padding = Math.max(10, (maxValue - minValue) * .12);
+      minValue = Math.max(0, minValue - padding); maxValue += padding;
+      if (maxValue <= minValue) maxValue = minValue + 1;
+      const x = value => L + (value - minTime) / (maxTime - minTime) * (W - L - R);
+      const y = value => T + (maxValue - value) / (maxValue - minValue) * (H - T - B);
+      const path = points => points.map(([px, py], index) => `${index ? 'L' : 'M'}${px.toFixed(1)},${py.toFixed(1)}`).join(' ');
+      for (let index = 0; index < 5; index++) {
+        const yy = T + index * (H - T - B) / 4;
+        svg.append(svgNode('line', {x1:L,y1:yy,x2:W-R,y2:yy,stroke:'#e7ecf4','stroke-width':1}));
+        const label = svgNode('text', {x:L-8,y:yy+4,'text-anchor':'end',fill:'#64748b','font-size':10});
+        label.textContent = fmtNumber(maxValue - index * (maxValue - minValue) / 4); svg.append(label);
+      }
+      const drawLine = (key, color, width = 2, dash = '') => {
+        const points = rows.map(row => [x(row.time), finite(row[key])]).filter(point => point[1] != null).map(([px, value]) => [px, y(value)]);
+        if (!points.length) return;
+        svg.append(svgNode('path', {d:path(points),fill:'none',stroke:color,'stroke-width':width,'stroke-dasharray':dash,'vector-effect':'non-scaling-stroke'}));
+        if (points.length === 1) svg.append(svgNode('circle', {cx:points[0][0],cy:points[0][1],r:3.5,fill:color}));
+      };
+      if (useLive) {
+        const p50 = rows.map(row => [x(row.time), finite(row.session_tokens_likely_p50)]).filter(point => point[1] != null).map(([px,value]) => [px,y(value)]);
+        const p90 = rows.map(row => [x(row.time), finite(row.session_tokens_likely_p90 ?? row.session_tokens_likely_p50)]).filter(point => point[1] != null).map(([px,value]) => [px,y(value)]);
+        if (p50.length > 1 && p90.length === p50.length) svg.append(svgNode('path', {d:`${path(p90)} ${path([...p50].reverse()).replace(/^M/,'L')} Z`,fill:'rgba(34,86,216,.16)'}));
+        drawLine('session_tokens_lower_bound','#6d3ac1',1.5,'5 4');
+        drawLine('session_tokens_likely_p50','#2256d8',2.4);
+        rows.forEach(row => { const value = finite(row.exact_total_tokens); if (value == null) return; const circle = svgNode('circle',{cx:x(row.time),cy:y(value),r:3.5,fill:'#087443'}); const title = svgNode('title'); title.textContent = `官方 ${fmtNumber(value)} · ${tokenTimeLabel(row.time)}`; circle.append(title); svg.append(circle); });
+        legend.innerHTML = '<span class="legend-key" style="--legend-color:#2256d8">p50 估算</span><span class="legend-key band" style="--legend-color:#2256d8">p50–p90</span><span class="legend-key" style="--legend-color:#6d3ac1">可见下界</span><span class="legend-key" style="--legend-color:#087443">官方值</span>';
+      } else {
+        drawLine('total_tokens','#2256d8',2.5); drawLine('input_tokens','#6d3ac1',1.8); drawLine('cached_input_tokens','#c17a16',1.6); drawLine('output_tokens','#087443',1.8);
+        legend.innerHTML = '<span class="legend-key" style="--legend-color:#2256d8">总计</span><span class="legend-key" style="--legend-color:#6d3ac1">输入</span><span class="legend-key" style="--legend-color:#c17a16">缓存输入</span><span class="legend-key" style="--legend-color:#087443">输出</span>';
+      }
+      const start = svgNode('text',{x:L,y:H-12,fill:'#64748b','font-size':10}); start.textContent = tokenTimeLabel(minTime); svg.append(start);
+      const end = svgNode('text',{x:W-R,y:H-12,'text-anchor':'end',fill:'#64748b','font-size':10}); end.textContent = tokenTimeLabel(maxTime); svg.append(end);
+      byId('token-chart-help').textContent = useLive ? `回放 ${fmtNumber(liveRows.length)} 个持久化 estimate → exact 采样。` : `该运行没有实时估算历史，显示 ${fmtNumber(exactRows.length)} 次官方累计更新。`;
+    }
+
+    function renderOfflineReconciliationDistribution(history) {
+      const svg = byId('offline-recon-chart'), empty = byId('offline-recon-empty'); svg.replaceChildren();
+      const percentage = (row, field, estimateField) => {
+        const direct = finite(row[field]); if (direct != null) return direct;
+        const official = finite(row.official_output_tokens), estimate = finite(row[estimateField]);
+        return official != null && official > 0 && estimate != null ? 100 * (estimate - official) / official : null;
+      };
+      const p50 = history.map(row => percentage(row,'output_error_pct_p50','estimated_output_tokens_p50')).filter(value => value != null);
+      const p90 = history.map(row => percentage(row,'output_error_pct_p90','estimated_output_tokens_p90')).filter(value => value != null);
+      const all = [...p50,...p90]; if (!all.length) { empty.hidden = false; return; } empty.hidden = true;
+      let min = Math.min(...all), max = Math.max(...all); if (max <= min) { min -= 1; max += 1; }
+      const bins = Math.min(20,Math.max(5,Math.ceil(Math.sqrt(all.length)))), width = (max-min)/bins;
+      const histogram = values => { const counts=Array(bins).fill(0); values.forEach(value => counts[Math.min(bins-1,Math.max(0,Math.floor((value-min)/width)))]++); return counts; };
+      const h50=histogram(p50),h90=histogram(p90),peak=Math.max(1,...h50,...h90),W=1000,H=220,L=55,R=18,T=16,B=34,plotW=W-L-R,plotH=H-T-B,binW=plotW/bins;
+      const yTicks=peak<=4?Array.from({length:peak+1},(_,index)=>peak-index):[peak,peak*.75,peak*.5,peak*.25,0];for(const count of yTicks){const yy=T+(peak-count)/peak*plotH;svg.append(svgNode('line',{x1:L,y1:yy,x2:W-R,y2:yy,stroke:'#e7ecf4','stroke-width':1}));const label=svgNode('text',{x:L-7,y:yy+4,'text-anchor':'end',fill:'#64748b','font-size':10});label.textContent=String(Math.round(count));svg.append(label);}
+      for(let index=0;index<bins;index++) for(const [series,color,offset] of [[h50,'#2256d8',0],[h90,'#6d3ac1',.5]]){const count=series[index],bar=svgNode('rect',{x:L+index*binW+offset*binW,y:T+plotH-count/peak*plotH,width:Math.max(1,binW*.48-1),height:count/peak*plotH,fill:color,opacity:.74});const title=svgNode('title');title.textContent=`${(min+index*width).toFixed(1)}%–${(min+(index+1)*width).toFixed(1)}% · ${count} 样本`;bar.append(title);svg.append(bar);}
+      if(min<=0&&max>=0){const zero=L+(0-min)/(max-min)*plotW;svg.append(svgNode('line',{x1:zero,y1:T,x2:zero,y2:T+plotH,stroke:'#334155','stroke-width':1.2,'stroke-dasharray':'4 4'}));}
+      for(const [value,anchor] of [[min,'start'],[max,'end']]){const label=svgNode('text',{x:value===min?L:W-R,y:H-11,'text-anchor':anchor,fill:'#64748b','font-size':10});label.textContent=`${value>0?'+':''}${value.toFixed(1)}%`;svg.append(label);}
+    }
+
+    function renderTokens() {
+      const report = reports.tokens || {}, summary = data.summary?.token_usage || data.normalization?.token_usage || {};
+      byId('tokens-coverage').innerHTML = coverage(report);
+      const lastEvent = tokenUsageEvents[tokenUsageEvents.length - 1] || {}, aggregate = summary.aggregate_total || lastEvent.total || {};
+      const input = Number(aggregate.input_tokens || 0), cached = Number(aggregate.cached_input_tokens || 0), output = Number(aggregate.output_tokens || 0), reasoning = Number(aggregate.reasoning_output_tokens || 0);
+      byId('token-cards').innerHTML = cards([
+        {label:'Provider 总 Token',value:aggregate.total_tokens,sub:'各 Thread 最新累计值求和'},
+        {label:'输入 Token',value:input,sub:`非缓存 ${fmtNumber(Math.max(0,input-cached))}`},
+        {label:'缓存输入',value:cached,sub:input ? `命中率 ${(100*cached/input).toFixed(1)}%` : '命中率 -'},
+        {label:'输出 Token',value:output,sub:`reasoning ${fmtNumber(reasoning)}`},
+        {label:'官方更新',value:report.total ?? tokenUsageEvents.length,sub:`${fmtNumber(report.threads)} Threads / ${fmtNumber(report.turns)} Turns`},
+        {label:'上下文窗口',value:lastEvent.model_context_window,sub:'最后一次官方更新'},
+      ]);
+      renderOfflineTokenChart();
+      const q = lower(byId('token-search').value), thread = byId('token-thread').value, turn = byId('token-turn').value;
+      const rows = [...tokenUsageEvents].reverse().filter(row => (!thread || row.thread_id === thread) && (!turn || row.turn_id === turn) && (!q || searchable([row.event_id,row.thread_id,row.turn_id]).includes(q)));
+      pagedTable('token-table','tokens',rows,'<tr><th>时间 / Event</th><th>Thread / Turn</th><th>本次调用</th><th>会话累计</th></tr>', row => `<tr><td class="nowrap">${esc(fmtTime(row.wall_start_ns,row.start_ns))}<div class="ids"><code>${esc(row.event_id || '-')}</code></div></td><td class="ids"><div>thread <code>${esc(row.thread_id || '-')}</code></div><div>turn <code>${esc(row.turn_id || '-')}</code></div></td><td>${esc(fmtNumber(row.last?.total_tokens))} total<div class="muted">in ${esc(fmtNumber(row.last?.input_tokens))} / cache ${esc(fmtNumber(row.last?.cached_input_tokens))} / out ${esc(fmtNumber(row.last?.output_tokens))} / reasoning ${esc(fmtNumber(row.last?.reasoning_output_tokens))}</div></td><td>${esc(fmtNumber(row.total?.total_tokens))} total<div class="muted">in ${esc(fmtNumber(row.total?.input_tokens))} / cache ${esc(fmtNumber(row.total?.cached_input_tokens))} / out ${esc(fmtNumber(row.total?.output_tokens))}</div><div class="muted">context ${esc(fmtNumber(row.model_context_window))}</div></td></tr>`, renderTokens, 50);
+      const history = tokenReconciliation.history || [], calibration = tokenReconciliation.summary || {};
+      const abs = key => history.map(row => finite(row[key])).filter(value => value != null).map(Math.abs);
+      const mean = values => values.length ? values.reduce((sum,value) => sum+value,0)/values.length : null;
+      const covered = history.filter(row => row.p90_interval_covered_official != null);
+      const p50Mae = finite(calibration.output_p50_mae_tokens) ?? mean(abs('output_error_tokens_p50'));
+      const p90Mae = finite(calibration.output_p90_mae_tokens) ?? mean(abs('output_error_tokens_p90'));
+      const coverageValue = finite(calibration.p90_coverage_pct) ?? (covered.length ? 100*covered.filter(row => row.p90_interval_covered_official === true).length/covered.length : null);
+      byId('token-recon-cards').innerHTML = cards([
+        {label:'校准样本',value:calibration.count ?? history.length,sub:`报告留存 ${fmtNumber(history.length)}`},
+        {label:'p50 MAE (Token)',value:p50Mae,sub:`${fmtNumber(calibration.output_error_sample_count ?? history.length)} 样本 · MAPE ${finite(calibration.output_p50_mape_pct) == null ? '-' : `${Number(calibration.output_p50_mape_pct).toFixed(2)}%`}`},
+        {label:'p90 MAE (Token)',value:p90Mae,sub:`${fmtNumber(calibration.output_error_sample_count ?? history.length)} 样本`},
+        {label:'p90 覆盖率 (%)',value:coverageValue,sub:`${fmtNumber(calibration.p90_coverage_sample_count ?? covered.length)} 样本 · 官方值落入下界–p90`},
+        {label:'p50 平均偏差',value:calibration.output_p50_mean_bias_tokens,sub:'负数表示低估'},
+      ]);
+      renderOfflineReconciliationDistribution(history);
+      pagedTable('token-recon-table','token-reconciliation',[...history].reverse(),'<tr><th>完成时间 / Slice</th><th>官方值</th><th>p50 估算 / 误差</th><th>p90 估算 / 误差</th><th>区间 / 耗时</th></tr>', row => `<tr><td>${esc(row.completed_at ? new Date(Number(row.completed_at)*1000).toISOString().replace('T',' ').replace('Z','') : '-')}<div class="muted">S${esc(row.slice_index ?? '-')} · ${esc(shortId(row.turn_id))}</div></td><td>out ${esc(fmtNumber(row.official_output_tokens))}<div class="muted">in ${esc(fmtNumber(row.official_input_tokens))} / reasoning ${esc(fmtNumber(row.official_reasoning_output_tokens))}</div></td><td>${esc(fmtNumber(row.estimated_output_tokens_p50))}<div class="muted">${esc(fmtSigned(row.output_error_tokens_p50))} tok / ${esc(fmtSigned(row.output_error_pct_p50))}%</div></td><td>${esc(fmtNumber(row.estimated_output_tokens_p90))}<div class="muted">${esc(fmtSigned(row.output_error_tokens_p90))} tok / ${esc(fmtSigned(row.output_error_pct_p90))}%</div></td><td>${row.p90_interval_covered_official === true ? '<span class="badge completed">命中</span>' : row.p90_interval_covered_official === false ? '<span class="badge failed">未命中</span>' : '-'}<div class="muted">${esc(Number(row.active_elapsed_seconds || 0).toLocaleString('zh-CN',{maximumFractionDigits:3}))} s</div></td></tr>`, renderTokens, 50);
+    }
+
+    function renderActions() {
+      const report = reports.actions || {};
+      byId('actions-coverage').innerHTML = coverage(report);
+      const q = lower(byId('action-search').value), type = byId('action-type').value, status = byId('action-status').value;
+      const rows = events.filter(row => (!type || row.action_type === type) && (!status || row.status === status) && (!q || searchable([row.source_dataset,row.event_id,row.source_event,row.operation,row.tool,row.targets,row.affected_files,row.functions,row.anomalies]).includes(q)));
+      pagedTable('action-table','actions',rows,'<tr><th>时间 / 状态</th><th>动作</th><th>作用域</th><th>文件 / 函数</th></tr>', row => `
+        <tr><td class="nowrap">${statusBadge(row.status)}<div class="muted">${esc(fmtTime(row.wall_start_ns,row.start_ns))}</div><div class="muted">${esc(fmtDuration(row.duration_ms))}</div></td>
+        <td><div class="event-title">${esc(row.action_type)} ${sourceBadge(row.source)} ${row.source_dataset ? sourceBadge(row.source_dataset) : ''}</div><div class="event-op">${esc(row.operation || row.tool || row.source_event)}</div><details><summary>事件详情</summary><pre>${esc(pretty(row))}</pre></details></td>
+        <td class="ids"><div>thread <code>${esc(row.thread_id || '-')}</code></div><div>turn <code>${esc(row.turn_id || '-')}</code></div><div>event <code>${esc(row.event_id)}</code></div></td>
+        <td>${(row.affected_files || []).map(value => `<span class="badge">${esc(value)}</span>`).join('')}${(row.functions || []).map(fn => `<span class="badge">${esc(fn.path)}::${esc(fn.name)} (${esc(fn.role)})</span>`).join('') || '<span class="muted">-</span>'}</td></tr>`, renderActions);
+    }
+
+    function renderHooks() {
+      const report = reports.hooks || {};
+      byId('hooks-coverage').innerHTML = coverage(report);
+      byId('hook-cards').innerHTML = cards([
+        {label:'Hook 观测',value:report.total,sub:`app-server ${fmtNumber(report.appserver)} / collector ${fmtNumber(report.collector)}`},
+        {label:'已关联',value:report.correlated},
+        {label:'带 tool ID 未匹配',value:report.unmatched_with_tool_id},
+        {label:'完整 Pre/Post 组',value:report.complete_pre_post_pairs},
+        {label:'仅 Pre',value:report.pre_only_pairs},
+        {label:'仅 Post',value:report.post_only_pairs},
+      ]);
+      const q = lower(byId('hook-search').value), name = byId('hook-name').value, source = byId('hook-source').value, corr = byId('hook-correlation').value;
+      const rows = hooks.filter(row => (!name || row.hook_event_name === name) && (!source || row.source === source) && (!corr || (corr === 'yes') === Boolean(row.related_event_id)) && (!q || searchable([row.source_dataset,row.hook_event_name,row.tool,row.event_id,row.tool_use_id,row.hook_run_id,row.related_event_id,row.payload,row.anomalies]).includes(q)));
+      pagedTable('hook-table','hooks',rows,'<tr><th>Hook / 状态</th><th>时间与作用域</th><th>精确关联</th><th>详情</th></tr>', row => `
+        <tr><td>${sourceBadge(row.source,'hook')} ${statusBadge(row.status)} ${row.source_dataset ? sourceBadge(row.source_dataset) : ''}<div class="event-title">${esc(row.hook_event_name)}</div><div class="muted">${esc(row.source_event)}</div></td>
+        <td class="ids"><div>${esc(fmtTime(row.wall_start_ns,row.start_ns))} · ${esc(fmtDuration(row.duration_ms))}</div><div>thread <code>${esc(row.thread_id || '-')}</code></div><div>turn <code>${esc(row.turn_id || '-')}</code></div><div>tool <code>${esc(row.tool || '-')}</code></div></td>
+        <td class="ids"><div>tool_use_id <code>${esc(row.tool_use_id || '-')}</code></div><div>target <code>${esc(row.related_event_id || '未关联')}</code></div><div>${esc(row.correlation_kind || '-')} ${row.correlation_confidence != null ? `<span class="badge">${esc(row.correlation_confidence)}</span>` : ''}</div><div class="muted">${esc(row.correlation_evidence || '')}</div></td>
+        <td class="ids"><div>event <code>${esc(row.event_id)}</code></div><div>hook_run <code>${esc(row.hook_run_id || '-')}</code></div>${(row.anomalies || []).map(value => `<span class="badge failed">${esc(value)}</span>`).join('')}<details><summary>已脱敏 Hook payload</summary><pre>${esc(pretty(row.payload))}</pre></details><details><summary>全部 canonical 字段</summary><pre>${esc(pretty({...row,payload:'[shown above]'}))}</pre></details></td></tr>`, renderHooks, 25);
+    }
+
+    function renderRuntime() {
+      const report = reports.runtime || {};
+      byId('runtime-coverage').innerHTML = coverage(report);
+      byId('runtime-cards').innerHTML = cards([
+        {label:'Activation',value:report.total,sub:`完成 ${fmtNumber(report.completed)} / 未完成 ${fmtNumber(report.incomplete)}`},
+        {label:'进程实例',value:report.processes}, {label:'线程',value:report.threads},
+        {label:'唯一函数',value:report.unique_functions}, {label:'调用树根',value:report.roots},
+        {label:'关联到命令',value:report.matched_to_commands},
+      ]);
+      const q = lower(byId('runtime-search').value), process = byId('runtime-process').value, thread = byId('runtime-thread').value, language = byId('runtime-language').value, status = byId('runtime-status').value;
+      const rows = runtimeCalls.filter(row => (!process || row.process_instance_id === process) && (!thread || String(row.tid) === thread) && (!language || row.language === language) && (!status || row.status === status) && (!q || searchable([row.source_dataset,row.operation,row.executed_functions,row.module,row.call_id,row.parent_call_id,row.caller_event_id,row.related_event_id,row.anomalies]).includes(q)));
+      pagedTable('runtime-table','runtime',rows,'<tr><th>调用树</th><th>进程 / 线程</th><th>耗时 / 状态</th><th>命令关联与证据</th></tr>', row => {
+        const fn = (row.executed_functions || [])[0] || {};
+        return `<tr><td><div class="call-name" style="--depth:${Math.max(0,Number(row.depth)||0)}"><span class="badge runtime">depth ${esc(row.depth)}</span><span class="event-title">${esc(fn.path || row.module)}::${esc(fn.name || row.operation)}</span></div><div class="muted">${esc(row.language)} · ${esc(row.backend)} · children ${esc(row.child_count)} ${row.source_dataset ? sourceBadge(row.source_dataset) : ''}</div><details><summary>activation 详情</summary><pre>${esc(pretty(row))}</pre></details></td>
+        <td class="ids"><div>PID ${esc(row.pid ?? '-')} ${row.process_id_verified ? '<span class="badge completed">kernel verified</span>' : ''}</div><div>instance <code>${esc(row.process_instance_id || '-')}</code></div><div>TID <code>${esc(row.tid ?? '-')}</code></div><div>call <code>${esc(row.call_id || '-')}</code></div><div>parent <code>${esc(row.parent_call_id || '-')}</code></div></td>
+        <td class="nowrap">${statusBadge(row.status)}<div>${esc(fmtDuration(row.duration_ms))}</div><div class="muted">${esc(fmtTime(row.wall_start_ns,row.start_ns))}</div>${row.tree_anomaly ? `<span class="badge failed">${esc(row.tree_anomaly)}</span>` : ''}</td>
+        <td class="ids"><div>command <code>${esc(row.related_event_id || '未关联')}</code></div><div>${esc(row.correlation_kind || '-')} ${row.correlation_confidence != null ? `<span class="badge">${esc(row.correlation_confidence)}</span>` : ''}</div><div class="muted">${esc(row.correlation_evidence || '')}</div>${(row.anomalies || []).map(value => `<span class="badge failed">${esc(value)}</span>`).join('')}</td></tr>`;
+      }, renderRuntime);
+    }
+
+    function renderOs() {
+      const report = reports.os || {};
+      byId('os-coverage').innerHTML = coverage(report);
+      byId('os-cards').innerHTML = cards([
+        {label:'系统调用',value:report.total}, {label:'Reads',value:report.reads}, {label:'Writes',value:report.writes},
+        {label:'Network',value:report.network}, {label:'Failed',value:report.failed}, {label:'关联到工具窗口',value:report.correlated},
+      ]);
+      pagedTable('process-table','processes',report.processes || [],'<tr><th>PID / Command</th><th>Calls</th><th>R/W/Net</th><th>Failed</th></tr>', row => `<tr><td><code>${esc(row.pid ?? 'unknown')}</code><div>${esc(row.comm || '-')}</div><div class="muted">PPID ${esc(row.ppid ?? '-')}</div></td><td>${esc(fmtNumber(row.syscalls))}</td><td>${esc(row.reads)}/${esc(row.writes)}/${esc(row.network)}</td><td>${esc(row.failed)}</td></tr>`, renderOs, 25);
+      pagedTable('endpoint-table','endpoints',report.endpoints || [],'<tr><th>Endpoint</th><th>Events</th><th>PIDs</th></tr>', row => `<tr><td><code>${esc(row.endpoint)}</code></td><td>${esc(fmtNumber(row.events))}</td><td>${esc((row.pids || []).join(', '))}</td></tr>`, renderOs, 25);
+      const q = lower(byId('os-search').value), pid = byId('os-pid').value, syscall = byId('os-syscall').value, category = byId('os-category').value, status = byId('os-status').value;
+      const rows = osSyscalls.filter(row => (!pid || String(row.pid) === pid) && (!syscall || row.syscall === syscall) && (!category || row.category === category) && (!status || row.status === status) && (!q || searchable([row.source_dataset,row.event_id,row.comm,row.syscall,row.category,row.access,row.targets,row.endpoint,row.arguments,row.result,row.errno,row.related_event_id,row.anomalies]).includes(q)));
+      pagedTable('os-table','os',rows,'<tr><th>进程 / 调用</th><th>目标 / 参数</th><th>结果</th><th>关联</th></tr>', row => `
+        <tr><td class="ids">${sourceBadge(row.backend,'os')} ${statusBadge(row.status)} ${row.source_dataset ? sourceBadge(row.source_dataset) : ''}<div class="event-title">${esc(row.syscall)}</div><div>PID ${esc(row.pid ?? '-')} / TID ${esc(row.tid ?? '-')} / PPID ${esc(row.ppid ?? '-')}</div><div>${esc(row.comm || '-')} · ${esc(row.category)} / ${esc(row.access)}</div><div class="muted">${esc(fmtTime(row.wall_start_ns,row.start_ns))}</div></td>
+        <td class="ids">${(row.targets || []).map(value => `<div><code>${esc(value)}</code></div>`).join('') || '<span class="muted">无路径</span>'}${row.endpoint != null ? `<div>endpoint <code>${esc(typeof row.endpoint === 'string' ? row.endpoint : pretty(row.endpoint))}</code></div>` : ''}<div>fd ${esc(row.fd ?? '-')} · bytes ${esc(row.bytes ?? '-')}</div><details><summary>脱敏参数与字段</summary><pre>${esc(pretty({arguments:row.arguments,path_scope:row.path_scope,duration_ns:row.duration_ns,pid_evidence:row.pid_evidence,candidates:row.candidate_event_ids,filesystem_events:row.filesystem_event_ids}))}</pre></details></td>
+        <td class="ids"><div>success <code>${esc(row.success)}</code></div><div>result <code>${esc(row.result ?? '-')}</code></div><div>errno <code>${esc(row.errno ?? '-')}</code></div>${(row.anomalies || []).map(value => `<span class="badge failed">${esc(value)}</span>`).join('')}</td>
+        <td class="ids"><div>tool <code>${esc(row.related_event_id || '未关联')}</code></div><div>${esc(row.correlation_kind || '-')} ${row.correlation_confidence != null ? `<span class="badge">${esc(row.correlation_confidence)}</span>` : ''}</div><div class="muted">${esc(row.correlation_evidence || '')}</div></td></tr>`, renderOs);
+    }
+
+    function displayedRelations() {
+      const rows = [], seen = new Set();
+      const add = row => { const key = `${row.source}|${row.target}|${row.type}|${row.evidence}`; if (!seen.has(key)) { seen.add(key); rows.push(row); } };
+      for (const [kind, values] of [['hook',hooks],['runtime',runtimeCalls],['os',osSyscalls]]) {
+        for (const row of values) if (row.related_event_id) add({layer:kind,dataset:row.source_dataset,source:row.event_id,target:row.related_event_id,type:row.correlation_kind || 'CORRELATES_WITH',confidence:row.correlation_confidence,evidence:row.correlation_evidence});
+      }
+      for (const row of runtimeCalls) if (row.tree_parent_event_id || row.caller_event_id) add({layer:'runtime',dataset:row.source_dataset,source:row.tree_parent_event_id || row.caller_event_id,target:row.event_id,type:'CALLS',confidence:1,evidence:row.tree_parent_source || 'runtime.nearest_tracked_ancestor'});
+      return rows;
+    }
+
+    function renderRelationGraph(rows) {
+      const svg = byId('relation-graph'), empty = byId('relation-graph-empty'), meta = byId('relation-graph-meta');
+      svg.replaceChildren();
+      const sampled = [...rows].sort((a,b) => String(a.layer).localeCompare(String(b.layer)) || String(a.type).localeCompare(String(b.type))).slice(0, 60);
+      if (!sampled.length) { empty.hidden = false; meta.textContent = '筛选后没有可绘制的关系。'; return; }
+      empty.hidden = true;
+      const sources = [...new Map(sampled.map(row => [`${row.layer}|${row.source}`,{id:row.source,layer:row.layer}])).values()];
+      const targets = [...new Map(sampled.map(row => [String(row.target),{id:row.target,layer:'target'}])).values()];
+      const height = Math.max(360, 54 + Math.max(sources.length,targets.length) * 30);
+      svg.setAttribute('viewBox',`0 0 1000 ${height}`); svg.style.height = `${height}px`;
+      const defs = svgNode('defs'), marker = svgNode('marker',{id:'relation-arrow',viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:6,markerHeight:6,orient:'auto-start-reverse'}), arrow = svgNode('path',{d:'M 0 0 L 10 5 L 0 10 z',fill:'#91a0b5'}); marker.append(arrow); defs.append(marker); svg.append(defs);
+      const yPositions = values => new Map(values.map((row,index) => [row.layer === 'target' ? String(row.id) : `${row.layer}|${row.id}`,42 + index*30]));
+      const sourceY = yPositions(sources), targetY = yPositions(targets);
+      const color = layer => ({hook:'#2256d8',runtime:'#6d3ac1',os:'#b36a08'}[layer] || '#64748b');
+      for (const row of sampled) {
+        const y1 = sourceY.get(`${row.layer}|${row.source}`), y2 = targetY.get(String(row.target));
+        const line = svgNode('path',{d:`M 250 ${y1} C 430 ${y1}, 570 ${y2}, 750 ${y2}`,fill:'none',stroke:color(row.layer),'stroke-width':1.25,opacity:.45,'marker-end':'url(#relation-arrow)'});
+        const title = svgNode('title'); title.textContent = `${row.type}: ${row.source} → ${row.target}\n${row.evidence || ''}`; line.append(title); svg.append(line);
+      }
+      const label = value => { const text = String(value || '-'); return text.length > 30 ? `${text.slice(0,14)}…${text.slice(-12)}` : text; };
+      for (const row of sources) {
+        const y = sourceY.get(`${row.layer}|${row.id}`), group = svgNode('g');
+        const rect = svgNode('rect',{x:24,y:y-11,width:216,height:22,rx:7,fill:'#fff',stroke:color(row.layer),'stroke-width':1.2});
+        const textNode = svgNode('text',{x:34,y:y+4,fill:'#26344c','font-size':11}); textNode.textContent = `${row.layer} · ${label(row.id)}`;
+        const title = svgNode('title'); title.textContent = String(row.id || '-'); group.append(rect,textNode,title); svg.append(group);
+      }
+      for (const row of targets) {
+        const y = targetY.get(String(row.id)), group = svgNode('g');
+        const rect = svgNode('rect',{x:760,y:y-11,width:216,height:22,rx:7,fill:'#fff',stroke:'#2256d8','stroke-width':1.2});
+        const textNode = svgNode('text',{x:770,y:y+4,fill:'#26344c','font-size':11}); textNode.textContent = `target · ${label(row.id)}`;
+        const title = svgNode('title'); title.textContent = String(row.id || '-'); group.append(rect,textNode,title); svg.append(group);
+      }
+      meta.textContent = `绘制 ${fmtNumber(sampled.length)} / ${fmtNumber(rows.length)} 条筛选后关系；为保持可读性，图最多显示 60 条，表格仍可分页查看全部嵌入样本。`;
+    }
+
+    function renderRelations() {
+      const graph = reports.graph || {}, relationRows = displayedRelations();
+      const estimatedTotal = Number(reports.hooks?.correlated || 0) + Number(reports.runtime?.matched_to_commands || 0) + Number(reports.os?.correlated || 0) + Math.max(0, Number(reports.runtime?.total || 0) - Number(reports.runtime?.roots || 0));
+      byId('relation-coverage').innerHTML = `<span class="coverage sampled">全量关联估计 ${fmtNumber(estimatedTotal)} · 当前样本关系 ${fmtNumber(relationRows.length)}</span>`;
+      byId('graph-cards').innerHTML = cards([
+        {label:'图节点',value:graph.node_count}, {label:'图边',value:graph.edge_count},
+        {label:'Hook 图边',value:graph.hook_edge_total}, {label:'当前跨层关系',value:relationRows.length},
+      ]);
+      const q = lower(byId('relation-search').value), type = byId('relation-type').value;
+      const rows = relationRows.filter(row => (!type || row.type === type) && (!q || searchable([row.layer,row.dataset,row.source,row.target,row.type,row.evidence]).includes(q)));
+      renderRelationGraph(rows);
+      pagedTable('relation-table','relations',rows,'<tr><th>层 / 关系</th><th>Source</th><th>Target</th><th>证据</th></tr>', row => `<tr><td>${sourceBadge(row.layer,row.layer)} ${row.dataset ? sourceBadge(row.dataset) : ''}<div class="event-title">${esc(row.type)}</div>${row.confidence != null ? `<span class="badge">confidence ${esc(row.confidence)}</span>` : ''}</td><td><code>${esc(row.source)}</code></td><td><code>${esc(row.target)}</code></td><td>${esc(row.evidence || '-')}</td></tr>`, renderRelations);
+      const edgeReport = {total:graph.hook_edge_total,displayed:graph.hook_edge_displayed,omitted:graph.hook_edge_omitted};
+      byId('hook-edge-coverage').innerHTML = coverage(edgeReport);
+      pagedTable('hook-edge-table','hook-edges',graph.hook_edges || [],'<tr><th>关系</th><th>Source</th><th>Target</th><th>证据 / 属性</th></tr>', edge => `<tr><td><span class="badge hook">${esc(edge.type)}</span> ${edge.confidence != null ? `<span class="badge">${esc(edge.confidence)}</span>` : ''}</td><td><code>${esc(edge.source)}</code></td><td><code>${esc(edge.target)}</code></td><td>${esc(edge.evidence || '')}<details><summary>扩展属性</summary><pre>${esc(pretty(edge))}</pre></details></td></tr>`, renderRelations);
+    }
+
+    renderers.overview = renderOverview;
+    renderers.tokens = renderTokens;
+    renderers.actions = renderActions;
+    renderers.hooks = renderHooks;
+    renderers.runtime = renderRuntime;
+    renderers.os = renderOs;
+    renderers.relations = renderRelations;
+
+    function activate(tab) {
+      if (!renderers[tab]) tab = 'overview';
+      activeTab = tab;
+      document.querySelectorAll('.tab').forEach(node => node.classList.toggle('active', node.dataset.tab === tab));
+      document.querySelectorAll('.panel').forEach(node => node.classList.toggle('active', node.dataset.panel === tab));
+      history.replaceState(null, '', `#${tab}`);
+      renderers[tab]();
+    }
+
+    function bindFilter(ids, key, renderer) {
+      ids.forEach(id => byId(id).addEventListener('input', () => { resetPage(key); renderer(); }));
+    }
+
+    renderMeta();
+    optionValues('action-type', events.map(row => row.action_type));
+    optionValues('action-status', events.map(row => row.status));
+    optionValues('hook-name', hooks.map(row => row.hook_event_name));
+    optionValues('hook-source', hooks.map(row => row.source));
+    optionValues('runtime-process', runtimeCalls.map(row => row.process_instance_id));
+    optionValues('runtime-thread', runtimeCalls.map(row => row.tid));
+    optionValues('runtime-language', runtimeCalls.map(row => row.language));
+    optionValues('runtime-status', runtimeCalls.map(row => row.status));
+    optionValues('os-pid', osSyscalls.map(row => row.pid));
+    optionValues('os-syscall', osSyscalls.map(row => row.syscall));
+    optionValues('os-category', osSyscalls.map(row => row.category));
+    optionValues('os-status', osSyscalls.map(row => row.status));
+    optionValues('relation-type', displayedRelations().map(row => row.type));
+    optionValues('token-thread', tokenUsageEvents.map(row => row.thread_id));
+    optionValues('token-turn', tokenUsageEvents.map(row => row.turn_id));
+    bindFilter(['token-search','token-thread','token-turn'],'tokens',renderTokens);
+    bindFilter(['action-search','action-type','action-status'],'actions',renderActions);
+    bindFilter(['hook-search','hook-name','hook-source','hook-correlation'],'hooks',renderHooks);
+    bindFilter(['runtime-search','runtime-process','runtime-thread','runtime-language','runtime-status'],'runtime',renderRuntime);
+    bindFilter(['os-search','os-pid','os-syscall','os-category','os-status'],'os',renderOs);
+    bindFilter(['relation-search','relation-type'],'relations',renderRelations);
+    document.querySelectorAll('.tab').forEach(node => node.addEventListener('click', () => activate(node.dataset.tab)));
+    activate(location.hash.slice(1) || 'overview');
+  </script>
+</body>
+</html>

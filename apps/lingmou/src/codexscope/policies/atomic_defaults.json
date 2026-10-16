@@ -1,0 +1,804 @@
+{
+  "schema_version": "lingmou.atomic-policies.v1",
+  "atoms": {},
+  "lists": {},
+  "rules": [
+    {
+      "id": "LING-CRED-001",
+      "name": "敏感凭证访问",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "observe",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-CRED-001"
+      }
+    },
+    {
+      "id": "LING-EGRESS-002",
+      "name": "异常外部连接",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "observe",
+      "risk_level": "warning",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-EGRESS-002"
+      }
+    },
+    {
+      "id": "LING-UPLOAD-003",
+      "name": "文件或数据上传",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "observe",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-UPLOAD-003"
+      }
+    },
+    {
+      "id": "LING-EXFIL-004",
+      "name": "敏感数据外泄",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "deny",
+      "risk_level": "critical",
+      "priority": 990,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-EXFIL-004"
+      }
+    },
+    {
+      "id": "LING-DESTRUCT-005",
+      "name": "高破坏性操作",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "deny",
+      "risk_level": "critical",
+      "priority": 991,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-DESTRUCT-005"
+      }
+    },
+    {
+      "id": "LING-PRIV-006",
+      "name": "权限与属主变更",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "observe",
+      "risk_level": "warning",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-PRIV-006"
+      }
+    },
+    {
+      "id": "LING-SCAN-007",
+      "name": "网络扫描行为",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "deny",
+      "risk_level": "high",
+      "priority": 989,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-SCAN-007"
+      }
+    },
+    {
+      "id": "LING-INJECT-008",
+      "name": "内存注入前兆",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "observe",
+      "risk_level": "critical",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-INJECT-008"
+      }
+    },
+    {
+      "id": "LING-PERSIST-009",
+      "name": "持久化落点修改",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "observe",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-PERSIST-009"
+      }
+    },
+    {
+      "id": "LING-BLOCK-010",
+      "name": "执行前安全阻断",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "observe",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-BLOCK-010"
+      }
+    },
+    {
+      "id": "LING-ENCODE-011",
+      "name": "敏感内容编码与派生",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "observe",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-ENCODE-011"
+      }
+    },
+    {
+      "id": "LING-CLOUD-012",
+      "name": "云凭证文件访问",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "observe",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-CLOUD-012"
+      }
+    },
+    {
+      "id": "LING-CMDINJ-013",
+      "name": "命令注入利用载荷",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "observe",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-CMDINJ-013"
+      }
+    },
+    {
+      "id": "LING-TRAVERSAL-014",
+      "name": "路径穿越访问",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "observe",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-TRAVERSAL-014"
+      }
+    },
+    {
+      "id": "LING-CI-015",
+      "name": "CI 与 Git 执行链投毒",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "observe",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-CI-015"
+      }
+    },
+    {
+      "id": "LING-EVASION-016",
+      "name": "审计与安全证据清除",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "deny",
+      "risk_level": "critical",
+      "priority": 1000,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-EVASION-016"
+      }
+    },
+    {
+      "id": "LING-REMOTEEXEC-017",
+      "name": "下载脚本直连解释器执行",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "deny",
+      "risk_level": "critical",
+      "priority": 997,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-REMOTEEXEC-017"
+      }
+    },
+    {
+      "id": "LING-REVSHELL-018",
+      "name": "反向或交互式 Shell 通道",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "deny",
+      "risk_level": "critical",
+      "priority": 996,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-REVSHELL-018"
+      }
+    },
+    {
+      "id": "LING-METADATA-019",
+      "name": "云实例元数据凭证访问",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "deny",
+      "risk_level": "critical",
+      "priority": 995,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-METADATA-019"
+      }
+    },
+    {
+      "id": "LING-CONTAINER-020",
+      "name": "容器逃逸与宿主控制面访问",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "deny",
+      "risk_level": "critical",
+      "priority": 994,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-CONTAINER-020"
+      }
+    },
+    {
+      "id": "LING-GIT-021",
+      "name": "Git 工作区或历史破坏",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "deny",
+      "risk_level": "critical",
+      "priority": 992,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-GIT-021"
+      }
+    },
+    {
+      "id": "LING-SECDISABLE-022",
+      "name": "主机安全控制停用",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "deny",
+      "risk_level": "critical",
+      "priority": 993,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-SECDISABLE-022"
+      }
+    },
+    {
+      "id": "LING-TUNNEL-023",
+      "name": "网络隧道与代理通道",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "observe",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-TUNNEL-023"
+      }
+    },
+    {
+      "id": "LING-DEVCRED-024",
+      "name": "开发与集群凭证访问",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "observe",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-DEVCRED-024"
+      }
+    },
+    {
+      "id": "LING-SECRETSTORE-025",
+      "name": "密钥管理服务读取",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "observe",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-SECRETSTORE-025"
+      }
+    },
+    {
+      "id": "LING-OBFEXEC-026",
+      "name": "解码与混淆载荷执行",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "deny",
+      "risk_level": "critical",
+      "priority": 999,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-OBFEXEC-026"
+      }
+    },
+    {
+      "id": "LING-ENVHARVEST-027",
+      "name": "环境秘密批量枚举",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "review",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-ENVHARVEST-027"
+      }
+    },
+    {
+      "id": "LING-CONTROLPLANE-028",
+      "name": "Agent 控制面与记忆篡改",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "review",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-CONTROLPLANE-028"
+      }
+    },
+    {
+      "id": "LING-SUPPLYCHAIN-029",
+      "name": "可变远程依赖与未校验安装",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "review",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-SUPPLYCHAIN-029"
+      }
+    },
+    {
+      "id": "LING-LINEAGE-030",
+      "name": "敏感派生文件跨步骤外发",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "deny",
+      "risk_level": "critical",
+      "priority": 998,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-LINEAGE-030"
+      }
+    },
+    {
+      "id": "LING-EGRESS-BURST-031",
+      "name": "短时集中外联与上传",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "review",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-EGRESS-BURST-031"
+      }
+    },
+    {
+      "id": "LING-EGRESS-ALLOWLIST-032",
+      "name": "未登记出口与私网 SSRF 候选",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "review",
+      "risk_level": "warning",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-EGRESS-ALLOWLIST-032"
+      }
+    },
+    {
+      "id": "LING-MCP-DRIFT-033",
+      "name": "MCP 工具定义漂移与 Rug Pull",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "review",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-MCP-DRIFT-033"
+      }
+    },
+    {
+      "id": "LING-MCP-OUTPUT-INJECTION-034",
+      "name": "MCP 与动态工具结果提示注入",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "review",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-MCP-OUTPUT-INJECTION-034"
+      }
+    },
+    {
+      "id": "LING-PRINCIPAL-035",
+      "name": "子 Agent 高影响能力越界",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "review",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-PRINCIPAL-035"
+      }
+    },
+    {
+      "id": "LING-PROMPT-INJECT-036",
+      "name": "输入侧直接与间接提示注入",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "observe",
+      "risk_level": "warning",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-PROMPT-INJECT-036"
+      }
+    },
+    {
+      "id": "PAY-KEY-001",
+      "name": "支付密钥资产",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "observe",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "PAY-KEY-001"
+      }
+    },
+    {
+      "id": "PAY-ENCODE-002",
+      "name": "密钥编码前兆",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "observe",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "PAY-ENCODE-002"
+      }
+    },
+    {
+      "id": "PAY-EGRESS-003",
+      "name": "外部上传通道",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "review",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "PAY-EGRESS-003"
+      }
+    },
+    {
+      "id": "PAY-EXFIL-004",
+      "name": "支付密钥外泄阻断",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "deny",
+      "risk_level": "critical",
+      "priority": 2000,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "PAY-EXFIL-004"
+      }
+    },
+    {
+      "id": "LIFE-RETRY-001",
+      "name": "超时后先查单",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "review",
+      "risk_level": "warning",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LIFE-RETRY-001"
+      }
+    },
+    {
+      "id": "LIFE-ORDER-002",
+      "name": "重复下单保护",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "deny",
+      "risk_level": "critical",
+      "priority": 3000,
+      "when": {
+        "field": "detector.blocking_ids",
+        "op": "contains",
+        "value": "LIFE-ORDER-002"
+      }
+    },
+    {
+      "id": "LIFE-SPEND-003",
+      "name": "消费预算保护",
+      "enabled": true,
+      "event": "command.approval",
+      "mode": "review",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LIFE-SPEND-003"
+      }
+    },
+    {
+      "id": "WORK-MAIL-001",
+      "name": "外部敏感邮件逐次确认",
+      "enabled": true,
+      "event": "work.action",
+      "mode": "review",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "WORK-MAIL-001"
+      },
+      "scope": {
+        "field": "action.family",
+        "op": "eq",
+        "value": "mail"
+      }
+    },
+    {
+      "id": "WORK-MAIL-002",
+      "name": "重复邮件投递阻断",
+      "enabled": true,
+      "event": "work.action",
+      "mode": "deny",
+      "risk_level": "critical",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "WORK-MAIL-002"
+      },
+      "scope": {
+        "field": "action.family",
+        "op": "eq",
+        "value": "mail"
+      }
+    },
+    {
+      "id": "WORK-MEETING-004",
+      "name": "批量改期影响复核",
+      "enabled": true,
+      "event": "work.action",
+      "mode": "review",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "WORK-MEETING-004"
+      },
+      "scope": {
+        "field": "action.family",
+        "op": "eq",
+        "value": "meeting"
+      }
+    },
+    {
+      "id": "WORK-APPROVAL-006",
+      "name": "批量审批速率复核",
+      "enabled": true,
+      "event": "work.action",
+      "mode": "review",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "WORK-APPROVAL-006"
+      },
+      "scope": {
+        "field": "action.family",
+        "op": "eq",
+        "value": "expense"
+      }
+    },
+    {
+      "id": "WORK-PROCURE-007",
+      "name": "重复采购阻断",
+      "enabled": true,
+      "event": "work.action",
+      "mode": "deny",
+      "risk_level": "critical",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "WORK-PROCURE-007"
+      },
+      "scope": {
+        "field": "action.family",
+        "op": "eq",
+        "value": "purchase"
+      }
+    },
+    {
+      "id": "WORK-SPEND-008",
+      "name": "累计采购金额控制",
+      "enabled": true,
+      "event": "work.action",
+      "mode": "review",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "WORK-SPEND-008"
+      },
+      "scope": {
+        "field": "action.family",
+        "op": "eq",
+        "value": "purchase"
+      }
+    },
+    {
+      "id": "WORK-SHARE-003",
+      "name": "公开分享最小权限收窄",
+      "enabled": true,
+      "event": "work.action",
+      "mode": "transform",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "WORK-SHARE-003"
+      },
+      "scope": {
+        "field": "action.family",
+        "op": "eq",
+        "value": "document"
+      }
+    },
+    {
+      "id": "WORK-EXPENSE-005",
+      "name": "重复票据单项拒绝",
+      "enabled": true,
+      "event": "work.action",
+      "mode": "transform",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "WORK-EXPENSE-005"
+      },
+      "scope": {
+        "field": "action.family",
+        "op": "eq",
+        "value": "expense"
+      }
+    },
+    {
+      "id": "WORK-REPORT-009",
+      "name": "日报脱敏与收件群消歧",
+      "enabled": true,
+      "event": "work.action",
+      "mode": "transform",
+      "risk_level": "high",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "WORK-REPORT-009"
+      },
+      "review_when": {
+        "field": "action.impact.matching_group_count",
+        "op": "ne",
+        "value": 1
+      },
+      "scope": {
+        "field": "action.family",
+        "op": "eq",
+        "value": "report"
+      }
+    },
+    {
+      "id": "WORK-SOURCE-CHURN-018",
+      "name": "资讯重放与反复交易阻断",
+      "enabled": true,
+      "event": "work.action",
+      "mode": "deny",
+      "risk_level": "critical",
+      "priority": 0,
+      "when": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "WORK-SOURCE-CHURN-018"
+      },
+      "scope": {
+        "field": "action.family",
+        "op": "eq",
+        "value": "trading"
+      }
+    }
+  ]
+}

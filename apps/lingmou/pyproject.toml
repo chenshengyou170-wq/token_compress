@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "codexscope"
+version = "0.1.0"
+description = "Cross-layer action provenance and function-level diagnosis for Codex runs"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.141,<1",
+  "httpx>=0.28,<1",
+  "mcp>=2,<3",
+  "pysqlite3-binary==0.5.4.post2; implementation_name == 'cpython' and platform_system == 'Linux' and platform_machine == 'x86_64'",
+  "tree-sitter>=0.25,<0.27",
+  "tree-sitter-c>=0.23,<0.25",
+  "tree-sitter-cpp>=0.23,<0.25",
+  "tree-sitter-python>=0.23,<0.25",
+  "websockets>=15,<16",
+  "uvicorn>=0.52,<1",
+]
+
+[project.optional-dependencies]
+forensic = ["cryptography>=46,<50"]
+proxy = ["tiktoken>=0.13,<1"]
+report = ["reportlab>=3.5,<5"]
+test = ["httpx>=0.28,<1", "pytest>=8,<10"]
+desktop = ["pyinstaller>=6.21,<7", "tomlkit>=0.13,<1", "tiktoken>=0.13,<1", "pillow>=11,<13"]
+compression = ["llmlingua>=0.2.2,<0.3"]
+compression-full = ["llmlingua>=0.2.2,<0.3", "headroom-ai>=0.40,<0.41", "spacy>=3.8,<3.9", "transformers>=4.57,<5", "tiktoken>=0.13,<1"]
+
+[project.scripts]
+codexscope = "codexscope.cli:main"
+lingmou-companion = "codexscope.desktop_companion:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+codexscope = [
+  "analysis_prompts/*.txt",
+  "analysis_schemas/*.json",
+  "templates/*.toml.example",
+  "templates/*.html",
+  "policies/*.json",
+  "runtime/*.c",
+  "runtime/*.h",
+  "workbench_dist/*",
+  "workbench_dist/assets/*",
+]
+
+[tool.pytest.ini_options]
+markers = [
+  "external: explicitly enabled tests that call an external provider and may incur cost",
+]

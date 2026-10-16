@@ -1,0 +1,107 @@
+name: Lingmou Windows Release
+
+on:
+  push:
+    branches: [main]
+    paths: ['apps/lingmou/**', '.github/workflows/lingmou-windows-release.yml']
+    tags: ['lingmou-v*']
+  pull_request:
+    paths: ['apps/lingmou/**', '.github/workflows/lingmou-windows-release.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lingmou-windows-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 40
+    env:
+      PYTHONUTF8: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Locate desktop product
+        shell: pwsh
+        run: |
+          $root = if (Test-Path apps/lingmou/desktop/package.json) { 'apps/lingmou' } else { '.' }
+          "LINGMOU_ROOT=$root" >> $env:GITHUB_ENV
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.11.21'
+      - name: Install locked dependencies
+        working-directory: ${{ env.LINGMOU_ROOT }}
+        shell: pwsh
+        run: |
+          uv sync --locked --python 3.13 --extra desktop --extra test
+          if ($LASTEXITCODE -ne 0) { throw 'Python dependencies failed' }
+          npm ci --prefix web
+          if ($LASTEXITCODE -ne 0) { throw 'Web dependencies failed' }
+          npm ci --prefix desktop
+          if ($LASTEXITCODE -ne 0) { throw 'Desktop dependencies failed' }
+      - name: Validate version and run isolated regressions
+        working-directory: ${{ env.LINGMOU_ROOT }}
+        shell: pwsh
+        run: |
+          $version = (Get-Content desktop/package.json | ConvertFrom-Json).version
+          if ($env:GITHUB_REF_TYPE -eq 'tag' -and $env:GITHUB_REF_NAME -ne "lingmou-v$version") { throw 'Tag/version mismatch' }
+          .venv/Scripts/python.exe -m pytest tests/test_desktop_connection.py tests/test_desktop_companion.py tests/test_request_token_tap.py -q
+          if ($LASTEXITCODE -ne 0) { throw 'Provider lifecycle or relay regression failed' }
+          npm --prefix desktop test
+          if ($LASTEXITCODE -ne 0) { throw 'Desktop tests failed' }
+          npm --prefix web test
+          if ($LASTEXITCODE -ne 0) { throw 'Web tests failed' }
+      - name: Build Windows x64 installer and portable ZIP
+        working-directory: ${{ env.LINGMOU_ROOT }}
+        shell: pwsh
+        run: |
+          npm --prefix desktop run make:windows
+          if ($LASTEXITCODE -ne 0) { throw 'Windows packaging failed' }
+      - name: Check frozen backend against a local simulated upstream
+        working-directory: ${{ env.LINGMOU_ROOT }}
+        shell: pwsh
+        run: |
+          .venv/Scripts/python.exe desktop/scripts/check-companion.py desktop/dist/backend/lingmou-backend/lingmou-backend.exe
+          if ($LASTEXITCODE -ne 0) { throw 'Frozen backend smoke test failed' }
+          .venv/Scripts/python.exe desktop/scripts/collect-release.py
+          if ($LASTEXITCODE -ne 0) { throw 'Release collection failed' }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lingmou-win-x64
+          path: ${{ env.LINGMOU_ROOT }}/desktop/out/release/*
+          if-no-files-found: error
+          retention-days: 14
+
+  publish:
+    if: startsWith(github.ref, 'refs/tags/lingmou-v')
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: lingmou-win-x64
+          path: release
+      - name: Verify and publish the complete release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ github.ref_name }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          (cd release && sha256sum --check SHA256SUMS.txt)
+          notes=desktop/RELEASE_NOTES.md
+          if [ -f apps/lingmou/desktop/RELEASE_NOTES.md ]; then notes=apps/lingmou/desktop/RELEASE_NOTES.md; fi
+          gh release create "$RELEASE_TAG" release/* --verify-tag --draft \
+            --title "Lingmou ${RELEASE_TAG#lingmou-v} · Windows x64" --notes-file "$notes"
+          gh release edit "$RELEASE_TAG" --draft=false --latest

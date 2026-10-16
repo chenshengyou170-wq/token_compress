@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="application-version" content="__CODEXSCOPE_VERSION__">
+  <title>灵眸 · Agent 实时行为监控</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fa;
+      --panel: #fff;
+      --soft: #f8fafc;
+      --ink: #152033;
+      --text: #344054;
+      --muted: #77839a;
+      --line: #e1e6ee;
+      --blue: #315eea;
+      --blue-soft: #edf2ff;
+      --green: #087a55;
+      --green-soft: #e9f8f1;
+      --amber: #a55b08;
+      --amber-soft: #fff5df;
+      --red: #b42318;
+      --red-strong: #8f1d14;
+      --red-soft: #fff0ef;
+      --violet: #6f4ad1;
+      --violet-soft: #f1edff;
+      --shadow: 0 8px 28px rgba(29, 44, 71, .055);
+    }
+    * { box-sizing: border-box; }
+    body { min-width: 320px; min-height: 100vh; margin: 0; color: var(--text); background: var(--bg); font: 15px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif; }
+    body.startup-open { overflow: hidden; }
+    button { font: inherit; }
+    code, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .app { width: min(1500px, calc(100% - 32px)); margin: 0 auto; padding: 16px 0 28px; transition: opacity .35s ease, filter .35s ease; }
+    body.startup-open .app { opacity: .16; filter: blur(8px); }
+    .topbar { display: flex; min-height: 66px; align-items: center; justify-content: space-between; gap: 20px; padding: 0 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); box-shadow: var(--shadow); }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-mark { position: relative; width: 32px; height: 32px; border-radius: 9px; background: var(--blue); }
+    .brand-mark::before, .brand-mark::after { position: absolute; inset: 8px; border: 1.5px solid #fff; border-radius: 50%; content: ""; }
+    .brand-mark::after { transform: rotate(60deg); }
+    .brand-title { display: flex; align-items: center; gap: 9px; }
+    .brand h1 { margin: 0; color: var(--ink); font-size: 17px; line-height: 1.25; }
+    .brand p { margin: 1px 0 0; color: var(--muted); font-size: 14px; }
+    .version-badge { display: inline-flex; align-items: center; min-height: 38px; padding: 7px 14px; border: 1px solid #cdd8fa; border-radius: 999px; color: var(--blue); background: var(--blue-soft); font: 800 20px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: .02em; }
+    .connection { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; }
+    .connection-dot { width: 8px; height: 8px; border-radius: 50%; background: #b4bdca; }
+    .connection.online .connection-dot { background: #1ab47b; box-shadow: 0 0 0 4px rgba(26,180,123,.11); }
+    .connection.offline .connection-dot { background: var(--red); }
+    .context { display: grid; grid-template-columns: minmax(190px,.8fr) minmax(320px,1.7fr) minmax(180px,1fr) auto; gap: 0; margin-top: 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); box-shadow: var(--shadow); overflow: hidden; }
+    .context-item { min-width: 0; padding: 11px 16px; border-right: 1px solid var(--line); }
+    .context-item:last-child { border-right: 0; }
+    .context-item span { display: block; color: var(--muted); font-size: 12px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+    .context-item strong { display: block; margin-top: 3px; overflow: hidden; color: var(--ink); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+    .live-label { display: inline-flex !important; align-items: center; gap: 6px; width: fit-content; color: var(--green) !important; }
+    .live-label::before { width: 6px; height: 6px; border-radius: 50%; background: currentColor; content: ""; }
+    .metrics { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 9px; margin-top: 10px; }
+    .metric { min-height: 82px; padding: 13px 15px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); box-shadow: var(--shadow); }
+    .metric span { color: var(--muted); font-size: 13px; }
+    .metric strong { display: block; margin-top: 5px; color: var(--ink); font-size: 23px; line-height: 1; }
+    .metric small { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; }
+    .metric.risk strong { color: var(--amber); }
+    .metric.blocked strong { color: var(--red); }
+    .workspace { display: grid; grid-template-columns: minmax(0,1fr) 340px; gap: 10px; margin-top: 10px; }
+    .panel { border: 1px solid var(--line); border-radius: 14px; background: var(--panel); box-shadow: var(--shadow); }
+    .panel-head { display: flex; min-height: 58px; align-items: center; justify-content: space-between; gap: 14px; padding: 0 17px; border-bottom: 1px solid var(--line); }
+    .panel-head h2 { margin: 0; color: var(--ink); font-size: 14px; }
+    .panel-head p { margin: 1px 0 0; color: var(--muted); font-size: 13px; }
+    .filters { display: flex; flex-wrap: wrap; gap: 5px; }
+    .filter { padding: 5px 9px; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); background: #fff; cursor: pointer; font-size: 13px; }
+    .filter.active { color: var(--blue); border-color: #b9c9f9; background: var(--blue-soft); font-weight: 700; }
+    .feed-head, .event { display: grid; grid-template-columns: 78px 88px minmax(270px,1fr) 100px 86px; align-items: center; gap: 10px; }
+    .feed-head { min-height: 34px; padding: 0 15px; color: var(--muted); background: var(--soft); border-bottom: 1px solid var(--line); font-size: 12px; font-weight: 700; letter-spacing: .06em; }
+    .feed { height: calc(100vh - 410px); min-height: 360px; max-height: 680px; overflow-y: auto; }
+    .event { position: relative; min-height: 66px; padding: 9px 15px; border-bottom: 1px solid #edf0f5; transition: background .15s ease; }
+    .event:last-child { border-bottom: 0; }
+    .event:hover { background: #fafbfe; }
+    .event.new { animation: flash 1.2s ease; }
+    .event.risk-high, .event.risk-critical { background: linear-gradient(90deg, rgba(196,63,63,.045), transparent 44%); }
+    .event-time { color: var(--muted); font-size: 12px; }
+    .source { display: inline-flex; width: fit-content; padding: 3px 7px; border-radius: 6px; color: var(--blue); background: var(--blue-soft); font-size: 12px; font-weight: 700; }
+    .source.syscall { color: var(--violet); background: var(--violet-soft); }
+    .source.approval { color: var(--amber); background: var(--amber-soft); }
+    .event-main { min-width: 0; }
+    .event-main strong { display: block; color: var(--ink); font-size: 12px; }
+    .event-main code { display: block; margin-top: 2px; overflow: hidden; color: #4e5d73; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+    .event-target { margin-top: 2px; overflow: hidden; color: var(--muted); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+    .badge { display: inline-flex; align-items: center; justify-content: center; width: fit-content; min-width: 58px; padding: 3px 7px; border-radius: 999px; font-size: 12px; font-weight: 750; }
+    .badge.risk-normal { color: var(--green); background: var(--green-soft); }
+    .badge.risk-notice { color: var(--blue); background: var(--blue-soft); }
+    .badge.risk-warning { color: var(--amber); background: var(--amber-soft); }
+    .badge.risk-high, .badge.risk-critical { color: var(--red); background: var(--red-soft); }
+    .status-completed { color: var(--green); background: var(--green-soft); }
+    .status-running { color: var(--blue); background: var(--blue-soft); }
+    .status-review { color: var(--amber); background: var(--amber-soft); }
+    .status-blocked, .status-failed { color: var(--red); background: var(--red-soft); }
+    .empty { display: grid; min-height: 260px; place-items: center; color: var(--muted); font-size: 12px; }
+    .side { display: grid; align-content: start; gap: 10px; }
+    .side-card { padding: 16px; }
+    .side-title { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 11px; border-bottom: 1px solid var(--line); }
+    .side-title h2 { margin: 0; color: var(--ink); font-size: 13px; }
+    .current-action { margin-top: 13px; }
+    .current-action > span { color: var(--muted); font-size: 12px; }
+    .current-action > strong { display: block; margin-top: 5px; color: var(--ink); font-size: 15px; }
+    .current-command { display: block; max-height: 110px; margin-top: 8px; padding: 10px; overflow: auto; border: 1px solid var(--line); border-radius: 8px; color: #34435a; background: var(--soft); font-size: 12px; overflow-wrap: anywhere; white-space: pre-wrap; }
+    .facts { display: grid; gap: 0; margin-top: 10px; }
+    .fact { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid #edf0f5; }
+    .fact:last-child { border-bottom: 0; }
+    .fact span { color: var(--muted); font-size: 12px; }
+    .fact strong { max-width: 65%; color: var(--ink); font-size: 12px; text-align: right; overflow-wrap: anywhere; }
+    .enforcement { border-left: 3px solid var(--green); }
+    .enforcement.detected, .enforcement.review { border-left-color: var(--amber); }
+    .enforcement.blocked { border-left-color: var(--red); }
+    .decision { display: flex; align-items: center; gap: 11px; margin-top: 13px; }
+    .decision-mark { display: grid; width: 40px; height: 40px; flex: 0 0 auto; place-items: center; border-radius: 10px; color: var(--green); background: var(--green-soft); font-size: 18px; font-weight: 800; }
+    .enforcement.detected .decision-mark, .enforcement.review .decision-mark { color: var(--amber); background: var(--amber-soft); }
+    .enforcement.blocked .decision-mark { color: var(--red); background: var(--red-soft); }
+    .decision strong { display: block; color: var(--ink); font-size: 15px; }
+    .decision span { color: var(--muted); font-size: 12px; }
+    .reasons { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+    .reason { padding: 4px 7px; border: 1px solid var(--line); border-radius: 7px; color: #58677d; background: var(--soft); font-size: 12px; }
+    .scope-note { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+    .error { display: none; margin-top: 10px; padding: 9px 12px; border: 1px solid #f0c2be; border-radius: 9px; color: var(--red); background: var(--red-soft); }
+    .error.visible { display: block; }
+    .event { cursor: pointer; }
+    .event.selected { background: #f0f4ff; box-shadow: inset 3px 0 0 var(--blue); }
+    .policy-hit-list { display: grid; gap: 9px; margin-top: 13px; }
+    .policy-hit { padding: 11px 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--soft); }
+    .policy-hit-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .policy-hit-name { min-width: 0; }
+    .policy-hit-name strong { display: block; color: var(--ink); font-size: 14px; }
+    .policy-hit-name code { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; }
+    .policy-hit-result { flex: 0 0 auto; padding: 4px 8px; border-radius: 999px; color: var(--amber); background: var(--amber-soft); font-size: 12px; font-weight: 750; }
+    .policy-hit-result.blocked { color: var(--red); background: var(--red-soft); }
+    .policy-hit-action { margin-top: 8px; color: #526176; font-size: 12px; }
+    .policy-empty { margin-top: 13px; padding: 14px; border: 1px dashed var(--line); border-radius: 9px; color: var(--muted); background: var(--soft); font-size: 13px; text-align: center; }
+    .analysis-board { margin-top: 10px; overflow: hidden; }
+    .analysis-board-head { display: flex; min-height: 68px; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 17px; border-bottom: 1px solid var(--line); }
+    .analysis-board-head h2 { margin: 0; color: var(--ink); font-size: 18px; }
+    .analysis-board-head p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+    .analysis-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 10px; background: var(--soft); }
+    .analysis-agent-card { min-width: 0; min-height: 250px; padding: 15px; border: 1px solid var(--line); border-top: 3px solid var(--blue); border-radius: 11px; background: var(--panel); }
+    .analysis-agent-card[data-agent-card="vulnerability_behavior"] { border-top-color: var(--amber); }
+    .analysis-agent-card[data-agent-card="dangerous_behavior"] { border-top-color: var(--red); }
+    .analysis-agent-card[data-agent-card="overall_behavior"] { border-top-color: var(--violet); }
+    .analysis-agent-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .analysis-agent-title strong { display: block; color: var(--ink); font-size: 16px; }
+    .analysis-agent-state { display: block; margin-top: 2px; color: var(--muted); font-size: 13px; }
+    .analysis-summary { min-height: 64px; margin: 10px 0 0; color: #536177; font-size: 15px; }
+    .analysis-items { display: grid; gap: 7px; margin-top: 11px; }
+    .analysis-item { padding: 9px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--soft); }
+    .analysis-item strong { display: block; color: var(--ink); font-size: 14px; }
+    .analysis-item span { display: block; margin-top: 4px; color: #536177; font-size: 14px; line-height: 1.55; overflow-wrap: anywhere; }
+
+    .event.risk-high .event-main strong, .event.risk-critical .event-main strong { color: var(--red-strong); }
+    .event.risk-critical .event-main code { color: var(--red); font-weight: 700; }
+    .policy-hit-name strong { color: var(--red-strong); }
+    .enforcement.blocked .decision strong { color: var(--red-strong); }
+    .analysis-agent-card.risk-high, .analysis-agent-card.risk-critical { border-color: #efc0bb; border-top-color: var(--red); background: #fffafa; }
+    .analysis-agent-card.risk-high .analysis-agent-title strong,
+    .analysis-agent-card.risk-critical .analysis-agent-title strong,
+    .analysis-agent-card.risk-high .analysis-item strong,
+    .analysis-agent-card.risk-critical .analysis-item strong { color: var(--red-strong); }
+
+    .startup-screen { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 24px; overflow: auto; color: #dfe8ff; background: #071226; opacity: 1; visibility: visible; transition: opacity .42s ease, visibility .42s ease; }
+    .startup-screen::before { position: absolute; width: min(760px, 82vw); height: min(760px, 82vw); border: 1px solid rgba(112,145,222,.12); border-radius: 50%; background: radial-gradient(circle, rgba(49,94,234,.2) 0, rgba(49,94,234,.06) 38%, transparent 69%); content: ""; }
+    .startup-screen::after { position: absolute; inset: 0; background-image: linear-gradient(rgba(131,153,204,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(131,153,204,.04) 1px, transparent 1px); background-size: 48px 48px; mask-image: radial-gradient(circle at center, #000, transparent 72%); content: ""; }
+    .startup-screen.is-ready { opacity: 0; visibility: hidden; pointer-events: none; }
+    .startup-card { position: relative; z-index: 1; width: min(520px, 100%); padding: 34px; border: 1px solid rgba(142,165,222,.2); border-radius: 24px; background: rgba(13,29,57,.84); box-shadow: 0 28px 90px rgba(0,0,0,.34); backdrop-filter: blur(18px); }
+    .startup-brand { display: flex; align-items: center; gap: 14px; }
+    .startup-mark { position: relative; display: grid; width: 54px; height: 54px; flex: 0 0 auto; place-items: center; border: 1px solid rgba(151,177,244,.35); border-radius: 16px; background: linear-gradient(145deg, #3d6df3, #2446ba); box-shadow: 0 12px 30px rgba(49,94,234,.32); }
+    .startup-mark::before, .startup-mark::after { position: absolute; inset: 14px; border: 1.5px solid #fff; border-radius: 50%; content: ""; }
+    .startup-mark::after { transform: rotate(60deg); }
+    .startup-brand-text { min-width: 0; }
+    .startup-kicker { margin: 0 0 2px; color: #8197c8; font-size: 11px; font-weight: 800; letter-spacing: .16em; }
+    .startup-brand h1 { margin: 0; color: #fff; font-size: 25px; line-height: 1.2; }
+    .startup-version { margin-left: auto; padding: 10px 15px; border: 1px solid rgba(142,165,222,.24); border-radius: 999px; color: #a9bce8; background: rgba(255,255,255,.035); font: 800 24px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .startup-copy { margin-top: 34px; }
+    .startup-copy h2 { margin: 0; color: #f7f9ff; font-size: clamp(24px, 5vw, 32px); line-height: 1.25; letter-spacing: -.02em; }
+    .startup-copy p { min-height: 26px; margin: 10px 0 0; color: #94a7d2; font-size: 14px; }
+    .startup-steps { display: grid; gap: 10px; margin: 28px 0 0; padding: 0; list-style: none; }
+    .startup-step { display: grid; grid-template-columns: 22px minmax(0,1fr) auto; align-items: center; gap: 11px; min-height: 42px; padding: 0 12px; border: 1px solid rgba(142,165,222,.11); border-radius: 11px; color: #8fa2cd; background: rgba(255,255,255,.025); font-size: 13px; transition: border-color .2s ease, color .2s ease, background .2s ease; }
+    .startup-step::before { display: grid; width: 18px; height: 18px; place-items: center; border: 1px solid #566b9d; border-radius: 50%; color: transparent; content: "✓"; font-size: 11px; }
+    .startup-step span { color: #667aa9; font-size: 12px; }
+    .startup-step.is-active { border-color: rgba(91,130,235,.38); color: #e9efff; background: rgba(49,94,234,.1); }
+    .startup-step.is-active::before { border: 2px solid #6f95ff; border-top-color: transparent; animation: startup-spin .8s linear infinite; }
+    .startup-step.is-active span { color: #9bb4f5; }
+    .startup-step.is-done { color: #cdd9f6; }
+    .startup-step.is-done::before { border-color: #42c996; color: #071f1a; background: #42c996; }
+    .startup-step.is-done span { color: #70d8b2; }
+    .startup-step.is-error { border-color: rgba(244,105,94,.35); color: #ffd8d4; background: rgba(180,35,24,.1); }
+    .startup-step.is-error::before { border-color: #ef746a; color: #ef746a; content: "!"; }
+    .startup-step.is-error span { color: #ef8d85; }
+    .startup-retry { width: 100%; margin-top: 18px; padding: 10px 16px; border: 1px solid rgba(126,158,241,.45); border-radius: 10px; color: #eef3ff; background: rgba(49,94,234,.2); cursor: pointer; font-weight: 750; }
+    .startup-retry:hover { background: rgba(49,94,234,.32); }
+    .startup-retry:focus-visible { outline: 3px solid rgba(126,158,241,.38); outline-offset: 2px; }
+    .startup-footer { margin: 20px 0 0; color: #6175a4; font-size: 12px; text-align: center; }
+    @keyframes startup-spin { to { transform: rotate(360deg); } }
+
+    /* The console is intended for wall displays and normal laptop viewing. */
+    body { font-size: 17px; line-height: 1.6; }
+    .app { width: min(1540px, calc(100% - 32px)); }
+    .topbar { min-height: 82px; }
+    .brand-mark { width: 42px; height: 42px; }
+    .brand h1 { font-size: 23px; }
+    .brand p, .connection { font-size: 15px; }
+    .context-item { padding: 13px 17px; }
+    .context-item span { font-size: 13px; }
+    .context-item strong { font-size: 16px; }
+    .metric { min-height: 104px; padding: 16px 18px; }
+    .metric span { font-size: 15px; }
+    .metric strong { font-size: 32px; }
+    .metric small { font-size: 14px; }
+    .workspace { grid-template-columns: minmax(0,1fr) 430px; }
+    .panel-head { min-height: 74px; }
+    .panel-head h2 { font-size: 20px; }
+    .panel-head p, .filter { font-size: 14px; }
+    .filter { padding: 6px 11px; }
+    .feed-head { min-height: 42px; font-size: 13px; }
+    .feed { height: calc(100vh - 310px); min-height: 450px; }
+    .event { min-height: 88px; padding: 13px 15px; }
+    .event-time, .source, .badge { font-size: 13px; }
+    .event-main strong { font-size: 16px; }
+    .event-main code { font-size: 14px; }
+    .event-target { font-size: 13px; }
+    .empty { font-size: 15px; }
+    .side-card { padding: 18px; }
+    .side-title h2 { font-size: 18px; }
+    .current-action > span { font-size: 14px; }
+    .current-action > strong { font-size: 19px; }
+    .current-command { font-size: 14px; }
+    .fact span, .fact strong { font-size: 14px; }
+    .decision strong { font-size: 20px; }
+    .decision span, .reason, .scope-note { font-size: 14px; }
+    .analysis-board-head h2 { font-size: 21px; }
+    .analysis-board-head p { font-size: 14px; }
+    .analysis-agent-title strong { font-size: 18px; }
+    .analysis-agent-state { font-size: 14px; }
+    .analysis-summary { font-size: 16px; }
+    .analysis-item strong { font-size: 15px; }
+    .analysis-item span { font-size: 15px; }
+    @keyframes flash { 0% { background: #eaf0ff; } 100% { background: transparent; } }
+    @media (max-width: 1050px) { .workspace { grid-template-columns: 1fr; } .side { grid-template-columns: 1fr 1fr; } .feed { height: 560px; } }
+    @media (max-width: 780px) { .app { width: calc(100% - 18px); padding-top: 9px; } .brand-title { align-items: flex-start; flex-direction: column; gap: 4px; } .context { grid-template-columns: 1fr 1fr; } .context-item:nth-child(2) { border-right: 0; } .context-item:nth-child(-n+2) { border-bottom: 1px solid var(--line); } .metrics { grid-template-columns: repeat(2,1fr); } .metric:first-child { grid-column: 1 / -1; } .analysis-board-head { align-items: flex-start; flex-direction: column; } .analysis-grid { grid-template-columns: 1fr; } .panel-head { align-items: flex-start; flex-direction: column; padding: 12px; } .feed-head { display: none; } .event { grid-template-columns: 74px minmax(0,1fr) auto; gap: 7px; } .event .source { grid-column: 1; } .event-main { grid-column: 2 / -1; grid-row: 1 / span 2; } .event > .badge:last-child { grid-column: 3; grid-row: 3; } .side { grid-template-columns: 1fr; } .startup-card { padding: 25px 20px; border-radius: 19px; } .startup-version { align-self: flex-start; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body class="startup-open">
+  <div class="startup-screen" id="startup-screen" role="dialog" aria-modal="true" aria-labelledby="startup-title">
+    <section class="startup-card" aria-labelledby="startup-title">
+      <div class="startup-brand">
+        <span class="startup-mark" aria-hidden="true"></span>
+        <div class="startup-brand-text">
+          <p class="startup-kicker">LINGMOU AGENT SECURITY</p>
+          <h1>灵眸</h1>
+        </div>
+        <span class="startup-version">v__CODEXSCOPE_VERSION__</span>
+      </div>
+      <div class="startup-copy">
+        <h2 id="startup-title">正在建立安全观测视图</h2>
+        <p id="startup-message" role="status" aria-live="polite">加载监控配置与本地策略…</p>
+      </div>
+      <ol class="startup-steps" aria-label="启动进度">
+        <li class="startup-step is-active" data-startup-step="configuration">加载运行配置 <span data-startup-label>进行中</span></li>
+        <li class="startup-step" data-startup-step="connection">连接监控服务 <span data-startup-label>等待</span></li>
+        <li class="startup-step" data-startup-step="data">等待首个任务 <span data-startup-label>等待</span></li>
+      </ol>
+      <button class="startup-retry" id="startup-retry" type="button" hidden>重新连接</button>
+      <p class="startup-footer">本地运行 · 监控数据保留在当前工作区</p>
+    </section>
+  </div>
+
+  <main class="app" id="app-shell" aria-busy="true" aria-hidden="true" inert>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <div>
+          <div class="brand-title"><h1>灵眸 · Agent 实时行为监控</h1><span class="version-badge">v__CODEXSCOPE_VERSION__</span></div>
+          <p>工具调用与 Linux syscall 持续采集</p>
+        </div>
+      </div>
+      <div class="connection" id="connection"><span class="connection-dot"></span><strong id="connection-text">连接中</strong><span class="mono" id="refresh-age">—</span></div>
+    </header>
+    <div class="error" id="error"></div>
+
+    <section class="context" aria-label="当前 Codex 会话">
+      <div class="context-item"><span>当前状态</span><strong class="live-label" id="activity">等待 Codex</strong></div>
+      <div class="context-item"><span>工作区</span><strong class="mono" id="workspace">—</strong></div>
+      <div class="context-item"><span>模型 / Turn</span><strong class="mono" id="model-turn">—</strong></div>
+      <div class="context-item"><span>Run ID</span><strong class="mono" id="run-id">—</strong></div>
+    </section>
+
+    <section class="metrics" aria-label="实时统计">
+      <article class="metric"><span>Agent 当前任务</span><strong id="active-count">0</strong><small id="active-detail">暂无运行中的工具</small></article>
+      <article class="metric"><span>工具调用</span><strong id="tool-count">0</strong><small>Codex app-server</small></article>
+      <article class="metric"><span>命令执行</span><strong id="command-count">0</strong><small>实时命令边界</small></article>
+      <article class="metric"><span>底层行为</span><strong id="low-level-count">0</strong><small id="low-level-state">等待 syscall / 文件审计</small></article>
+      <article class="metric risk"><span>策略命中 / 拦截</span><strong><span id="policy-hit-count">0</span> / <span id="blocked-count">0</span></strong><small id="enforcement-summary">未发现风险</small></article>
+    </section>
+
+    <section class="panel analysis-board" id="analysis-card" aria-label="四个实时分析 Agent">
+      <div class="analysis-board-head">
+        <div><h2 id="analysis-title">实时分析 Agent</h2><p id="analysis-meta">Codex 后端增量分析 · 四个角色同步展示</p></div>
+        <span class="badge status-running" id="analysis-runtime">启动中</span>
+      </div>
+      <div class="analysis-grid" id="analysis-grid">
+        <article class="analysis-agent-card" data-agent-card="behavior_prediction">
+          <div class="analysis-agent-head">
+            <div class="analysis-agent-title"><strong>行为分析与预测</strong><span class="analysis-agent-state" id="analysis-behavior_prediction-state">等待事件</span></div>
+            <span class="badge risk-normal" id="analysis-behavior_prediction-risk">正常</span>
+          </div>
+          <p class="analysis-summary" id="analysis-behavior_prediction-summary">等待 Codex 分析行为阶段与后续趋势。</p>
+          <div class="analysis-items" id="analysis-behavior_prediction-items"></div>
+        </article>
+        <article class="analysis-agent-card" data-agent-card="vulnerability_behavior">
+          <div class="analysis-agent-head">
+            <div class="analysis-agent-title"><strong>漏洞行为识别</strong><span class="analysis-agent-state" id="analysis-vulnerability_behavior-state">等待事件</span></div>
+            <span class="badge risk-normal" id="analysis-vulnerability_behavior-risk">正常</span>
+          </div>
+          <p class="analysis-summary" id="analysis-vulnerability_behavior-summary">等待 Codex 识别漏洞侦察、利用与影响证据。</p>
+          <div class="analysis-items" id="analysis-vulnerability_behavior-items"></div>
+        </article>
+        <article class="analysis-agent-card" data-agent-card="dangerous_behavior">
+          <div class="analysis-agent-head">
+            <div class="analysis-agent-title"><strong>危险行为识别</strong><span class="analysis-agent-state" id="analysis-dangerous_behavior-state">等待事件</span></div>
+            <span class="badge risk-normal" id="analysis-dangerous_behavior-risk">正常</span>
+          </div>
+          <p class="analysis-summary" id="analysis-dangerous_behavior-summary">等待 Codex 研判高危操作与实际处置结果。</p>
+          <div class="analysis-items" id="analysis-dangerous_behavior-items"></div>
+        </article>
+        <article class="analysis-agent-card" data-agent-card="overall_behavior">
+          <div class="analysis-agent-head">
+            <div class="analysis-agent-title"><strong>总体行为分析</strong><span class="analysis-agent-state" id="analysis-overall_behavior-state">等待事件</span></div>
+            <span class="badge risk-normal" id="analysis-overall_behavior-risk">正常</span>
+          </div>
+          <p class="analysis-summary" id="analysis-overall_behavior-summary">等待 Codex 汇总行为链、总体风险和处置建议。</p>
+          <div class="analysis-items" id="analysis-overall_behavior-items"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <div class="panel">
+        <div class="panel-head">
+          <div><h2>Agent 正在做什么</h2><p>每 500ms 更新；汇总工具调用、syscall 与文件审计事件</p></div>
+          <div class="filters" id="filters">
+            <button class="filter active" type="button" data-filter="all">全部</button>
+            <button class="filter" type="button" data-filter="command">命令</button>
+            <button class="filter" type="button" data-filter="syscall">系统调用</button>
+            <button class="filter" type="button" data-filter="file">文件</button>
+            <button class="filter" type="button" data-filter="risk">风险</button>
+            <button class="filter" type="button" data-filter="blocked">已拦截</button>
+          </div>
+        </div>
+        <div class="feed-head"><span>时间</span><span>来源</span><span>行为</span><span>风险</span><span>结果</span></div>
+        <div class="feed" id="feed"></div>
+      </div>
+
+      <aside class="side">
+        <section class="panel side-card">
+          <div class="side-title"><h2>行为详情</h2><span class="badge status-running" id="current-status">等待</span></div>
+          <div class="current-action">
+            <span id="current-source">—</span>
+            <strong id="current-action">Codex 尚未执行工具</strong>
+            <code class="current-command" id="current-detail">等待实时事件…</code>
+          </div>
+          <div class="facts">
+            <div class="fact"><span>目标</span><strong id="current-target">—</strong></div>
+            <div class="fact"><span>PID / TID</span><strong class="mono" id="current-pid">—</strong></div>
+            <div class="fact"><span>检测依据</span><strong id="current-basis">—</strong></div>
+          </div>
+        </section>
+
+        <section class="panel side-card enforcement" id="enforcement-card">
+          <div class="side-title"><h2>触发的风控策略</h2><span class="badge risk-normal" id="enforcement-badge">正常</span></div>
+          <div class="decision">
+            <span class="decision-mark" id="decision-mark">✓</span>
+            <div><strong id="decision-label">未发现风险</strong><span id="decision-source">CodexScope 实时规则</span></div>
+          </div>
+          <div class="reasons" id="reasons"></div>
+          <div class="policy-hit-list" id="policy-hit-list"></div>
+          <p class="scope-note" id="scope-note">这里只显示当前行为实际命中的策略，不展示本地策略库。</p>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <script id="initial-live-security" type="application/json">__CODEXSCOPE_LIVE_SECURITY_DATA__</script>
+  <script>
+    (() => {
+      "use strict";
+      const API = "/api/live-security";
+      const POLL_MS = 500;
+      const STARTUP_MIN_MS = 700;
+      const startupStartedAt = performance.now();
+      const state = { payload: null, filter: "all", known: new Set(), receivedAt: 0, selectedEventId: null, startupResolved: false, polling: false };
+      const analysisAgentIds = ["behavior_prediction", "vulnerability_behavior", "dangerous_behavior", "overall_behavior"];
+      const $ = (id) => document.getElementById(id);
+      const labels = {
+        activity: { idle: "等待 Codex", waiting_model: "模型思考中", streaming: "生成回复中", local_tool: "执行本地工具", awaiting_user: "等待批准", stalled: "会话停滞" },
+        risk: { normal: "正常", notice: "关注", warning: "警告", high: "高风险", critical: "严重" },
+        status: { completed: "完成", running: "运行中", review: "待批准", blocked: "已拦截", failed: "失败" },
+        source: { codex_app_server: "Codex", linux_strace: "syscall", linux_inotify: "文件审计", codex_approval: "审批", codexscope_policy: "策略" },
+        control: { observe: "继续观察", warn: "告警", review: "人工复核", block: "执行前阻断", isolate: "隔离" },
+        stage: { observed: "已观察", requested: "已请求", review: "待审批", executed: "已执行", failed: "执行失败", blocked: "已阻断", unknown: "待确认" },
+      };
+
+      function setText(id, value) { const node = $(id); if (node) node.textContent = value ?? "—"; }
+      function setStartupStep(name, status, label) {
+        const step = document.querySelector(`[data-startup-step="${name}"]`);
+        if (!step) return;
+        step.classList.remove("is-active", "is-done", "is-error");
+        if (status) step.classList.add(`is-${status}`);
+        const statusLabel = step.querySelector("[data-startup-label]");
+        if (statusLabel) statusLabel.textContent = label;
+      }
+      function hasStartedTurn(payload) {
+        return typeof payload?.turn_id === "string" && payload.turn_id.trim().length > 0;
+      }
+      function waitForFirstPrompt() {
+        if (state.startupResolved) return;
+        setStartupStep("configuration", "done", "已加载");
+        setStartupStep("connection", "done", "已连接");
+        setStartupStep("data", "active", "等待提示词");
+        setText("startup-title", "灵眸已就绪，等待首个任务");
+        setText("startup-message", "请在 Codex 中发送第一条提示词；任务开始后将自动进入实时控制台。");
+        $("startup-retry").hidden = true;
+      }
+      function completeStartup() {
+        if (state.startupResolved) return;
+        state.startupResolved = true;
+        setStartupStep("configuration", "done", "已加载");
+        setStartupStep("connection", "done", "已连接");
+        setStartupStep("data", "done", "已就绪");
+        setText("startup-title", "安全观测视图已就绪");
+        setText("startup-message", "实时行为证据与分析 Agent 已同步。即将进入控制台…");
+        $("startup-retry").hidden = true;
+        const remaining = Math.max(120, STARTUP_MIN_MS - (performance.now() - startupStartedAt));
+        window.setTimeout(() => {
+          document.body.classList.remove("startup-open");
+          const appShell = $("app-shell");
+          appShell.setAttribute("aria-busy", "false");
+          appShell.setAttribute("aria-hidden", "false");
+          appShell.removeAttribute("inert");
+          const screen = $("startup-screen");
+          screen.classList.add("is-ready");
+          window.setTimeout(() => { screen.hidden = true; }, 460);
+        }, remaining);
+      }
+      function showStartupError(error) {
+        if (state.startupResolved) return;
+        setStartupStep("configuration", "done", "已加载");
+        setStartupStep("connection", "error", "连接失败");
+        setStartupStep("data", "", "等待");
+        setText("startup-title", "监控服务尚未就绪");
+        setText("startup-message", `${error.message}。启动监控后可自动重连，或点击下方按钮重试。`);
+        $("startup-retry").hidden = false;
+      }
+      function number(value) { const parsed = Number(value); return Number.isFinite(parsed) ? Math.round(parsed).toLocaleString("zh-CN") : "0"; }
+      function timeLabel(value) { if (!Number.isFinite(Number(value)) || Number(value) <= 0) return "—"; return new Date(Number(value) * 1000).toLocaleTimeString("zh-CN", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit", fractionalSecondDigits: 3 }); }
+      function sourceClass(value) { return value === "linux_strace" || value === "linux_inotify" ? "syscall" : value === "codex_approval" || value === "codexscope_policy" ? "approval" : ""; }
+      function riskRank(value) { return ({ normal: 0, notice: 1, warning: 2, high: 3, critical: 4 })[value] || 0; }
+
+      function filteredEvents() {
+        const events = state.payload?.events || [];
+        if (state.filter === "all") return events;
+        if (state.filter === "command") return events.filter((event) => event.kind === "command" || event.kind === "tool");
+        if (state.filter === "syscall") return events.filter((event) => event.kind === "syscall" || event.kind === "network");
+        if (state.filter === "file") return events.filter((event) => event.kind === "file");
+        if (state.filter === "risk") return events.filter((event) => riskRank(event.risk?.level) >= 2);
+        if (state.filter === "blocked") return events.filter((event) => event.blocked);
+        return events;
+      }
+
+      function renderFeed() {
+        const feed = $("feed");
+        const events = filteredEvents();
+        feed.replaceChildren();
+        if (!events.length) {
+          const empty = document.createElement("div");
+          empty.className = "empty";
+          empty.textContent = state.filter === "all" ? "等待 Codex 行为事件" : "当前筛选下没有事件";
+          feed.append(empty);
+          return;
+        }
+        const fragment = document.createDocumentFragment();
+        events.forEach((event) => {
+          const row = document.createElement("article");
+          const level = event.risk?.level || "normal";
+          const selected = event.id === state.selectedEventId;
+          row.className = `event risk-${level}${selected ? " selected" : ""}${state.known.has(event.id) ? "" : " new"}`;
+          row.dataset.eventId = event.id;
+          row.tabIndex = 0;
+          row.setAttribute("role", "button");
+          row.setAttribute("aria-label", `查看行为：${event.action || "行为"}`);
+
+          const when = document.createElement("span"); when.className = "event-time mono"; when.textContent = timeLabel(event.timestamp);
+          const source = document.createElement("span"); source.className = `source ${sourceClass(event.source)}`; source.textContent = labels.source[event.source] || event.source;
+          const main = document.createElement("div"); main.className = "event-main";
+          const action = document.createElement("strong"); action.textContent = event.action || "行为";
+          const detail = document.createElement("code"); detail.textContent = event.detail || "—";
+          main.append(action, detail);
+          if (event.target) { const target = document.createElement("div"); target.className = "event-target"; target.textContent = `目标：${event.target}`; main.append(target); }
+          const risk = document.createElement("span"); risk.className = `badge risk-${level}`; risk.textContent = labels.risk[level] || level;
+          const status = event.status || "completed";
+          const result = document.createElement("span"); result.className = `badge status-${status}`; result.textContent = labels.status[status] || status;
+          row.append(when, source, main, risk, result);
+          fragment.append(row);
+        });
+        feed.append(fragment);
+        state.known = new Set((state.payload?.events || []).map((event) => event.id));
+      }
+
+      function renderCurrent(event) {
+        if (!event) {
+          setText("current-status", "等待"); setText("current-source", "—"); setText("current-action", "Codex 尚未执行工具"); setText("current-detail", "等待实时事件…"); setText("current-target", "—"); setText("current-pid", "—"); setText("current-basis", "—");
+          return;
+        }
+        const status = event.status || "completed";
+        const statusNode = $("current-status"); statusNode.className = `badge status-${status}`; statusNode.textContent = labels.status[status] || status;
+        setText("current-source", `${labels.source[event.source] || event.source} · ${timeLabel(event.timestamp)}`);
+        setText("current-action", event.action);
+        setText("current-detail", event.detail || "—");
+        setText("current-target", event.target || "—");
+        const technical = event.technical || {};
+        const pid = technical.pid || technical.process_id;
+        setText("current-pid", pid ? `${pid}${technical.tid ? ` / ${technical.tid}` : ""}` : "—");
+        setText("current-basis", event.risk?.basis || "—");
+      }
+
+      function selectedEvent(payload) {
+        const events = payload.events || [];
+        const existing = events.find((event) => event.id === state.selectedEventId);
+        if (existing) return existing;
+        const preferred = events.find((event) => event.blocked)
+          || events.find((event) => (event.policy_hits || []).length)
+          || payload.current
+          || events[0]
+          || null;
+        state.selectedEventId = preferred?.id || null;
+        return preferred;
+      }
+
+      function renderPolicyHits(hits) {
+        const list = $("policy-hit-list");
+        list.replaceChildren();
+        if (!hits.length) {
+          const empty = document.createElement("div");
+          empty.className = "policy-empty";
+          empty.textContent = "当前行为未触发风控策略";
+          list.append(empty);
+          return;
+        }
+        hits.forEach((hit) => {
+          const item = document.createElement("article");
+          item.className = "policy-hit";
+          const top = document.createElement("div");
+          top.className = "policy-hit-top";
+          const name = document.createElement("div");
+          name.className = "policy-hit-name";
+          const title = document.createElement("strong");
+          title.textContent = hit.name || "已命中策略";
+          const id = document.createElement("code");
+          id.textContent = hit.id || "—";
+          name.append(title, id);
+          const result = document.createElement("span");
+          result.className = `policy-hit-result${hit.result === "blocked" ? " blocked" : ""}`;
+          result.textContent = hit.result === "blocked" ? "已阻断" : "已触发";
+          top.append(name, result);
+          const action = document.createElement("div");
+          action.className = "policy-hit-action";
+          action.textContent = `处置：${hit.action || "记录"}`;
+          item.append(top, action);
+          list.append(item);
+        });
+      }
+
+      function renderEnforcement(payload, event) {
+        const hits = event?.policy_hits || [];
+        let enforcement = { state: "clear", label: "未触发策略", source: "当前选中行为" };
+        if (event?.blocked) enforcement = { state: "blocked", label: "已拦截", source: labels.source[event.source] || event.source };
+        else if (hits.length) enforcement = { state: "detected", label: `命中 ${hits.length} 条策略`, source: labels.source[event.source] || event.source };
+        else if (event?.status === "review") enforcement = { state: "review", label: "等待批准", source: labels.source[event.source] || event.source };
+        else if (riskRank(event?.risk?.level) >= 2) enforcement = { state: "detected", label: "检测到风险", source: labels.source[event.source] || event.source };
+
+        const card = $("enforcement-card"); card.className = `panel side-card enforcement ${enforcement.state}`;
+        const badge = $("enforcement-badge");
+        const badgeLevel = enforcement.state === "blocked" ? "high" : enforcement.state === "detected" || enforcement.state === "review" ? "warning" : "normal";
+        badge.className = `badge risk-${badgeLevel}`; badge.textContent = enforcement.label;
+        setText("decision-label", enforcement.label); setText("decision-source", enforcement.source);
+        setText("decision-mark", enforcement.state === "blocked" ? "×" : enforcement.state === "detected" || enforcement.state === "review" ? "!" : "✓");
+
+        const reasons = $("reasons"); reasons.replaceChildren();
+        (event?.risk?.reasons || []).forEach((value) => { const tag = document.createElement("span"); tag.className = "reason"; tag.textContent = value; reasons.append(tag); });
+        if (!reasons.childElementCount) { const tag = document.createElement("span"); tag.className = "reason"; tag.textContent = "未发现异常特征"; reasons.append(tag); }
+        renderPolicyHits(hits);
+        const mode = payload.policy?.mode === "enforce" ? "执行前拦截已开启" : "当前为观察模式";
+        setText("scope-note", `${mode} · 本地策略库未在前端展开`);
+      }
+
+      function analysisLevel(agentId, result) {
+        if (agentId === "overall_behavior") {
+          const score = Number(result?.risk_score || 0);
+          return score >= 80 ? "critical" : score >= 60 ? "high" : score >= 30 ? "warning" : score >= 10 ? "notice" : "normal";
+        }
+        if (agentId === "dangerous_behavior") return result?.session_risk_level || "normal";
+        if (agentId === "vulnerability_behavior") return result?.highest_severity || "normal";
+        const levels = [...(result?.anomalies || []).map((item) => item.risk_level), ...(result?.predictions || []).map((item) => item.risk_level)];
+        return levels.sort((left, right) => riskRank(right) - riskRank(left))[0] || "normal";
+      }
+
+      function analysisItems(agentId, result) {
+        if (agentId === "behavior_prediction") {
+          const observed = (result?.anomalies || []).slice(-1).map((item) => ({
+            title: `已观察：${item.description || "异常行为"}`,
+            detail: `${labels.stage[item.stage] || item.stage || "待确认"} · 目标 ${item.target || "未识别"}${item.reason ? `；依据 ${item.reason}` : ""}${item.recommendation ? `；处置 ${item.recommendation}` : ""}`,
+          }));
+          const predictions = (result?.predictions || []).slice(0, 2).map((item) => ({
+            title: `预测 ${item.rank || ""}：${item.predicted_behavior || "未知行为"}`,
+            detail: `概率 ${Math.round(Number(item.probability || 0) * 100)}% · ${labels.risk[item.risk_level] || item.risk_level || "正常"} · ${labels.control[item.recommended_control] || item.recommended_control || "继续观察"}；依据 ${item.reasoning || "等待更多事件"}`,
+          }));
+          return [...observed, ...predictions].slice(0, 3);
+        }
+        if (agentId === "vulnerability_behavior") {
+          return (result?.findings || []).slice(0, 3).map((item) => ({
+            title: item.behavior || "漏洞相关行为",
+            detail: `${labels.stage[item.stage] || item.stage || "待确认"} · 目标 ${item.target || "未识别"}；指标 ${(item.matched_indicators || []).join("、") || "待确认"}；CWE/ATT&CK ${[...(item.possible_cwe || []), ...(item.possible_attack_techniques || [])].join("、") || "未确认"}；影响 ${item.impact_confirmed ? "已有底层证据" : "尚待确认"}`,
+          }));
+        }
+        if (agentId === "dangerous_behavior") {
+          return (result?.findings || []).slice(-3).reverse().map((item) => ({
+            title: `${item.behavior || "危险行为"} · ${item.blocked ? "已阻断" : labels.stage[item.stage] || item.stage || "待确认"}`,
+            detail: `${item.category || "risk"} · 目标 ${item.target || "未识别"}；原因 ${item.reason || "等待更多证据"}；策略 ${(item.triggered_policy_ids || []).join("、") || "未命中编号策略"}；影响 ${item.impact_confirmed ? "已确认" : "未确认"}`,
+          }));
+        }
+        const chains = (result?.behavior_chains || []).slice(0, 2).map((item) => ({
+          title: item.chain_name || "关联行为链",
+          detail: `${labels.stage[item.stage] || item.stage || "已观察"} · 目标 ${item.target || "未识别"}；${item.analysis ? `分析：${item.analysis}；` : ""}策略 ${(item.policy_ids || []).join("、") || "未命中编号策略"}；证据 ${(item.event_ids || []).join(" → ") || "—"}`,
+        }));
+        const facts = (result?.confirmed_facts || []).slice(0, 2).map((value) => ({ title: "已确认事实", detail: value }));
+        const actions = (result?.recommended_actions || []).slice(0, 2).map((value) => ({ title: "处置建议", detail: value }));
+        return [...chains, ...facts, ...actions].slice(0, 6);
+      }
+
+      function renderAnalysis(payload) {
+        const analysis = payload.analysis || {};
+        const runtime = analysis.runtime || {};
+        const agents = analysis.agents || {};
+        setText("analysis-title", runtime.provider === "local" ? "本地策略实时分析" : "实时分析 Agent");
+        const runtimeBadge = $("analysis-runtime");
+        if (runtime.status === "analyzing") {
+          runtimeBadge.className = "badge status-running";
+          runtimeBadge.textContent = `Codex ${number(runtime.ready_agent_count)} / 4 分析中`;
+        } else if (runtime.status === "ready") {
+          runtimeBadge.className = "badge status-completed";
+          runtimeBadge.textContent = `Codex ${number(runtime.ready_agent_count)} / 4 已完成`;
+        } else if (runtime.status === "degraded") {
+          runtimeBadge.className = "badge status-review";
+          runtimeBadge.textContent = `Codex ${number(runtime.ready_agent_count)} / 4 · 已降级`;
+        } else if (runtime.status === "running") {
+          runtimeBadge.className = "badge status-running";
+          runtimeBadge.textContent = `本地策略 ${number(runtime.agent_count)} / 4 · 即时更新`;
+        } else if (runtime.status === "waiting") {
+          runtimeBadge.className = "badge status-review";
+          runtimeBadge.textContent = "Codex 等待事件";
+        } else {
+          runtimeBadge.className = "badge status-review";
+          runtimeBadge.textContent = "等待后端";
+        }
+        analysisAgentIds.forEach((agentId) => {
+          const result = agents[agentId];
+          const card = document.querySelector(`[data-agent-card="${agentId}"]`);
+          if (card) card.classList.remove("risk-notice", "risk-warning", "risk-high", "risk-critical");
+          const items = $(`analysis-${agentId}-items`); items.replaceChildren();
+          if (!result) {
+            setText(`analysis-${agentId}-state`, "等待行为事件");
+            const risk = $(`analysis-${agentId}-risk`); risk.className = "badge risk-normal"; risk.textContent = "正常";
+            return;
+          }
+          const agentState = result.mode === "codex_exec" && result.status === "ready"
+            ? "Codex 分析完成"
+            : result.mode === "local_fallback" || result.status === "degraded"
+              ? "Codex 失败 · 本地降级"
+              : result.mode === "local_prefilter" || result.status === "analyzing"
+                ? "Codex 分析中 · 显示本地初筛"
+                : result.mode === "local_explainable" && runtime.provider === "codex_cli"
+                  ? "本地初筛 · 等待 Codex"
+                  : "本地策略即时分析";
+          setText(`analysis-${agentId}-state`, agentState);
+          const isRealCodexResult = result.mode === "codex_exec" && result.status === "ready";
+          const isLocalOnlyMode = runtime.provider !== "codex_cli" && result.mode === "local_explainable";
+          const displaySummary = isRealCodexResult || isLocalOnlyMode || result.mode === "codex_error"
+            ? result.executive_summary || result.summary || "分析完成"
+            : "Codex 正在读取本轮行为证据并生成结论，请稍候…";
+          setText(`analysis-${agentId}-summary`, displaySummary);
+          const level = analysisLevel(agentId, result);
+          if (card && level !== "normal") card.classList.add(`risk-${level}`);
+          const risk = $(`analysis-${agentId}-risk`); risk.className = `badge risk-${level}`; risk.textContent = labels.risk[level] || level;
+          const values = isRealCodexResult || isLocalOnlyMode ? analysisItems(agentId, result) : [];
+          if (!values.length) {
+            const empty = document.createElement("div"); empty.className = "policy-empty";
+            empty.textContent = result.mode === "codex_error"
+              ? "本轮 Codex 分析失败，未用脚本结论替代"
+              : isRealCodexResult || isLocalOnlyMode
+                ? "当前没有需要展开的分析结论"
+                : "等待 Codex 返回真实分析结果";
+            items.append(empty);
+            return;
+          }
+          values.forEach((value) => {
+            const item = document.createElement("article"); item.className = "analysis-item";
+            const title = document.createElement("strong"); title.textContent = value.title;
+            const detail = document.createElement("span"); detail.textContent = value.detail;
+            item.append(title, detail); items.append(item);
+          });
+        });
+        const provider = runtime.provider === "codex_cli"
+          ? "Codex CLI"
+          : runtime.provider === "local"
+            ? "本地策略引擎"
+            : runtime.provider || "本地策略引擎";
+        const model = runtime.model ? ` · 模型 ${runtime.model}` : "";
+        setText("analysis-meta", `${provider}${model} · 四个角色同步展示 · 会话 ${analysis.session_id || "—"} · 修订 ${number(analysis.revision)} · 已分析 ${number(runtime.analyzed_event_count)} 条事件`);
+      }
+
+      function render(payload) {
+        state.payload = payload; state.receivedAt = Date.now();
+        const monitor = payload.monitor || {}; const summary = payload.summary || {};
+        const connection = $("connection"); connection.className = `connection ${monitor.active ? "online" : "offline"}`;
+        setText("connection-text", monitor.active ? "实时采集中" : monitor.stale ? "数据已停止" : "等待监控器");
+        setText("activity", labels.activity[payload.activity] || payload.activity || "等待 Codex");
+        setText("workspace", payload.workspace || "—"); setText("model-turn", [payload.model, payload.turn_id].filter(Boolean).join(" / ") || "—"); setText("run-id", payload.run_id || "—");
+        setText("active-count", number(summary.active)); setText("active-detail", summary.active ? "Agent 正在调用工具" : "暂无运行中的工具");
+        setText("tool-count", number(summary.tools)); setText("command-count", number(summary.commands)); setText("low-level-count", number(Number(summary.syscalls || 0) + Number(summary.file_events || 0)));
+        setText("low-level-state", `${number(summary.syscalls)} syscall · ${number(summary.file_events)} 文件事件`);
+        setText("policy-hit-count", number(summary.triggered_policies_visible)); setText("blocked-count", number(summary.blocked_events_visible)); setText("enforcement-summary", payload.enforcement?.label || "—");
+        const selected = selectedEvent(payload);
+        renderFeed(); renderCurrent(selected); renderAnalysis(payload); renderEnforcement(payload, selected);
+        $("error").classList.remove("visible");
+        if (hasStartedTurn(payload)) completeStartup(); else waitForFirstPrompt();
+      }
+
+      async function poll() {
+        if (state.polling) return;
+        state.polling = true;
+        try {
+          const response = await fetch(API, { cache: "no-store", headers: { Accept: "application/json" } });
+          if (!response.ok) throw new Error(`实时接口返回 ${response.status}`);
+          const payload = await response.json();
+          if (payload.schema_version !== "codexscope.live-security.v1") throw new Error("实时数据版本不兼容");
+          render(payload);
+        } catch (error) {
+          const connection = $("connection"); connection.className = "connection offline"; setText("connection-text", "实时数据不可用");
+          const banner = $("error"); banner.textContent = `${error.message}。请先运行 codexscope monitor，再使用 codexscope attach。`; banner.classList.add("visible");
+          showStartupError(error);
+        } finally {
+          state.polling = false;
+        }
+      }
+
+      $("filters").addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-filter]"); if (!button) return;
+        state.filter = button.dataset.filter || "all";
+        document.querySelectorAll(".filter").forEach((node) => node.classList.toggle("active", node === button));
+        renderFeed();
+      });
+      function selectFeedEvent(target) {
+        const row = target.closest(".event[data-event-id]");
+        if (!row || !state.payload) return;
+        state.selectedEventId = row.dataset.eventId || null;
+        const selected = selectedEvent(state.payload);
+        renderFeed(); renderCurrent(selected); renderEnforcement(state.payload, selected);
+      }
+      $("feed").addEventListener("click", (event) => selectFeedEvent(event.target));
+      $("feed").addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault(); selectFeedEvent(event.target);
+      });
+      $("startup-retry").addEventListener("click", () => {
+        $("startup-retry").hidden = true;
+        setStartupStep("connection", "active", "连接中");
+        setStartupStep("data", "", "等待");
+        setText("startup-title", "正在建立安全观测视图");
+        setText("startup-message", "正在重新连接本地监控服务…");
+        poll();
+      });
+      window.setInterval(() => { if (state.receivedAt) setText("refresh-age", `${((Date.now() - state.receivedAt) / 1000).toFixed(1)}s`); }, 200);
+      setStartupStep("configuration", "done", "已加载");
+      setStartupStep("connection", "active", "连接中");
+      setText("startup-message", "正在连接本地监控服务…");
+      try {
+        const initial = JSON.parse($("initial-live-security")?.textContent || "{}");
+        if (initial.schema_version === "codexscope.live-security.v1") {
+          render(initial);
+        }
+      } catch (error) {
+        // The polling path below remains authoritative.
+      }
+      poll(); window.setInterval(() => { if (!document.hidden) poll(); }, POLL_MS);
+    })();
+  </script>
+</body>
+</html>

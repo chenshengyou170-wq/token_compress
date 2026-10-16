@@ -1,0 +1,25 @@
+# 灵眸 0.1.2 · Windows 10/11 x64
+
+修复退出灵眸后 Codex 线程找不到 provider、无法恢复，以及错误复用未配置 ChatGPT 鉴权的供应商导致的 401 问题。
+
+- 新接入保持 `openai` 或用户自定义 provider 的名称；退出后新建的历史线程仍引用原 provider。
+- 内置 OpenAI 连接通过 `openai_base_url` 接入本地代理，继续由 Codex 处理登录和令牌刷新。
+- 旧版本的连接记录升级时恢复直连，并保留带正确鉴权的历史 provider 兼容项；不改写会话文件和线程数据库。
+- 仅恢复灵眸改动的字段，保留用户其他修改；桌面进程退出、后台仍存活时恢复配置。
+- 上游收到原有 Authorization 和账户头，本地代理凭证不会转发；WebSocket 请求按 Codex 协议回退到 HTTP/SSE。
+
+下载 `Lingmou-Setup.exe` 安装，或解压 `Lingmou-win-x64.zip` 使用便携版。每次更新均可访问
+[最新 Release](https://github.com/chenshengyou170-wq/token_compress/releases/latest)。
+`SHA256SUMS.txt` 提供两个安装产物的校验值。
+
+升级前结束 Codex 任务并完全退出 Codex / ChatGPT 桌面端，再退出旧版灵眸。
+安装新版后启动一次灵眸以读取原数据目录中的恢复记录，随后重新打开 Codex。
+你已手工修复的线程无需再次修改。若使用便携版，应保持原 Windows 用户和灵眸数据目录。
+
+新接入需要支持 `openai_base_url` 的 Codex 版本；不支持该设置的旧客户端应先更新。
+保留的旧 provider 仅用于历史线程直连，不再接管默认连接；不要在仍有历史线程引用时删除它。
+如果旧版备份已经丢失，本版本不会猜测并批量修改会话或供应商。
+
+本包未做 Windows 代码签名。自动发布要求 Windows runner 上的配置/代理回归、桌面测试、
+前端测试/构建，以及冻结后端对本机模拟上游的检查通过。
+这些检查不代表已完成真实 Windows 桌面交互或真实 ChatGPT 上游验收。

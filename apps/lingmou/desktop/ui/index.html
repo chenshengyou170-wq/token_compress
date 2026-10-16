@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'" />
+    <title>灵眸 Agent 安全中心</title>
+    <link rel="stylesheet" href="./launcher.css" />
+  </head>
+  <body>
+    <div class="launcher-shell">
+      <header class="launcher-header">
+        <div class="launcher-brand">
+          <img src="../assets/icon.svg" alt="" />
+          <span><strong>灵眸</strong><small>Agent 安全中心</small></span>
+        </div>
+        <span class="local-badge"><i aria-hidden="true"></i>本机安全壳</span>
+      </header>
+
+      <main class="launcher-main">
+        <section class="launcher-intro" aria-labelledby="launcher-title">
+          <div class="launcher-emblem" aria-hidden="true">
+            <span class="emblem-ring ring-outer"></span>
+            <span class="emblem-ring ring-inner"></span>
+            <img src="../assets/icon.svg" alt="" />
+          </div>
+          <h1 id="launcher-title">让 Agent 的每一次操作<br />都可见、可控</h1>
+          <p class="launcher-description">灵眸在本机记录 Codex 的命令、文件与网络行为，对敏感操作发起审批，并在真正执行前阻断高置信度风险。</p>
+          <ul class="launcher-capabilities" aria-label="核心保护能力">
+            <li><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5 19 6v5.2c0 4.2-2.65 7.35-7 9.3-4.35-1.95-7-5.1-7-9.3V6Z"/><path d="m8.7 12 2.1 2.1 4.5-4.5"/></svg></span><div><strong>执行前阻断</strong><small>危险命令不落地</small></div></li>
+            <li><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h11v14H4Z"/><circle cx="16.5" cy="15.5" r="3"/><path d="m18.75 17.75 2 2M8 9h3M8 12h3"/></svg></span><div><strong>跨层证据</strong><small>操作与进程可追溯</small></div></li>
+            <li><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12s3.3-5.5 9-5.5 9 5.5 9 5.5-3.3 5.5-9 5.5S3 12 3 12Z"/><circle cx="12" cy="12" r="2.5"/></svg></span><div><strong>本地隐私</strong><small>凭据始终脱敏</small></div></li>
+          </ul>
+        </section>
+
+        <section class="launcher-control" aria-labelledby="status-title">
+          <div class="status-heading">
+            <span class="status-symbol"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5 19 6v5.2c0 4.2-2.65 7.35-7 9.3-4.35-1.95-7-5.1-7-9.3V6Z"/><path d="m8.7 12 2.1 2.1 4.5-4.5"/></svg></span>
+            <div><span>保护状态</span><h2 id="status-title">准备开始</h2></div>
+          </div>
+          <p id="status-message" class="status-message">选择一个工作区，灵眸会自动启动完整安全链路。</p>
+          <p id="status-detail" class="status-detail" aria-live="polite"></p>
+          <div id="progress-track" class="progress-track" hidden><span></span></div>
+          <div id="error-box" class="error-box" role="alert" hidden></div>
+
+          <div id="last-workspace" class="recent-workspace" hidden>
+            <span>最近保护</span>
+            <strong id="last-workspace-name"></strong>
+            <code id="last-workspace-path"></code>
+            <button id="start-last" type="button">继续保护此工作区</button>
+          </div>
+
+          <button id="choose-workspace" type="button" class="primary-launch-action">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6.5h6l2 2h9v10h-17Z"/><path d="M3.5 9h17"/></svg>
+            选择工作区并开启保护
+          </button>
+          <button id="connect-existing" type="button" class="secondary-launch-action">连接本机已有 monitor</button>
+          <button id="open-compression" type="button" class="secondary-launch-action">为自己的 Codex 接入 Token 压缩</button>
+
+          <div class="connection-divider"><span>或连接现有灵眸服务</span></div>
+          <form id="remote-service-form" class="remote-service-form">
+            <label for="service-url">
+              <span>服务登录链接</span>
+              <input
+                id="service-url"
+                name="service-url"
+                type="password"
+                inputmode="url"
+                autocomplete="off"
+                spellcheck="false"
+                maxlength="2048"
+                placeholder="https://私网地址:端口/?access_token=…"
+                aria-describedby="remote-service-hint"
+                required
+              />
+            </label>
+            <label for="service-fingerprint">
+              <span>证书 SHA-256 指纹</span>
+              <input
+                id="service-fingerprint"
+                name="service-fingerprint"
+                type="text"
+                autocomplete="off"
+                spellcheck="false"
+                maxlength="160"
+                placeholder="AA:BB:CC:…"
+                aria-describedby="remote-service-hint"
+                required
+              />
+            </label>
+            <p id="remote-service-hint">仅接受 HTTPS 私网服务；先校验证书，再发送令牌。两项内容均不会保存。</p>
+            <button id="connect-service" type="submit" class="remote-connect-action">校验并打开服务</button>
+          </form>
+
+          <div class="launch-contract">
+            <div><span>01</span><p><strong>启动本地监控</strong><small>文件审计与系统审计自动探测</small></p></div>
+            <div><span>02</span><p><strong>开启强制策略</strong><small>支持的高风险操作在审批门阻断</small></p></div>
+            <div><span>03</span><p><strong>进入安全中心</strong><small>关闭应用时自动收尾生成报告</small></p></div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="launcher-footer">
+        <span>本机安全壳 · 凭据不落盘 · 渲染进程无 Node 权限 · 不展示隐藏思维链</span>
+        <button id="quit-app" type="button">退出</button>
+      </footer>
+    </div>
+    <script src="./launcher.js"></script>
+  </body>
+</html>

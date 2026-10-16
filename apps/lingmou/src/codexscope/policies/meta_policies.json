@@ -1,0 +1,493 @@
+{
+  "schema_version": "lingmou.meta-policies.v1",
+  "items": [
+    {
+      "id": "meta.network.present",
+      "name": "发起网络访问",
+      "category": "网络",
+      "description": "识别到 curl、wget、ssh、scp、nc 等网络命令。",
+      "event": "command.approval",
+      "parameter": null,
+      "predicate": {
+        "field": "network.present",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "meta.network.upload",
+      "name": "上传或发送数据",
+      "category": "网络",
+      "description": "识别到请求体、表单或文件上传；不读取上传内容。",
+      "event": "command.approval",
+      "parameter": null,
+      "predicate": {
+        "field": "network.upload",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "meta.network.download",
+      "name": "下载或读取网络资源",
+      "category": "网络",
+      "description": "识别到 curl / wget 下载或 scp 拉取。",
+      "event": "command.approval",
+      "parameter": null,
+      "predicate": {
+        "field": "network.download",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "meta.network.tls_unverified",
+      "name": "关闭 TLS 证书验证",
+      "category": "网络",
+      "description": "识别到 curl -k / --insecure 或 wget --no-check-certificate。",
+      "event": "command.approval",
+      "parameter": null,
+      "predicate": {
+        "field": "network.tls_verify_disabled",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "meta.network.loopback",
+      "name": "访问回环地址",
+      "category": "网络",
+      "description": "仅分类命令中的字面地址，不解析 DNS。",
+      "event": "command.approval",
+      "parameter": null,
+      "predicate": {
+        "field": "network.address_classes",
+        "op": "contains",
+        "value": "loopback"
+      }
+    },
+    {
+      "id": "meta.network.private",
+      "name": "访问私网地址",
+      "category": "网络",
+      "description": "仅分类命令中的字面地址，不解析 DNS。",
+      "event": "command.approval",
+      "parameter": null,
+      "predicate": {
+        "field": "network.address_classes",
+        "op": "contains",
+        "value": "private"
+      }
+    },
+    {
+      "id": "meta.network.link_local",
+      "name": "访问链路本地地址",
+      "category": "网络",
+      "description": "仅分类命令中的字面地址，不解析 DNS。",
+      "event": "command.approval",
+      "parameter": null,
+      "predicate": {
+        "field": "network.address_classes",
+        "op": "contains",
+        "value": "link_local"
+      }
+    },
+    {
+      "id": "meta.network.public",
+      "name": "访问公网 IP",
+      "category": "网络",
+      "description": "仅分类命令中的字面地址，不解析 DNS。",
+      "event": "command.approval",
+      "parameter": null,
+      "predicate": {
+        "field": "network.address_classes",
+        "op": "contains",
+        "value": "public"
+      }
+    },
+    {
+      "id": "meta.network.hostname",
+      "name": "使用域名目的地",
+      "category": "网络",
+      "description": "仅分类命令中的字面地址，不解析 DNS。",
+      "event": "command.approval",
+      "parameter": null,
+      "predicate": {
+        "field": "network.address_classes",
+        "op": "contains",
+        "value": "hostname"
+      }
+    },
+    {
+      "id": "meta.network.domains",
+      "name": "访问指定域名",
+      "category": "网络",
+      "description": "精确匹配；*.example.com 仅匹配子域名。",
+      "event": "command.approval",
+      "parameter": {
+        "kind": "strings",
+        "placeholder": "example.com, *.example.com"
+      },
+      "predicate": {
+        "field": "network.hosts",
+        "op": "domain_matches",
+        "value": []
+      }
+    },
+    {
+      "id": "meta.network.outside_domains",
+      "name": "访问允许名单以外的域名",
+      "category": "网络",
+      "description": "任一已识别主机不在名单中即命中；IP 目的地同样属于名单外。",
+      "event": "command.approval",
+      "parameter": {
+        "kind": "strings",
+        "placeholder": "example.com, *.example.com"
+      },
+      "predicate": {
+        "not": {
+          "field": "network.hosts",
+          "op": "domains_subset",
+          "value": []
+        }
+      }
+    },
+    {
+      "id": "meta.network.cidrs",
+      "name": "访问指定 IP 网段",
+      "category": "网络",
+      "description": "支持 IPv4 / IPv6 CIDR；不解析域名。",
+      "event": "command.approval",
+      "parameter": {
+        "kind": "strings",
+        "placeholder": "10.0.0.0/8, 127.0.0.0/8, ::1/128"
+      },
+      "predicate": {
+        "field": "network.hosts",
+        "op": "ip_in_cidr",
+        "value": []
+      }
+    },
+    {
+      "id": "meta.network.ports",
+      "name": "访问指定端口",
+      "category": "网络",
+      "description": "识别 URL 显式/默认端口及 ssh、scp、nc 端口。",
+      "event": "command.approval",
+      "parameter": {
+        "kind": "ports",
+        "placeholder": "22, 80, 443"
+      },
+      "predicate": {
+        "field": "network.ports",
+        "op": "intersects",
+        "value": []
+      }
+    },
+    {
+      "id": "meta.network.schemes",
+      "name": "使用指定协议",
+      "category": "网络",
+      "description": "按命令里的目的地协议匹配。",
+      "event": "command.approval",
+      "parameter": {
+        "kind": "strings",
+        "placeholder": "http, ftp"
+      },
+      "predicate": {
+        "field": "network.schemes",
+        "op": "intersects",
+        "value": []
+      }
+    },
+    {
+      "id": "meta.network.methods",
+      "name": "使用指定 HTTP 方法",
+      "category": "网络",
+      "description": "识别 curl / wget 的方法与请求体选项。",
+      "event": "command.approval",
+      "parameter": {
+        "kind": "methods",
+        "placeholder": "POST, PUT, DELETE"
+      },
+      "predicate": {
+        "field": "network.methods",
+        "op": "intersects",
+        "value": []
+      }
+    },
+    {
+      "id": "meta.file.read",
+      "name": "读取文件",
+      "category": "文件",
+      "description": "根据受支持命令和重定向识别操作意图，不代表操作已经执行。",
+      "event": "command.approval",
+      "parameter": null,
+      "predicate": {
+        "field": "file.read",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "meta.file.write",
+      "name": "写入文件",
+      "category": "文件",
+      "description": "根据受支持命令和重定向识别操作意图，不代表操作已经执行。",
+      "event": "command.approval",
+      "parameter": null,
+      "predicate": {
+        "field": "file.write",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "meta.file.delete",
+      "name": "删除文件",
+      "category": "文件",
+      "description": "根据受支持命令和重定向识别操作意图，不代表操作已经执行。",
+      "event": "command.approval",
+      "parameter": null,
+      "predicate": {
+        "field": "file.delete",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "meta.file.permission_change",
+      "name": "修改文件权限",
+      "category": "文件",
+      "description": "根据受支持命令和重定向识别操作意图，不代表操作已经执行。",
+      "event": "command.approval",
+      "parameter": null,
+      "predicate": {
+        "field": "file.permission_change",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "meta.file.read_under",
+      "name": "读取指定目录",
+      "category": "文件",
+      "description": "含目录本身及后代；相对路径以工作区为基准，按路径边界匹配。",
+      "event": "command.approval",
+      "parameter": {
+        "kind": "strings",
+        "placeholder": "finance/private, /etc"
+      },
+      "predicate": {
+        "field": "file.read_paths",
+        "op": "any_path_under",
+        "value": []
+      }
+    },
+    {
+      "id": "meta.file.write_under",
+      "name": "写入指定目录",
+      "category": "文件",
+      "description": "含目录本身及后代；相对路径以工作区为基准，按路径边界匹配。",
+      "event": "command.approval",
+      "parameter": {
+        "kind": "strings",
+        "placeholder": "finance/private, /etc"
+      },
+      "predicate": {
+        "field": "file.write_paths",
+        "op": "any_path_under",
+        "value": []
+      }
+    },
+    {
+      "id": "meta.file.delete_under",
+      "name": "删除指定目录",
+      "category": "文件",
+      "description": "含目录本身及后代；相对路径以工作区为基准，按路径边界匹配。",
+      "event": "command.approval",
+      "parameter": {
+        "kind": "strings",
+        "placeholder": "finance/private, /etc"
+      },
+      "predicate": {
+        "field": "file.delete_paths",
+        "op": "any_path_under",
+        "value": []
+      }
+    },
+    {
+      "id": "meta.file.permission_under",
+      "name": "修改指定目录权限",
+      "category": "文件",
+      "description": "含目录本身及后代；相对路径以工作区为基准，按路径边界匹配。",
+      "event": "command.approval",
+      "parameter": {
+        "kind": "strings",
+        "placeholder": "finance/private, /etc"
+      },
+      "predicate": {
+        "field": "file.permission_paths",
+        "op": "any_path_under",
+        "value": []
+      }
+    },
+    {
+      "id": "meta.file.write_outside",
+      "name": "写入允许目录以外的位置",
+      "category": "文件",
+      "description": "任一已识别写入路径在名单外即命中；不限制读取。",
+      "event": "command.approval",
+      "parameter": {
+        "kind": "strings",
+        "placeholder": "output, reports"
+      },
+      "predicate": {
+        "not": {
+          "field": "file.write_paths",
+          "op": "all_paths_under",
+          "value": []
+        }
+      }
+    },
+    {
+      "id": "meta.file.recursive",
+      "name": "递归文件操作",
+      "category": "文件",
+      "description": "识别文件命令的 -r / -R / --recursive 参数。",
+      "event": "command.approval",
+      "parameter": null,
+      "predicate": {
+        "field": "file.recursive",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "meta.file.force",
+      "name": "强制文件操作",
+      "category": "文件",
+      "description": "识别文件命令的 -f / --force 参数。",
+      "event": "command.approval",
+      "parameter": null,
+      "predicate": {
+        "field": "file.force",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "meta.process.elevated",
+      "name": "请求提权执行",
+      "category": "进程",
+      "description": "识别 sudo / doas / su 包装；不代表已获得权限。",
+      "event": "command.approval",
+      "parameter": null,
+      "predicate": {
+        "field": "process.elevated",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "meta.process.shell",
+      "name": "通过 Shell 执行",
+      "category": "进程",
+      "description": "识别 sh / bash / zsh 等解释器包装。",
+      "event": "command.approval",
+      "parameter": null,
+      "predicate": {
+        "field": "process.shell",
+        "op": "eq",
+        "value": true
+      }
+    },
+    {
+      "id": "meta.process.executables",
+      "name": "调用指定程序",
+      "category": "进程",
+      "description": "按程序 basename 匹配，包括可识别的 Shell 子命令。",
+      "event": "command.approval",
+      "parameter": {
+        "kind": "strings",
+        "placeholder": "ssh, scp, python3"
+      },
+      "predicate": {
+        "field": "process.executables",
+        "op": "intersects",
+        "value": []
+      }
+    },
+    {
+      "id": "meta.principal.roles",
+      "name": "指定 Agent 角色",
+      "category": "主体",
+      "description": "仅使用审批上下文实际提供的角色，缺失时为空。",
+      "event": "command.approval",
+      "parameter": {
+        "kind": "strings",
+        "placeholder": "basic, guest"
+      },
+      "predicate": {
+        "field": "principal.role",
+        "op": "in",
+        "value": []
+      }
+    },
+    {
+      "id": "meta.principal.agents",
+      "name": "指定 Agent 标识",
+      "category": "主体",
+      "description": "使用审批上下文实际提供的 Agent ID。",
+      "event": "command.approval",
+      "parameter": {
+        "kind": "strings",
+        "placeholder": "worker-1"
+      },
+      "predicate": {
+        "field": "principal.agent_id",
+        "op": "in",
+        "value": []
+      }
+    },
+    {
+      "id": "meta.analysis.incomplete",
+      "name": "命令无法完整静态解析",
+      "category": "解析",
+      "description": "脚本、动态展开、未支持命令/选项等会命中；可单独设置人工复核。",
+      "event": "command.approval",
+      "parameter": null,
+      "predicate": {
+        "field": "command.parse_complete",
+        "op": "eq",
+        "value": false
+      }
+    },
+    {
+      "id": "meta.context.lineage",
+      "name": "敏感派生文件外发",
+      "category": "会话",
+      "description": "复用现有会话检测；单命令试算不含历史状态。",
+      "event": "command.approval",
+      "parameter": null,
+      "predicate": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-LINEAGE-030"
+      }
+    },
+    {
+      "id": "meta.context.burst",
+      "name": "短时间集中外联",
+      "category": "会话",
+      "description": "复用现有会话检测；单命令试算不含历史状态。",
+      "event": "command.approval",
+      "parameter": null,
+      "predicate": {
+        "field": "detector.ids",
+        "op": "contains",
+        "value": "LING-EGRESS-BURST-031"
+      }
+    }
+  ]
+}

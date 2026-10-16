@@ -1,0 +1,26 @@
+{
+  "schema_version": "lingmou.business-policy-catalog.v1",
+  "policies": [
+    {
+      "id": "LIFE-RETRY-001",
+      "name": "超时后先查单",
+      "condition": "提交回执超时，但平台可能已经完成下单和扣款",
+      "action": "再次提交前要求核对已有订单",
+      "enabled": true
+    },
+    {
+      "id": "LIFE-ORDER-002",
+      "name": "重复下单保护",
+      "condition": "相同商家、商品、金额和地址的订单超过用户授权数量",
+      "action": "第二单人工确认，第三单执行前阻断",
+      "enabled": true
+    },
+    {
+      "id": "LIFE-SPEND-003",
+      "name": "消费预算保护",
+      "condition": "本次操作后的累计支出将超过用户明确授权金额",
+      "action": "展示预计多花金额并建议拒绝",
+      "enabled": true
+    }
+  ]
+}
