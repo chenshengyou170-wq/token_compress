@@ -55,14 +55,20 @@ jobs:
         working-directory: ${{ env.LINGMOU_ROOT }}
         shell: pwsh
         run: |
+          function Test-Checked([string]$program, [string[]]$arguments) {
+            $log = Join-Path $env:RUNNER_TEMP 'lingmou-regression.log'
+            & $program @arguments 2>&1 | Tee-Object -FilePath $log
+            if ($LASTEXITCODE -ne 0) {
+              $details = ((Get-Content $log -Tail 120) -join "`n").Replace('%', '%25').Replace("`r", '%0D').Replace("`n", '%0A')
+              Write-Output "::error title=Isolated regression failed::$details"
+              exit 1
+            }
+          }
           $version = (Get-Content desktop/package.json | ConvertFrom-Json).version
           if ($env:GITHUB_REF_TYPE -eq 'tag' -and $env:GITHUB_REF_NAME -ne "lingmou-v$version") { throw 'Tag/version mismatch' }
-          .venv/Scripts/python.exe -m pytest tests/test_desktop_connection.py tests/test_desktop_companion.py tests/test_request_token_tap.py -q
-          if ($LASTEXITCODE -ne 0) { throw 'Provider lifecycle or relay regression failed' }
-          npm --prefix desktop test
-          if ($LASTEXITCODE -ne 0) { throw 'Desktop tests failed' }
-          npm --prefix web test
-          if ($LASTEXITCODE -ne 0) { throw 'Web tests failed' }
+          Test-Checked .venv/Scripts/python.exe @('-m', 'pytest', 'tests/test_desktop_connection.py', 'tests/test_desktop_companion.py', 'tests/test_request_token_tap.py', '-q')
+          Test-Checked npm @('--prefix', 'desktop', 'test')
+          Test-Checked npm @('--prefix', 'web', 'test')
       - name: Check actual Codex reader visibility and thread resume
         working-directory: ${{ env.LINGMOU_ROOT }}
         shell: pwsh
