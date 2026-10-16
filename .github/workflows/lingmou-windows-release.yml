@@ -69,8 +69,13 @@ jobs:
         run: |
           npm install --global @openai/codex@0.147.0
           if ($LASTEXITCODE -ne 0) { throw 'Pinned Codex CLI installation failed' }
-          .venv/Scripts/python.exe desktop/scripts/check-codex-routing.py
-          if ($LASTEXITCODE -ne 0) { throw 'Codex source reader or thread resume regression failed' }
+          $log = Join-Path $env:RUNNER_TEMP 'lingmou-codex-routing.log'
+          .venv/Scripts/python.exe desktop/scripts/check-codex-routing.py 2>&1 | Tee-Object -FilePath $log
+          if ($LASTEXITCODE -ne 0) {
+            $details = ((Get-Content $log -Tail 80) -join "`n").Replace('%', '%25').Replace("`r", '%0D').Replace("`n", '%0A')
+            Write-Output "::error title=Codex source reader or thread resume regression failed::$details"
+            exit 1
+          }
       - name: Build Windows x64 installer and portable ZIP
         working-directory: ${{ env.LINGMOU_ROOT }}
         shell: pwsh
