@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'src'))
 
-import json,os,shutil,subprocess,tempfile,threading
+import json,os,re,shutil,subprocess,tempfile,threading
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from codexscope.desktop_companion import Companion, _source_available
 
@@ -24,6 +24,7 @@ if sys.platform == 'win32' and Path(codex_entry).suffix.lower() in {'.cmd', '.ba
     codex_command = [node, str(npm_entry)]
 
 seen=[]
+tool_summaries=[]
 source_server=''
 item={'type':'message','id':'msg_test','role':'assistant','content':[{'type':'output_text','text':'OK','annotations':[]}]}
 events=[{'type':'response.created','response':{'id':'resp_test','status':'in_progress','output':[]}},
@@ -44,6 +45,17 @@ class Upstream(BaseHTTPRequestHandler):
         seen.append({'path':self.path,'authorization':self.headers.get('Authorization'),
                      'relay':self.headers.get('X-Lingmou-Relay-Token'),
                      'source_reader_advertised':_source_available(json.loads(body), source_server)})
+        request=json.loads(body)
+        def names(items, namespace=''):
+            result=[]
+            for tool in items if isinstance(items,list) else []:
+                if not isinstance(tool,dict): continue
+                name=namespace+tool.get('name','')
+                result.extend(names(tool['tools'], name+'.') if isinstance(tool.get('tools'),list) else [name])
+            return result
+        tool_summaries.append(names(request.get('tools')) + [name
+            for item in request.get('input',[]) if isinstance(item,dict) and item.get('type')=='additional_tools'
+            for name in names(item.get('tools'))])
         self.send_response(200)
         self.send_header('Content-Type','text/event-stream')
         self.send_header('Content-Length',str(len(wire)))
@@ -62,11 +74,15 @@ with tempfile.TemporaryDirectory(prefix='lingmou-codex-smoke-') as temporary:
     original=f'openai_base_url = "http://127.0.0.1:{server.server_port}/v1"\nmodel = "gpt-5.4-mini"\n'
     target.write_text(original)
     companion=Companion(root/'state')
-    env={key:value for key,value in os.environ.items() if key in ('PATH','HOME','TMPDIR','SYSTEMROOT','WINDIR','COMSPEC','PATHEXT','APPDATA','LOCALAPPDATA')}
+    env={key:value for key,value in os.environ.items() if key.upper() in
+         ('PATH','HOME','USERPROFILE','HOMEDRIVE','HOMEPATH','TMPDIR','TEMP','TMP',
+          'SYSTEMROOT','WINDIR','COMSPEC','PATHEXT','APPDATA','LOCALAPPDATA')}
     env.update(CODEX_HOME=str(codex_home),CODEX_API_KEY='synthetic-smoke-api-key',OPENAI_API_KEY='synthetic-smoke-api-key',
                HTTP_PROXY='http://127.0.0.1:1',HTTPS_PROXY='http://127.0.0.1:1',NO_PROXY='127.0.0.1,localhost')
+    diagnostics=[]
     def execute(arguments):
         result=subprocess.run([*codex_command,'exec',*arguments],cwd=work,env=env,text=True,capture_output=True,timeout=70)
+        diagnostics.append(re.sub(r'/lingmou-relay/[^/\s]+','/lingmou-relay/[redacted]',result.stderr[-5000:]))
         if result.returncode:
             print(result.stdout[-4000:]); print(result.stderr[-4000:]); raise AssertionError(result.returncode)
         return [json.loads(line) for line in result.stdout.splitlines() if line.startswith('{')]
@@ -85,6 +101,8 @@ with tempfile.TemporaryDirectory(prefix='lingmou-codex-smoke-') as temporary:
         resumed=execute(['resume','--skip-git-repo-check','--json',thread_id,'Reply only OK again. Do not use tools.'])
         assert any(e.get('type')=='turn.completed' for e in resumed),resumed
         assert len(seen)==2, seen
+        if [record['source_reader_advertised'] for record in seen] != [True,False]:
+            print(json.dumps({'tool_names':tool_summaries,'codex_diagnostics':diagnostics},ensure_ascii=False))
         assert seen==[{'path':'/v1/responses','authorization':'Bearer synthetic-smoke-api-key','relay':None,
                        'source_reader_advertised':reader} for reader in (True,False)],seen
         print(json.dumps({'codex_version':subprocess.check_output([*codex_command,'--version'],text=True).strip(),

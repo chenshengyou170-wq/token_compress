@@ -1,15 +1,15 @@
 # Windows 桌面端：接入用户自己的 Codex
 
-## 0.1.4 补读工具兼容性修复
+## 0.1.5 补读工具兼容性修复
 
 新版接入流程将灵眸来源工具的 namespace 加入
 `features.code_mode.direct_only_tool_namespaces`，使 code mode 下的实际请求仍直接声明补读工具。
 来源服务名也已缩短，完整 MCP 工具名不超过 64 字符，兼容旧版 Codex 的工具命名限制。
 原有开关、其他直接调用工具及无关配置修改均保留，解除接入时恢复受管理字段。
 
-从旧版升级时，先结束任务并关闭 Codex，在旧版灵眸中解除接入并退出；安装 0.1.4 后
+从旧版升级时，先结束任务并关闭 Codex，在旧版灵眸中解除接入并退出；安装 0.1.5 后
 重新接入，再打开 Codex。旧连接不会自动更换来源服务名，需要重新接入应用完整修复。
-安装器与便携版见 [0.1.4 Release](https://github.com/chenshengyou170-wq/token_compress/releases/tag/lingmou-v0.1.4)。
+安装器与便携版见 [0.1.5 Release](https://github.com/chenshengyou170-wq/token_compress/releases/tag/lingmou-v0.1.5)。
 
 ## 2026-10-16 真实 Windows 压缩兼容性验证
 
@@ -26,7 +26,7 @@
 替换为哈希。配置恢复会保留原有 code mode 偏好和其他 namespace。源码回归 36 项通过，
 Linux Codex 0.162.1 的模拟上游接入、补读工具声明和解除接入后恢复线程均通过。
 
-上述排障测试使用 0.1.3，通过保存兼容配置修复当时的连接；0.1.4 已将该设置加入新接入流程。
+上述排障测试使用 0.1.3，通过保存兼容配置修复当时的连接；0.1.5 已将该设置加入新接入流程。
 已打开的 Codex 需要在任务结束后重新启动以加载配置。旧请求仍在累计中，应同时查看最近请求。
 详细数字和测试边界见 [验证记录](../evidence/windows_compression_live_20261016/validation.json)。
 
