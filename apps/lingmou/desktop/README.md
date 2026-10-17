@@ -2,7 +2,7 @@
 
 Windows 10/11 x64 下载：[最新 GitHub Release](https://github.com/chenshengyou170-wq/token_compress/releases/latest)。
 安装器为 `Lingmou-Setup.exe`，便携版为 `Lingmou-win-x64.zip`。
-0.1.5 修复 Codex 延迟加载及工具名长度导致的补读工具误判，保留累计节省和压缩前后对比；升级前需解除旧接入，步骤见 [发行说明](RELEASE_NOTES.md)。
+本地 0.1.7 构建增加同一回合内的旧工具输出归档与补读，保留 0.1.6 的当前对话统计和 0.1.5 的补读工具兼容修复。构建和发布是独立步骤；变更与升级步骤见 [发行说明](RELEASE_NOTES.md)。
 以后推送与 `desktop/package.json` 版本一致的 `lingmou-vX.Y.Z` 标签，会自动在 Windows 上
 测试、打包并发布；构建或冻结后端检查失败时不发布安装包。
 

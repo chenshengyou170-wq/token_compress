@@ -1,7 +1,7 @@
 {
   "name": "lingmou-agent-security",
   "productName": "灵眸 Agent 安全中心",
-  "version": "0.1.5",
+  "version": "0.1.8",
   "description": "Local Agent security monitoring, approvals, blocking, and evidence for Codex.",
   "private": true,
   "main": "src/main.cjs",

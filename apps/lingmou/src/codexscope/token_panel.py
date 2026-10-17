@@ -47,7 +47,8 @@ def _tool_rows(measurement: dict):
     return sorted(rows, key=lambda row: (-(row['saved'] or 0), -(row['before'] or 0), row['name']))
 
 
-def token_panel_snapshot(run_dir: Path, *, provider_snapshot: dict | None = None) -> dict:
+def token_panel_snapshot(run_dir: Path, *, provider_snapshot: dict | None = None,
+                         allow_usage_fallback: bool = True) -> dict:
     live = _read(run_dir / 'live_status.json')
     manifest = _read(run_dir / 'manifest.json')
     tap = live.get('request_token_tap') or manifest.get('request_token_tap') or {}
@@ -83,7 +84,7 @@ def token_panel_snapshot(run_dir: Path, *, provider_snapshot: dict | None = None
         'measured_requests': measured, 'missing_requests': requests - measured,
         'complete': bool(requests) and requests == measured and compression_calls == measured_compression,
     }
-    if not requests:
+    if not requests and allow_usage_fallback:
         usage = live.get('token_usage') or manifest.get('last_token_usage') or _read(run_dir / 'workbench_token_usage.json')
         total = usage.get('total') or {}
         if total:

@@ -26,7 +26,15 @@ def protected_rewrite(text, rewrite):
         return text
     mapping = dict(protected)
     pieces = re.split(r"(⟦KEEP_\d+⟧)", masked)
-    return "".join(mapping[p] if p in mapping else rewrite(p) if p.strip() else p for p in pieces)
+    result = ''
+    for piece in pieces:
+        value = mapping[piece] if piece in mapping else rewrite(piece) if piece.strip() else piece
+        # NLP backends often strip punctuation/whitespace at segment edges.
+        # Keep protected numeric/entity literals from merging into nearby words.
+        if result and value and result[-1].isalnum() and value[0].isalnum():
+            result += ' '
+        result += value
+    return result
 
 
 class RemoteRewriter:

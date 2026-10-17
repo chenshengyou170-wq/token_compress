@@ -1,0 +1,89 @@
+{
+  "observation": {
+    "status": "skipped",
+    "reason": "full_no_valid_reduction",
+    "text_tokens_before_estimate": 0,
+    "text_tokens_after_estimate": 0,
+    "changed_fields": 0,
+    "changed_roles": [],
+    "tokenizer_source": "tokenizer-est",
+    "latency_ms": 13290.754,
+    "compression_model_calls": 1,
+    "cache_hits": 0,
+    "rejected_fields": 0,
+    "full_request_tokens_before_estimate": 377,
+    "full_request_tokens_after_estimate": 377,
+    "compression_calls": [
+      {
+        "provider": "kimi",
+        "purpose": "full_compression",
+        "status": "completed",
+        "official_usage": {
+          "input_tokens": 564,
+          "output_tokens": 319,
+          "total_tokens": 883,
+          "cached_input_tokens": null,
+          "reasoning_output_tokens": 81
+        },
+        "model": "kimi-for-coding"
+      }
+    ],
+    "local_model_calls": 3,
+    "lossy_fields": 0,
+    "method_observations": [
+      {
+        "method": "caveman",
+        "component": "tool_output",
+        "before": 312,
+        "status": "insufficient_saving",
+        "latency_ms": 1.079,
+        "after": 298,
+        "saved": 14
+      },
+      {
+        "method": "llmlingua2",
+        "component": "tool_output",
+        "before": 312,
+        "status": "rejected_literal_change",
+        "latency_ms": 5720.78,
+        "after": 181,
+        "saved": 131
+      },
+      {
+        "method": "caveman_nlp",
+        "component": "tool_output",
+        "before": 312,
+        "status": "rejected_literal_change",
+        "latency_ms": 74.004,
+        "after": 214,
+        "saved": 98
+      },
+      {
+        "method": "caveman_mlm",
+        "component": "tool_output",
+        "before": 312,
+        "status": "skipped_length_limit",
+        "latency_ms": 0
+      },
+      {
+        "method": "headroom",
+        "component": "tool_output",
+        "before": 312,
+        "status": "insufficient_saving",
+        "latency_ms": 22.313,
+        "after": 312,
+        "saved": 0
+      },
+      {
+        "method": "kimi",
+        "component": "tool_output",
+        "before": 312,
+        "status": "rejected_literal_change",
+        "latency_ms": 7468.192,
+        "after": 202,
+        "saved": 110
+      }
+    ]
+  },
+  "source_count": 1
+}

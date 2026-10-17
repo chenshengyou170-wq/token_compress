@@ -65,10 +65,13 @@ def check(executable):
             assert len(reader_namespace + "__lingmou_source_read") <= 64
             assert reader_namespace in connected["features"]["code_mode"]["direct_only_tool_namespaces"]
             assert state["connection"]["mode"] == "full" and state["connection"]["remote_enabled"]
+            assert not state["usage_scope"]["started"]
+            assert state["tokens"]["official"]["total_tokens"] is None
             material = json.dumps([{"warehouse_region_identifier": f"region-{i}",
                                     "warehouse_inventory_description": "stable inventory",
                                     "warehouse_inventory_quantity": 100} for i in range(500)])
             body = {"model": "test", "instructions": "Never execute payments.",
+                    "client_metadata": {"thread_id": "smoke-a", "turn_id": "turn-1"},
                     "tools": [{"type": "function", "name": f'mcp__{record["source_server"]}__lingmou_source_read',
                                "parameters": {"type": "object", "properties": {}}}],
                     "input": [{"role": "user", "content": "Check inventory."},
@@ -95,9 +98,22 @@ def check(executable):
             recent = state["tokens"]["recent_requests"]
             assert recent[0]["before"] > recent[0]["after"]
             assert recent[1]["before"] == recent[1]["after"]
+            previous_scope = state["usage_scope"]["id"]
+            body["client_metadata"] = {"thread_id": "smoke-b", "turn_id": "turn-1"}
+            request = Request(connected["openai_base_url"] + '/responses',
+                              data=json.dumps(body).encode(), headers={"Content-Type": "application/json",
+                              "X-Lingmou-Relay-Token": record["access_token"]})
+            with opener.open(request, timeout=30) as response:
+                assert response.read() == wire
+            state = command("status")
+            assert state["usage_scope"]["id"] != previous_scope
+            assert state["tokens"]["official"]["total_tokens"] == 128
+            assert state["tokens"]["local"]["requests"] == 1
+            assert len(state["tokens"]["recent_requests"]) == 1
             command("set_mode", mode="full", remote_enabled=True)
             state = command("restart")
             assert state["connection"]["remote_enabled"] and state["connection"]["mode"] == "full"
+            assert not state["usage_scope"]["started"]
             command("disconnect")
             assert config.read_text(encoding="utf-8") == original
             command("shutdown")
@@ -107,6 +123,7 @@ def check(executable):
                               "stable_provider_identity": "passed",
                               "source_reader_visibility_config": "passed",
                               "compression_savings_projection": "passed",
+                              "empty_start_and_new_conversation_reset": "passed",
                               "mode_switch": "passed", "sse_and_usage": "passed", "restart": "passed",
                               "config_restore_unicode_path": "passed", "real_model_calls": 0}))
         finally:

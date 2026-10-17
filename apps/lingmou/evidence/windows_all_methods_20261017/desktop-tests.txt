@@ -1,0 +1,26 @@
+
+> lingmou-agent-security@0.1.8 test
+> node --test test/*.test.cjs
+
+✔ shows current conversation compression separately from official and auxiliary usage (12.820238ms)
+✔ compares components and requests, preserving growth and missing measurements (1.354971ms)
+✔ empty, legacy, and incomplete snapshots show unknown savings instead of zero (1.562038ms)
+✔ known zero savings are displayed and explained, including disabled compression (4.211715ms)
+✔ polling replaces totals, mode changes preserve totals, and a restart clears them (1.038583ms)
+✔ initialization traffic and old snapshots never display token usage before a conversation (0.892142ms)
+✔ a new conversation immediately replaces every old total and request row (1.033016ms)
+✔ compression estimates are available before official usage arrives (0.769875ms)
+✔ launcher renderer stays behind a narrow context bridge (0.686862ms)
+✔ desktop process starts enforce mode with local audits (0.346645ms)
+✔ remote service parser accepts one token-bearing private HTTPS origin (0.893145ms)
+✔ remote service parser rejects public, ambiguous, and token-leaking URLs (0.556947ms)
+✔ remote connection scope accepts only loopback and private addresses (3.147479ms)
+✔ certificate fingerprint normalization accepts common SHA-256 display forms (0.256909ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 57.117559

@@ -200,6 +200,7 @@ def test_relay_mode_switch_restart_usage_and_restore(tmp_path, monkeypatch):
         companion.connect(config_path=str(target), auth_kind="api", upstream=f"http://127.0.0.1:{server.server_port}/v1",
                           mode="full", remote_enabled=True)
         body = request_body()
+        body["client_metadata"] = {"thread_id": "desktop-test", "turn_id": "turn-1"}
         body["tools"] = [{**READER, "name": f'mcp__{companion.connection.record["source_server"]}__lingmou_source_read'}]
         for mode in ("full", "off"):
             companion.set_mode(mode)

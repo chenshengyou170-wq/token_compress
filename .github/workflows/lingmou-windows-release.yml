@@ -66,7 +66,7 @@ jobs:
           }
           $version = (Get-Content desktop/package.json | ConvertFrom-Json).version
           if ($env:GITHUB_REF_TYPE -eq 'tag' -and $env:GITHUB_REF_NAME -ne "lingmou-v$version") { throw 'Tag/version mismatch' }
-          Test-Checked .venv/Scripts/python.exe @('-m', 'pytest', 'tests/test_desktop_connection.py', 'tests/test_desktop_companion.py', 'tests/test_request_token_tap.py', '-q')
+          Test-Checked .venv/Scripts/python.exe @('-m', 'pytest', 'tests/test_desktop_connection.py', 'tests/test_desktop_companion.py', 'tests/test_desktop_conversation_usage.py', 'tests/test_request_token_tap.py', 'tests/test_compression_worker.py', 'tests/test_full_compression.py', 'tests/test_full_compression_reintegration.py', 'tests/test_tool_output_history.py', 'tests/test_compression_v2.py', '-q')
           Test-Checked npm @('--prefix', 'desktop', 'test')
           Test-Checked npm @('--prefix', 'web', 'test')
       - name: Check actual Codex reader visibility and thread resume

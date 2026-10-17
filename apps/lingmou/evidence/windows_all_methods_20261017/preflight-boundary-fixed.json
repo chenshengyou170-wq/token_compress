@@ -1,0 +1,152 @@
+{
+  "observation": {
+    "status": "skipped",
+    "reason": "full_no_valid_reduction",
+    "text_tokens_before_estimate": 0,
+    "text_tokens_after_estimate": 0,
+    "changed_fields": 0,
+    "changed_roles": [],
+    "tokenizer_source": "tokenizer-est",
+    "latency_ms": 20426.906,
+    "compression_model_calls": 4,
+    "cache_hits": 0,
+    "rejected_fields": 0,
+    "full_request_tokens_before_estimate": 377,
+    "full_request_tokens_after_estimate": 377,
+    "compression_calls": [
+      {
+        "provider": "kimi",
+        "purpose": "full_compression",
+        "status": "completed",
+        "official_usage": {
+          "input_tokens": 564,
+          "output_tokens": 869,
+          "total_tokens": 1433,
+          "cached_input_tokens": 564,
+          "reasoning_output_tokens": 675
+        },
+        "model": "kimi-for-coding"
+      },
+      {
+        "provider": "typesafe",
+        "purpose": "compression_validation",
+        "status": "completed",
+        "official_usage": {
+          "input_tokens": 987,
+          "output_tokens": 21,
+          "total_tokens": 1008,
+          "cached_input_tokens": null,
+          "reasoning_output_tokens": null
+        },
+        "model": "jev-1.13.0",
+        "verdicts": [
+          {
+            "component": "tool_output",
+            "threshold": 0.75,
+            "probability": 0.7,
+            "accepted": false
+          }
+        ]
+      },
+      {
+        "provider": "typesafe",
+        "purpose": "compression_validation",
+        "status": "completed",
+        "official_usage": {
+          "input_tokens": 1012,
+          "output_tokens": 21,
+          "total_tokens": 1033,
+          "cached_input_tokens": null,
+          "reasoning_output_tokens": null
+        },
+        "model": "jev-1.13.0",
+        "verdicts": [
+          {
+            "component": "tool_output",
+            "threshold": 0.75,
+            "probability": 0.45,
+            "accepted": false
+          }
+        ]
+      },
+      {
+        "provider": "typesafe",
+        "purpose": "compression_validation",
+        "status": "completed",
+        "official_usage": {
+          "input_tokens": 1046,
+          "output_tokens": 21,
+          "total_tokens": 1067,
+          "cached_input_tokens": null,
+          "reasoning_output_tokens": null
+        },
+        "model": "jev-1.13.0",
+        "verdicts": [
+          {
+            "component": "tool_output",
+            "threshold": 0.75,
+            "probability": 0.38,
+            "accepted": false
+          }
+        ]
+      }
+    ],
+    "local_model_calls": 3,
+    "lossy_fields": 0,
+    "method_observations": [
+      {
+        "method": "caveman",
+        "component": "tool_output",
+        "before": 312,
+        "status": "insufficient_saving",
+        "latency_ms": 1.074,
+        "after": 298,
+        "saved": 14
+      },
+      {
+        "method": "llmlingua2",
+        "component": "tool_output",
+        "before": 312,
+        "status": "rejected_semantics",
+        "latency_ms": 1477.385,
+        "after": 182,
+        "saved": 130
+      },
+      {
+        "method": "caveman_nlp",
+        "component": "tool_output",
+        "before": 312,
+        "status": "rejected_semantics",
+        "latency_ms": 68.085,
+        "after": 213,
+        "saved": 99
+      },
+      {
+        "method": "caveman_mlm",
+        "component": "tool_output",
+        "before": 312,
+        "status": "skipped_length_limit",
+        "latency_ms": 0
+      },
+      {
+        "method": "headroom",
+        "component": "tool_output",
+        "before": 312,
+        "status": "insufficient_saving",
+        "latency_ms": 11.577,
+        "after": 312,
+        "saved": 0
+      },
+      {
+        "method": "kimi",
+        "component": "tool_output",
+        "before": 312,
+        "status": "rejected_semantics",
+        "latency_ms": 16795.746,
+        "after": 158,
+        "saved": 154
+      }
+    ]
+  },
+  "source_count": 1
+}

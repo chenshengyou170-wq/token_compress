@@ -61,7 +61,9 @@ function controls() {
     element(prefix === "initial" ? "initial-mode-hint" : "mode-hint").textContent = MODE_HINTS[mode] || MODE_HINTS.structure;
     const remote = state.remote_configuration || {};
     const missing = [!remote.kimi_configured && "Kimi", !remote.jev_configured && "TypeSafe / Jev"].filter(Boolean);
-    element(`${prefix}-remote-status`).textContent = remote.ready
+    element(`${prefix}-remote-status`).textContent = remote.worker_configured
+      ? "已配置本机压缩服务转发；模型在连接的主机上运行。连通性将在实际请求时确认，额外用量单独记录。"
+      : remote.ready
       ? "已检测到 Kimi 与 Jev 配置；是否可调用将在实际请求时确认。调用受预算限制，额外用量在 Token 用量页单独列出。"
       : `尚未检测到 ${missing.join("、")} 配置。开启后仍先使用本地压缩；配置完成并重新打开灵眸后，远程功能才可用。`;
   }
@@ -123,11 +125,11 @@ function renderCompression(tokens) {
   element("compression-summary").textContent = measured
     ? `已统计 ${number(local.requests)} 次请求 · ${number(local.compressed_requests)} 次输入缩短${tokens.processing ? " · 正在处理新请求" : ""}`
     : tokens.processing ? "正在处理请求，压缩效果即将更新。"
-      : state.request_count > 0 ? "已收到请求，暂无可用的压缩前后估算。" : "等待请求后显示压缩效果。";
+      : state.usage_scope?.started ? "已收到对话请求，暂无可用的压缩前后估算。" : "等待请求后显示压缩效果。";
   element("compression-hint").textContent = (state.connection?.mode || tokens.requested_mode) === "off"
-    ? "当前已关闭压缩，仅采集用量；本次运行已有的压缩统计会保留。可在应用接入页开启压缩。"
+    ? "当前已关闭压缩，仅采集用量；当前对话已有的压缩统计会保留。可在应用接入页开启压缩。"
     : measured ? local.saved > 0
-      ? "按本次后台运行累计；未缩短的请求也计入压缩前后总量。"
+      ? "按当前对话本次发出的请求累计；未缩短的请求也计入压缩前后总量。"
       : "当前记录尚无累计节省。没有可压缩内容或压缩未产生收益时，会保留原文转发。"
       : state.running ? "继续在 Codex 中工作，收到可统计的请求后自动更新。"
         : "接入 Codex 并发起任务后显示压缩效果；缺失的历史统计保持未知。";
@@ -136,10 +138,10 @@ function renderCompression(tokens) {
 function render(next) {
   state = next;
   const connection = state.connection;
-  const received = state.request_count > 0;
+  const received = state.running && state.usage_scope?.started === true;
   const badge = element("connection-badge");
   badge.textContent = state.error ? "服务需要处理" : state.running
-    ? received ? "已收到请求" : "已配置 · 等待请求" : state.enabled ? "连接待恢复" : "尚未接入";
+    ? received ? "已收到对话请求" : "已配置 · 等待对话" : state.enabled ? "连接待恢复" : "尚未接入";
   badge.dataset.status = state.error ? "error" : received && state.running ? "connected" : "idle";
   element("setup-status").textContent = badge.textContent;
   if (!state.enabled && connection?.legacy_provider_preserved) {
@@ -158,7 +160,8 @@ function render(next) {
     }
   }
   element("traffic-state").textContent = state.running
-    ? `${number(state.request_count || 0)} 次请求 · ${number(state.active_requests || 0)} 次进行中${state.relay_errors ? ` · ${number(state.relay_errors)} 次转发异常` : ""}`
+    ? received ? `当前对话 ${number(state.usage_scope.requests)} 次请求 · ${number(state.usage_scope.active_requests)} 次进行中`
+      : "连接已就绪，等待对话的首个请求。"
     : "后台尚未运行，请恢复服务或解除接入。";
   element("reader-state").textContent = state.source_reader_seen ? "最近请求已包含补读工具" : "尚未在请求中确认";
   const excerpt = ["extract", "auto", "full"].includes(connection?.mode);
@@ -172,7 +175,10 @@ function render(next) {
   const error = operationError || state.error || "";
   element("error-banner").textContent = error;
   element("error-banner").hidden = !error;
-  const tokens = state.tokens || {};
+  element("usage-empty").hidden = received;
+  element("usage-data").hidden = !received;
+  element("connection-usage").hidden = !received;
+  const tokens = received ? state.tokens || {} : {};
   renderCompression(tokens);
   const official = tokens.official || {};
   element("official-total").textContent = number(official.total_tokens);
@@ -186,9 +192,9 @@ function render(next) {
   element("usage-quality").textContent = !official.measured_requests ? "等待官方 usage"
     : official.missing_requests ? `已知小计 · ${number(official.missing_requests)} 次缺少用量`
       : `${number(official.measured_requests)} 次已确认`;
-  element("usage-period").textContent = state.running
-    ? "当前后台运行中的模型请求；多个 Codex 会话合计展示，重启后台后重新累计。"
-    : "最近一次保存的后台运行记录。缺失记录时显示未知。";
+  element("usage-period").textContent = received
+    ? "当前对话本次统计；新对话发出首个请求时重新计数，旧对话的累计用量不带入。"
+    : state.running ? "等待你在 Codex 中发起对话。" : "接入 Codex 并发起对话后开始统计。";
   const components = tokens.breakdown?.requests ? tokens.breakdown.components || [] : [];
   rows("component-rows", components, [
     { value: (row) => row.label },

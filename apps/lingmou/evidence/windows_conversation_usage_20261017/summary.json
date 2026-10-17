@@ -1,0 +1,214 @@
+{
+  "version": "0.1.6",
+  "scope": "Lingmou Windows product usage display",
+  "local_regressions": {
+    "backend_passed": 129,
+    "desktop_passed": 14,
+    "frozen_backend_mock": "passed",
+    "codex_cli_mock": "passed"
+  },
+  "real_windows_upstream": {
+    "blank": {
+      "stage": "blank_thread_after_10_seconds",
+      "at": "2026-10-17T05:00:52.745Z",
+      "request_count": 2,
+      "local": {
+        "before": null,
+        "after": null,
+        "saved": null,
+        "savings_percent": null,
+        "requests": 0,
+        "compressed_requests": 0,
+        "current_input": null,
+        "current_input_quality": "estimated"
+      },
+      "official": {
+        "source": "unavailable",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "cached_input_tokens": null,
+        "compression_tokens": 0,
+        "known_compression_tokens": 0,
+        "missing_compression_calls": 0,
+        "measured_requests": 0,
+        "missing_requests": 0,
+        "complete": false
+      },
+      "usage_scope": {
+        "kind": "conversation",
+        "id": null,
+        "started": false,
+        "started_at": null,
+        "requests": 0,
+        "active_requests": 0
+      }
+    },
+    "trials": [
+      {
+        "label": "完整压缩复测",
+        "thread_id": "[redacted-session-id]",
+        "totals": {
+          "requests": 1,
+          "before": 20813,
+          "after": 15097,
+          "official_input": 12686,
+          "official_output": 33,
+          "official_cached": 0,
+          "official_usage_requests": 1
+        },
+        "display": {
+          "at": "2026-10-17T05:01:01.288Z",
+          "request_count": 4,
+          "local": {
+            "before": 20813,
+            "after": 15097,
+            "saved": 5716,
+            "savings_percent": 27.5,
+            "requests": 1,
+            "compressed_requests": 1,
+            "current_input": null,
+            "current_input_quality": "estimated"
+          },
+          "official": {
+            "source": "request_usage",
+            "input_tokens": 12686,
+            "output_tokens": 33,
+            "total_tokens": 12719,
+            "cached_input_tokens": 0,
+            "compression_tokens": 0,
+            "known_compression_tokens": 0,
+            "missing_compression_calls": 0,
+            "measured_requests": 1,
+            "missing_requests": 0,
+            "complete": true
+          },
+          "usage_scope": {
+            "kind": "conversation",
+            "id": "[redacted-conversation-id]",
+            "started": true,
+            "started_at": "2026-10-17T05:00:55.169062+00:00",
+            "requests": 1,
+            "active_requests": 0
+          }
+        },
+        "checks": {
+          "identified": true,
+          "request_count": true,
+          "local": true,
+          "official": true,
+          "recent": true,
+          "new_conversation": true
+        }
+      },
+      {
+        "label": "关闭压缩复测",
+        "thread_id": "[redacted-session-id]",
+        "totals": {
+          "requests": 1,
+          "before": 20829,
+          "after": 20829,
+          "official_input": 18306,
+          "official_output": 34,
+          "official_cached": 6016,
+          "official_usage_requests": 1
+        },
+        "display": {
+          "at": "2026-10-17T05:01:10.268Z",
+          "request_count": 6,
+          "local": {
+            "before": 20829,
+            "after": 20829,
+            "saved": 0,
+            "savings_percent": 0,
+            "requests": 1,
+            "compressed_requests": 0,
+            "current_input": null,
+            "current_input_quality": "estimated"
+          },
+          "official": {
+            "source": "request_usage",
+            "input_tokens": 18306,
+            "output_tokens": 34,
+            "total_tokens": 18340,
+            "cached_input_tokens": 6016,
+            "compression_tokens": 0,
+            "known_compression_tokens": 0,
+            "missing_compression_calls": 0,
+            "measured_requests": 1,
+            "missing_requests": 0,
+            "complete": true
+          },
+          "usage_scope": {
+            "kind": "conversation",
+            "id": "[redacted-conversation-id]",
+            "started": true,
+            "started_at": "2026-10-17T05:01:03.565559+00:00",
+            "requests": 1,
+            "active_requests": 0
+          }
+        },
+        "checks": {
+          "identified": true,
+          "request_count": true,
+          "local": true,
+          "official": true,
+          "recent": true,
+          "new_conversation": true
+        }
+      }
+    ],
+    "existing_config_unchanged": true,
+    "private_sidecar_restored": true
+  },
+  "source_sha256": {
+    "src/codexscope/conversation_usage.py": "11a3202c055452b06064fb3f806d576bea55e60b6b498aa90981c96ef3ed4013",
+    "src/codexscope/request_usage_ledger.py": "926b25ab551444e1692f888aaa6f3947266d0e191be86e024afbf2e0bff00ad7",
+    "src/codexscope/request_token_tap.py": "0343f1e6dde2624e60552d1335460202d93e7f45b4703233aa705f693bce7a91",
+    "src/codexscope/desktop_companion.py": "5c2dab18219992e5c05290847f33759b72f607cddb980061e6dd54b67d9ff08a",
+    "src/codexscope/token_panel.py": "80494905070b8e97a976081682ce04fa3e42c7eb0bd05c7c764010faa9c2c711",
+    "desktop/ui/compression.js": "91cd8a6f2143e6e532ac0cbb15f5d22c8f22d0c2bb085a51fd46af9704811447",
+    "desktop/ui/compression.html": "5f5d8b2aa7ec551e94be2531cb21985a4e009bb35e0702fda792cef786156353",
+    "tests/test_desktop_conversation_usage.py": "b90fc9d87c7a276d84818426803f3d3101b524ec8381ddbb369ab9d817ef7c6c",
+    "tests/test_desktop_companion.py": "24972db237a5ab2796a3b6dc0b1f1f3b554817095cbf54d2e839cb166130b1c8",
+    "desktop/test/compression-ui.test.cjs": "20d0387c9520186238d4ef8c92c768310f24688575a67038a87c9cb307a349b6",
+    "desktop/scripts/check-companion.py": "b524b69b77163dad8a618e1973e4679a00065971523c9268b8860d565846e12b",
+    "desktop/package.json": "9ef51962a13757e81090cfb70f40d0712258385268a4ea8f02c58b7d0b8d0004",
+    "desktop/package-lock.json": "4a9d64e51f64a7fe21abce9de5a99b4747eab874401e1af9df14a43477482770",
+    ".github/workflows/lingmou-windows-release.yml": "8bd62d4b0f9080c03b744a392f1712a2b439155d3fb75de31a63fc15c28f9c97"
+  },
+  "installed_backend_sha256": "22ebcbfbf57e5b9b28999f2e090134fd9319c4ba74ad8b9b426541e5232b0be6",
+  "published": false,
+  "deployment": {
+    "installed_version": "0.1.6",
+    "backend_sha256": "22ebcbfbf57e5b9b28999f2e090134fd9319c4ba74ad8b9b426541e5232b0be6",
+    "asar_sha256": "2337fc046126ff2e7e0607d4c2e3d1f1e6d95bb14c00d4e9b50eb19ae83da591",
+    "config_unchanged": true,
+    "connection_phase": "connected",
+    "port": 53177,
+    "listener_pid": 50832,
+    "active_connections": 0,
+    "source_reader_retained": true
+  },
+  "windows_ui": {
+    "version": "0.1.6",
+    "process_id": 44524,
+    "usage_page_opened": true,
+    "waiting_visible": true,
+    "text": [
+      "灵眸",
+      "本地压缩默认开启",
+      "\n",
+      "远程改写按需启用",
+      "Token 压缩",
+      "已配置 · 等待对话",
+      "Token 压缩与用量",
+      "等待你在 Codex 中发起对话。",
+      "等待对话开始",
+      "发出第一条消息后，这里会显示本次对话的压缩效果与用量。",
+      "初始化和预热不计入。新对话从首个实际请求开始统计，不带入旧对话的累计用量。",
+      "本机服务运行中 · 关闭窗口后继续在托盘运行"
+    ]
+  },
+  "temporary_start_and_ui_tasks_removed": true
+}

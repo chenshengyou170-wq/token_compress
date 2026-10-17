@@ -1,0 +1,13 @@
+{
+  "frozen_companion": "passed",
+  "full_compression": "passed",
+  "stable_provider_identity": "passed",
+  "source_reader_visibility_config": "passed",
+  "compression_savings_projection": "passed",
+  "empty_start_and_new_conversation_reset": "passed",
+  "mode_switch": "passed",
+  "sse_and_usage": "passed",
+  "restart": "passed",
+  "config_restore_unicode_path": "passed",
+  "real_model_calls": 0
+}

@@ -19,6 +19,7 @@ from .desktop_connection import (
     MODES, CodexConnection, ConnectionError, default_codex_config, file_lock, inspect_codex,
 )
 from .input_compression import CompressionObservation, ResponsesInputCompressor
+from .conversation_usage import ConversationUsage
 from .full_compression import FullCompressionConfig
 from .reference_selection import SourceStore
 from .request_token_tap import RequestTokenTap
@@ -58,7 +59,7 @@ def _source_available(body: dict, server_name: str) -> bool:
     return False
 
 
-def remote_configuration() -> dict:
+def remote_configuration(worker=None) -> dict:
     """Report presence only. Never expose keys, paths, or credential contents."""
     kimi = any(os.environ.get(key, "").strip() for key in ("KIMI_API_KEY", "MOONSHOT_API_KEY"))
     if not kimi and (filename := os.environ.get("KIMI_API_KEY_FILE")):
@@ -67,16 +68,20 @@ def remote_configuration() -> dict:
         except OSError:
             pass
     jev = bool(os.environ.get("TYPESAFE_API_KEY", "").strip())
-    return {"kimi_configured": bool(kimi), "jev_configured": jev, "ready": bool(kimi and jev)}
+    result = {"kimi_configured": bool(kimi), "jev_configured": jev, "ready": bool(kimi and jev) or worker is not None}
+    if worker is not None:
+        result['worker_configured'] = True
+    return result
 
 
 class DesktopCompressor(ResponsesInputCompressor):
     supports_chat_completions = True
 
-    def __init__(self, mode: str, store: SourceStore, server_name: str, *, remote_enabled=False, **kwargs):
+    def __init__(self, mode: str, store: SourceStore, server_name: str, *, remote_enabled=False, worker=None, **kwargs):
         super().__init__(**kwargs)
         self.mode, self.store, self.server_name = mode, store, server_name
         self.remote_enabled = remote_enabled
+        self.worker = worker
         self.last_reason = "waiting_for_request"
         self.last_status = "waiting"
         self.last_mode = None
@@ -96,7 +101,7 @@ class DesktopCompressor(ResponsesInputCompressor):
             return raw, CompressionObservation("skipped", "unsupported_input")
         with self._lock:
             mode = self.mode
-            remote = self.remote_enabled and remote_configuration()["ready"]
+            remote = self.remote_enabled and remote_configuration(self.worker)["ready"]
         has_reader = _source_available(body, self.server_name)
         # Multiple Codex conversations may share this provider. Request-local
         # engines never reuse another conversation's prefix/delta/cache state.
@@ -108,7 +113,10 @@ class DesktopCompressor(ResponsesInputCompressor):
                                        startup_remote_tokens=0, output_rewrite=False)
         engine = UnifiedInputCompressor(mode, source_store=self.store if has_reader else None,
                                        token_counter=self.token_counter, full_config=config)
-        output, observation = engine.compress_observed(raw)
+        if remote and self.worker is not None and mode == 'full' and has_reader:
+            output, observation = self.worker.compress(raw, self.store)
+        else:
+            output, observation = engine.compress_observed(raw)
         if not has_reader and mode in {"extract", "auto", "full"}:
             observation = replace(observation, reason="source_tool_unavailable")
         with self._lock:
@@ -142,12 +150,16 @@ class Companion:
 
     def _start_relay(self):
         record = self.connection.record
+        from .compression_worker_client import CompressionWorkerClient
+        worker = CompressionWorkerClient.from_file(self.root / 'worker.json')
         self.compressor = DesktopCompressor(record["mode"], SourceStore(self.connection.directory / "sources"),
-                                            record["source_server"], remote_enabled=record.get("remote_enabled") is True)
+                                            record["source_server"], remote_enabled=record.get("remote_enabled") is True,
+                                            worker=worker)
         self.tap = RequestTokenTap(
             record["upstream"], listen_port=record["port"], access_token=record["access_token"],
             access_token_in_path=record.get("path_auth", False),
             input_compressor=self.compressor, on_request_usage=self._record_usage,
+            track_conversations=True,
         ).start()
         self.error = ""
         self.started_at = datetime.now(UTC).isoformat()
@@ -177,20 +189,28 @@ class Companion:
         root = self.connection.directory if self.connection.record else self.root
         source_files = list((self.root / "connections").glob("*/sources/*.txt"))
         source_bytes = sum(file.stat().st_size for file in source_files if file.is_file() and not file.is_symlink())
-        public_stats = {**stats, "configurable": bool(self.tap)}
+        # A stopped service or a legacy saved snapshot is not a new conversation.
+        # Persisted run totals remain diagnostic evidence, never a display seed.
+        current = stats.get("conversation_usage") if self.tap else None
+        current = current or ConversationUsage().snapshot()
+        scope = current["scope"]
+        public_stats = {**current, "running": bool(self.tap), "configurable": bool(self.tap),
+                        "input_compression": {"mode": (self.connection.record or {}).get("mode", "off"),
+                                              "processing": scope["active_requests"] > 0}}
         return {
             "schema_version": 1, "enabled": self.connection.enabled, "running": bool(self.tap),
             "active_requests": stats.get("active_requests", 0),
             "connection": self.connection.public(), "default_config_path": str(default_codex_config()),
             "error": self.error, "started_at": self.started_at,
             "request_count": stats.get("request_count", 0), "relay_errors": stats.get("error_count", 0),
+            "usage_scope": scope,
             "source_bytes": source_bytes, "source_count": len(source_files),
             "source_reader_seen": (stats.get("input_compression") or {}).get("source_reader_seen", False),
             "last_reason": (stats.get("input_compression") or {}).get("last_reason", "waiting_for_request"),
             "last_status": (stats.get("input_compression") or {}).get("last_status", "waiting"),
             "last_mode": (stats.get("input_compression") or {}).get("last_mode"),
-            "remote_configuration": remote_configuration(),
-            "tokens": token_panel_snapshot(root, provider_snapshot=public_stats),
+            "remote_configuration": remote_configuration(self.compressor.worker if self.compressor else None),
+            "tokens": token_panel_snapshot(root, provider_snapshot=public_stats, allow_usage_fallback=False),
         }
 
     def connect(self, *, config_path: str, auth_kind: str, upstream: str = "", mode: str = "structure",

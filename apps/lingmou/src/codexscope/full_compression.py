@@ -25,6 +25,7 @@ from .reference_selection import SourceStore, LexicalSelector, extract_source, s
 from .compression_boundary import task_from_body, transform_data, REFERENCE_START
 from .deferred_tools import defer_request_tools
 from .skill_catalog_compression import defer_skill_descriptions
+from .tool_output_history import compact_tool_outputs
 from .structural_compression import StructuralCompressor, dumps, loads
 from token_compression.backends import make_backend, protected_rewrite
 from token_compression.history import trim_history
@@ -38,6 +39,7 @@ METHOD_LABELS = {
     'kimi': 'Kimi 大模型压缩', 'jev': 'Jev 语义核对',
     'history': '整轮旧历史裁剪', 'tool_loading': '工具按需加载',
     'skill_loading': '技能说明按需加载',
+    'tool_history': '旧工具输出按需补读',
 }
 _MARKERS = re.compile(r'⟦KEEP_\d+⟧')
 _TEXT_KEYS = {'text', 'output', 'content', 'stdout', 'stderr', 'description', 'summary'}
@@ -47,6 +49,8 @@ _TEXT_KEYS = {'text', 'output', 'content', 'stdout', 'stderr', 'description', 's
 class FullCompressionConfig:
     history_max_tokens: int = 24000
     history_keep_turns: int = 2
+    tool_history_max_tokens: int = 12000
+    tool_history_keep_results: int = 4
     material_threshold: float = .75
     instruction_threshold: float = .9
     min_model_tokens: int = 256
@@ -61,12 +65,14 @@ class FullCompressionConfig:
     output_rewrite: bool = False
 
     def __post_init__(self):
-        for name in ('history_max_tokens', 'min_model_tokens', 'min_saved_tokens',
+        for name in ('history_max_tokens', 'tool_history_max_tokens', 'min_model_tokens', 'min_saved_tokens',
                      'max_remote_calls', 'max_remote_tokens', 'startup_remote_tokens'):
             if type(getattr(self, name)) is not int or getattr(self, name) < 0:
                 raise ValueError(name + ' must be a nonnegative integer')
         if type(self.history_keep_turns) is not int or self.history_keep_turns < 1:
             raise ValueError('history_keep_turns must be positive')
+        if type(self.tool_history_keep_results) is not int or self.tool_history_keep_results < 1:
+            raise ValueError('tool_history_keep_results must be positive')
         for name in ('material_threshold', 'instruction_threshold', 'min_saved_ratio', 'remote_budget_share'):
             if not 0 < getattr(self, name) <= 1:
                 raise ValueError(name + ' must be in (0,1]')
@@ -195,7 +201,9 @@ class FullCompressionPipeline:
                     'preserve every requirement and fact, authority, scope, negation and ordering. '
                     'Never change executable literals. Aim for 50-65% of the original length.'},
                 {'role': 'user', 'content': json.dumps({alias: pieces[key] for alias, key in aliases.items()}, ensure_ascii=False)},
-            ], max_tokens=min(4096, max(256, self.count(json.dumps(pieces, ensure_ascii=False)))))
+            # Coding models may spend part of this allowance on reasoning.
+            # A budget equal to source length can truncate the actual JSON.
+            ], max_tokens=min(4096, max(2048, self.count(json.dumps(pieces, ensure_ascii=False)))))
             record.update(model=result.get('model'), official_usage=result.get('usage'))
             if result.get('finish_reason') != 'stop':
                 raise ValueError('incomplete')
@@ -288,12 +296,12 @@ class FullCompressionPipeline:
 
     def _verification_pair(self, original, candidate, role, task):
         masked, protected = protect_text(original)
-        short = candidate
-        for marker, literal in protected:
-            if literal not in short:
-                return None
-            short = short.replace(literal, marker, 1)
-        if not masked or _MARKERS.findall(short) != [m for m, _ in protected]:
+        # Remask from the candidate's source spans. Repeated str.replace can
+        # replace a short literal (e.g. "1") inside a KEEP_1 marker already
+        # inserted, and used to reject even an unchanged paper abstract.
+        short, candidate_protected = protect_text(candidate)
+        if (not masked or not short
+                or [literal for _, literal in candidate_protected] != [literal for _, literal in protected]):
             return None
         return {'original': masked, 'short': short, 'component': role,
                 'task': task if role in {'tool_output', 'reference'} else ''}
@@ -474,6 +482,16 @@ class FullCompressionPipeline:
                 changed += archive['removed_messages']
                 lossy += 1
             stage('history', before, archive=archive)
+            self._note('tool_history', attempted=1)
+            previous = stages[-1]['after']
+            archived_outputs = compact_tool_outputs(body, budget=self.config.tool_history_max_tokens,
+                keep_results=self.config.tool_history_keep_results, count=self.count, store=self.store)
+            if archived_outputs:
+                self._note('tool_history', accepted=archived_outputs, saved=previous-self.count(dumps(body)))
+                roles.add('tool_output')
+                structural_changed += archived_outputs
+                lossy += archived_outputs
+            stage('tool_history', previous, archived_outputs=archived_outputs)
             slots, decoded = [], []
             codec = StructuralCompressor(self.count)
             items = body.get('messages', body.get('input', []))

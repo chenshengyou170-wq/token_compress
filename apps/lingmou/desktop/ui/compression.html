@@ -109,7 +109,7 @@
                   <div><dt>原文补读</dt><dd id="reader-state">等待请求确认</dd></div>
                   <div><dt>当前方式</dt><dd id="applied-mode">—</dd></div>
                   <div><dt>最近压缩</dt><dd id="compression-state">等待请求</dd></div>
-                  <div><dt>累计节省</dt><dd class="compression-link"><span id="connection-saved">— · 本地估算</span><button id="view-compression" type="button" class="text-button">查看压缩效果</button></dd></div>
+                  <div id="connection-usage" hidden><dt>本次对话节省</dt><dd class="compression-link"><span id="connection-saved">—</span><button id="view-compression" type="button" class="text-button">查看压缩效果</button></dd></div>
                 </dl>
                 <div class="form-grid mode-controls">
                   <div class="field"><label for="active-mode">压缩方式</label>
@@ -140,11 +140,17 @@
           </section>
 
           <section id="page-usage" class="page" aria-labelledby="usage-title" hidden>
-            <header class="page-heading"><h1 id="usage-title">Token 压缩与用量</h1><p id="usage-period">当前后台运行中的模型请求；多个 Codex 会话合计展示。</p></header>
+            <header class="page-heading"><h1 id="usage-title">Token 压缩与用量</h1><p id="usage-period">等待你在 Codex 中发起对话。</p></header>
+            <section id="usage-empty" class="surface" role="status">
+              <h2>等待对话开始</h2>
+              <p>发出第一条消息后，这里会显示本次对话的压缩效果与用量。</p>
+              <p class="hint">初始化和预热不计入。新对话从首个实际请求开始统计，不带入旧对话的累计用量。</p>
+            </section>
+            <div id="usage-data" hidden>
             <section class="surface" aria-labelledby="savings-heading">
               <div class="section-heading"><h2 id="savings-heading">压缩节省了多少</h2><span class="muted">输入 Token · 本地估算</span></div>
               <dl class="usage-totals compression-totals">
-                <div><dt>累计节省 Token</dt><dd id="compression-saved">—</dd></div>
+                <div><dt>本次对话节省 Token</dt><dd id="compression-saved">—</dd></div>
                 <div><dt>输入压缩率</dt><dd id="compression-percent">—</dd></div>
                 <div><dt>压缩前</dt><dd id="compression-before">—</dd></div>
                 <div><dt>压缩后 · 实际发送</dt><dd id="compression-after">—</dd></div>
@@ -174,6 +180,7 @@
               <div class="table-scroll" tabindex="0" role="region" aria-labelledby="requests-heading"><table class="request-table"><thead><tr><th scope="col">请求</th><th scope="col">状态</th><th scope="col" class="numeric">压缩前</th><th scope="col" class="numeric">压缩后</th><th scope="col" class="numeric">节省</th><th scope="col" class="numeric">官方输入</th><th scope="col" class="numeric">官方输出</th></tr></thead><tbody id="request-rows"><tr><td colspan="7">还没有请求记录。</td></tr></tbody></table></div>
               <p class="hint">压缩前后与节省量为本地估算；官方输入、输出来自模型返回。未知值显示“—”。</p>
             </section>
+            </div>
           </section>
 
           <section id="page-settings" class="page" aria-labelledby="settings-title" hidden>

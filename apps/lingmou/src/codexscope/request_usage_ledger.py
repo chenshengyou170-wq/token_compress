@@ -26,6 +26,48 @@ def request_accounting(headers) -> dict:
             'attempt': int(attempt) if labelled else 1, 'accounting_labelled': labelled}
 
 
+def _codex_metadata(headers, body: dict) -> dict:
+    metadata = body.get('client_metadata')
+    metadata = metadata if isinstance(metadata, dict) else {}
+    encoded = metadata.get('x-codex-turn-metadata', headers.get('x-codex-turn-metadata', ''))
+    if isinstance(encoded, str) and len(encoded) < 100_000:
+        try:
+            nested = json.loads(encoded)
+            if isinstance(nested, dict):
+                metadata = {**metadata, **nested}
+        except ValueError:
+            pass
+    return metadata
+
+
+def _identity(value) -> str | None:
+    return value if isinstance(value, str) and 0 < len(value) <= 128 else None
+
+
+def _conversation_accounting(headers, body: dict, metadata: dict) -> dict:
+    thread = _identity(metadata.get('thread_id')) or _identity(metadata.get('session_id'))
+    parent = _identity(metadata.get('parent_thread_id', metadata.get('x-codex-parent-thread-id')))
+    subagent = metadata.get('subagent_kind') or metadata.get('x-openai-subagent') or headers.get('x-openai-subagent')
+    kind = metadata.get('request_kind', 'turn')
+    kind = kind if kind in ('turn', 'prewarm', 'compaction', 'memory') else 'unknown'
+    if body.get('generate') is False:
+        kind = 'prewarm'
+    # Forked conversations use their own thread, never forked_from_thread_id.
+    # Child agents may contribute to their parent but cannot select the UI scope.
+    owner = parent or thread
+    turn = _identity(metadata.get('turn_id'))
+    started = metadata.get('turn_started_at_unix_ms')
+    return {
+        'conversation_id': 'codex-' + hashlib.sha256(owner.encode()).hexdigest()[:32] if owner else None,
+        'conversation_turn_id': hashlib.sha256((thread + ':' + turn).encode()).hexdigest()[:32] if thread and turn else None,
+        'conversation_foreground': bool(thread and turn
+                                        and kind == 'turn' and not subagent and not parent
+                                        and metadata.get('thread_source') in (None, 'user')),
+        'request_kind': kind,
+        'turn_started_at_unix_ms': started if type(started) is int and started >= 0 else None,
+    }
+
+
 class RequestAccountingTracker:
     """Correlate Codex turns without storing task content or routing tokens.
 
@@ -37,18 +79,10 @@ class RequestAccountingTracker:
         self._lock = threading.Lock()
 
     def observe(self, headers, body: dict) -> dict:
-        result = request_accounting(headers)
+        metadata = _codex_metadata(headers, body)
+        result = {**request_accounting(headers), **_conversation_accounting(headers, body, metadata)}
         if result['accounting_labelled']:
             return {**result, 'task_source': 'host', 'attempt_source': 'host', 'purpose_source': 'host'}
-        metadata = body.get('client_metadata')
-        metadata = metadata if isinstance(metadata, dict) else {}
-        encoded = metadata.get('x-codex-turn-metadata', headers.get('x-codex-turn-metadata', ''))
-        if isinstance(encoded, str) and len(encoded) < 100_000:
-            try:
-                nested = json.loads(encoded)
-                if isinstance(nested, dict): metadata = {**metadata, **nested}
-            except ValueError:
-                pass
         turn, thread = metadata.get('turn_id'), metadata.get('thread_id', metadata.get('session_id'))
         if all(isinstance(v, str) and 0 < len(v) <= 128 for v in (turn, thread)):
             result.update(task_id='codex-' + hashlib.sha256((thread + ':' + turn).encode()).hexdigest()[:32],

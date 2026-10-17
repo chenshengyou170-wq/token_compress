@@ -1,0 +1,67 @@
+{
+  "version": "0.1.7",
+  "scope": "Two new requests in the existing paper PPT conversation after app upgrade; read-only audit of existing reports, not a rerun of the whole PPT task.",
+  "request_before": 290400,
+  "request_after": 232810,
+  "requests": 2,
+  "components": [
+    {
+      "id": "instructions",
+      "requests": 2,
+      "compressed_requests": 2,
+      "before": 29604,
+      "after": 23904
+    },
+    {
+      "id": "user",
+      "requests": 2,
+      "compressed_requests": 0,
+      "before": 410,
+      "after": 410
+    },
+    {
+      "id": "history",
+      "requests": 2,
+      "compressed_requests": 0,
+      "before": 8828,
+      "after": 8828
+    },
+    {
+      "id": "tool_definitions",
+      "requests": 2,
+      "compressed_requests": 0,
+      "before": 43036,
+      "after": 43036
+    },
+    {
+      "id": "tool_calls",
+      "requests": 2,
+      "compressed_requests": 0,
+      "before": 38208,
+      "after": 38208
+    },
+    {
+      "id": "tool_results",
+      "requests": 2,
+      "compressed_requests": 2,
+      "before": 93728,
+      "after": 41838
+    },
+    {
+      "id": "other",
+      "requests": 2,
+      "compressed_requests": 0,
+      "before": 1430,
+      "after": 1430
+    }
+  ],
+  "official": {
+    "requests": 2,
+    "requests_with_official_usage": 2,
+    "official_input_tokens": 163580,
+    "official_output_tokens": 161,
+    "official_total_tokens": 163741
+  },
+  "completed": true,
+  "limitation": "Append-only read audit in the existing paper conversation, not a fresh PPT run and not a billing A/B test."
+}

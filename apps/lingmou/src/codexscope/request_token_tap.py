@@ -29,6 +29,7 @@ from .proxy_usage import TokenCounter, default_token_counter
 from .input_compression import ResponsesInputCompressor
 from .component_usage import ComponentUsageLedger, measure_components
 from .request_usage_ledger import RequestUsageLedger, provider_usage, RequestAccountingTracker, ACCOUNTING_HEADERS
+from .conversation_usage import ConversationUsage
 
 
 _HOP_BY_HOP_HEADERS = frozenset(
@@ -513,6 +514,7 @@ class _TapHTTPServer(ThreadingHTTPServer):
         on_request_usage: Callable[[dict], None] | None = None,
         access_token: str | None = None,
         access_token_in_path: bool = False,
+        track_conversations: bool = False,
     ) -> None:
         self.upstream = upstream
         self.on_input_estimate = on_input_estimate
@@ -525,6 +527,7 @@ class _TapHTTPServer(ThreadingHTTPServer):
         self.active_requests = 0
         self.usage_ledger = RequestUsageLedger(on_record=on_request_usage)
         self.component_usage = ComponentUsageLedger()
+        self.conversation_usage = ConversationUsage() if track_conversations else None
         self.accounting_tracker = RequestAccountingTracker()
         self.stats_lock = threading.Lock()
         self.request_sequence = 0
@@ -938,6 +941,7 @@ class _TapRequestHandler(BaseHTTPRequestHandler):
         connection: http.client.HTTPConnection | None = None
         response_started = False
         usage_record = None
+        conversation_epoch = None
         request_stream = False
         started = time.monotonic()
         try:
@@ -958,6 +962,10 @@ class _TapRequestHandler(BaseHTTPRequestHandler):
                             'tokenizer_source': estimate.tokenizer_source,
                             'context_complete': estimate.context_complete,
                             'official_usage': None, 'usage_source': 'unavailable', 'status': 'pending'}
+                        if endpoint.endswith('/responses/compact'):
+                            usage_record.update(request_kind='compaction', conversation_foreground=False)
+                        if server.conversation_usage is not None:
+                            conversation_epoch = server.conversation_usage.begin(usage_record)
                 except (ValueError, UnicodeDecodeError, TypeError):
                     pass
             if (
@@ -1016,6 +1024,8 @@ class _TapRequestHandler(BaseHTTPRequestHandler):
                 except Exception:
                     # A metering failure must never change or retry a valid request.
                     usage_record['component_usage_unavailable'] = True
+                if server.conversation_usage is not None:
+                    server.conversation_usage.sent(conversation_epoch, usage_record)
             response = connection.getresponse()
             if usage_record is not None:
                 usage_record['http_status'] = response.status
@@ -1147,6 +1157,8 @@ class _TapRequestHandler(BaseHTTPRequestHandler):
                     if usage_record['status'] == 'pending':
                         usage_record['status'] = 'interrupted'
                     usage_record['latency_ms'] = round(1000 * (time.monotonic() - started), 3)
+                    if server.conversation_usage is not None:
+                        server.conversation_usage.finish(conversation_epoch, usage_record)
                     server.usage_ledger.append(usage_record)
             finally:
                 try:
@@ -1173,6 +1185,7 @@ class RequestTokenTap:
         listen_port: int = 0,
         access_token: str | None = None,
         access_token_in_path: bool = False,
+        track_conversations: bool = False,
     ) -> None:
         upstream = urlsplit(upstream_base_url.strip())
         if (
@@ -1206,6 +1219,7 @@ class RequestTokenTap:
                 c not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-" for c in access_token)):
             raise ValueError("path authentication requires a URL-safe local relay credential")
         self.listen_port = listen_port
+        self.track_conversations = track_conversations
         self.access_token = access_token
         self.access_token_in_path = access_token_in_path
         self.upstream = upstream
@@ -1243,6 +1257,7 @@ class RequestTokenTap:
             on_request_usage=self.on_request_usage,
             access_token=self.access_token,
             access_token_in_path=self.access_token_in_path,
+            track_conversations=self.track_conversations,
         )
         thread = threading.Thread(
             target=server.serve_forever,
@@ -1317,6 +1332,8 @@ class RequestTokenTap:
                 "upstream_path": self.upstream.path or "/",
                 "usage_ledger": server.usage_ledger.snapshot(),
                 "component_usage": server.component_usage.snapshot(),
+                **({"conversation_usage": server.conversation_usage.snapshot()}
+                   if server.conversation_usage is not None else {}),
                 **(
                     {"input_compression": self.input_compressor.stats()}
                     if self.input_compressor is not None else {}

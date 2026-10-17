@@ -1,0 +1,336 @@
+{
+  "scope": "visible task and tool history; not a captured complete wire request",
+  "model_tokenizer": "gpt-6-astra local proxy estimate",
+  "requests": [
+    {
+      "items": 4,
+      "before": {
+        "input": 3074,
+        "output": 3074,
+        "status": "skipped",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 3074,
+        "output": 3074,
+        "status": "skipped",
+        "archived_outputs": 0
+      }
+    },
+    {
+      "items": 6,
+      "before": {
+        "input": 4845,
+        "output": 4845,
+        "status": "skipped",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 4845,
+        "output": 4845,
+        "status": "skipped",
+        "archived_outputs": 0
+      }
+    },
+    {
+      "items": 8,
+      "before": {
+        "input": 10737,
+        "output": 10737,
+        "status": "skipped",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 10737,
+        "output": 10737,
+        "status": "skipped",
+        "archived_outputs": 0
+      }
+    },
+    {
+      "items": 11,
+      "before": {
+        "input": 18564,
+        "output": 18564,
+        "status": "skipped",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 18564,
+        "output": 18564,
+        "status": "skipped",
+        "archived_outputs": 0
+      }
+    },
+    {
+      "items": 13,
+      "before": {
+        "input": 19860,
+        "output": 19860,
+        "status": "skipped",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 19860,
+        "output": 19860,
+        "status": "skipped",
+        "archived_outputs": 0
+      }
+    },
+    {
+      "items": 15,
+      "before": {
+        "input": 25422,
+        "output": 25422,
+        "status": "skipped",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 25422,
+        "output": 25422,
+        "status": "skipped",
+        "archived_outputs": 0
+      }
+    },
+    {
+      "items": 17,
+      "before": {
+        "input": 25989,
+        "output": 25989,
+        "status": "skipped",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 25989,
+        "output": 20976,
+        "status": "compressed",
+        "archived_outputs": 1
+      }
+    },
+    {
+      "items": 19,
+      "before": {
+        "input": 39813,
+        "output": 39813,
+        "status": "skipped",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 39813,
+        "output": 34800,
+        "status": "compressed",
+        "archived_outputs": 1
+      }
+    },
+    {
+      "items": 21,
+      "before": {
+        "input": 44089,
+        "output": 44089,
+        "status": "skipped",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 44089,
+        "output": 39076,
+        "status": "compressed",
+        "archived_outputs": 1
+      }
+    },
+    {
+      "items": 24,
+      "before": {
+        "input": 44767,
+        "output": 44767,
+        "status": "skipped",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 44767,
+        "output": 35177,
+        "status": "compressed",
+        "archived_outputs": 2
+      }
+    },
+    {
+      "items": 26,
+      "before": {
+        "input": 46700,
+        "output": 46700,
+        "status": "skipped",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 46700,
+        "output": 37110,
+        "status": "compressed",
+        "archived_outputs": 2
+      }
+    },
+    {
+      "items": 28,
+      "before": {
+        "input": 47793,
+        "output": 47793,
+        "status": "skipped",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 47793,
+        "output": 25291,
+        "status": "compressed",
+        "archived_outputs": 3
+      }
+    },
+    {
+      "items": 30,
+      "before": {
+        "input": 48114,
+        "output": 48114,
+        "status": "skipped",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 48114,
+        "output": 22537,
+        "status": "compressed",
+        "archived_outputs": 4
+      }
+    },
+    {
+      "items": 33,
+      "before": {
+        "input": 57411,
+        "output": 57411,
+        "status": "skipped",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 57411,
+        "output": 31834,
+        "status": "compressed",
+        "archived_outputs": 4
+      }
+    },
+    {
+      "items": 35,
+      "before": {
+        "input": 57848,
+        "output": 57848,
+        "status": "skipped",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 57848,
+        "output": 32271,
+        "status": "compressed",
+        "archived_outputs": 4
+      }
+    },
+    {
+      "items": 38,
+      "before": {
+        "input": 60060,
+        "output": 60056,
+        "status": "compressed",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 60060,
+        "output": 34479,
+        "status": "compressed",
+        "archived_outputs": 4
+      }
+    },
+    {
+      "items": 40,
+      "before": {
+        "input": 60366,
+        "output": 60362,
+        "status": "compressed",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 60366,
+        "output": 34785,
+        "status": "compressed",
+        "archived_outputs": 4
+      }
+    },
+    {
+      "items": 42,
+      "before": {
+        "input": 60727,
+        "output": 60723,
+        "status": "compressed",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 60727,
+        "output": 34782,
+        "status": "compressed",
+        "archived_outputs": 5
+      }
+    },
+    {
+      "items": 46,
+      "before": {
+        "input": 62705,
+        "output": 61602,
+        "status": "compressed",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 62705,
+        "output": 35661,
+        "status": "compressed",
+        "archived_outputs": 5
+      }
+    },
+    {
+      "items": 48,
+      "before": {
+        "input": 63404,
+        "output": 62301,
+        "status": "compressed",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 63404,
+        "output": 36360,
+        "status": "compressed",
+        "archived_outputs": 5
+      }
+    },
+    {
+      "items": 50,
+      "before": {
+        "input": 66525,
+        "output": 65422,
+        "status": "compressed",
+        "archived_outputs": 0
+      },
+      "after": {
+        "input": 66525,
+        "output": 39481,
+        "status": "compressed",
+        "archived_outputs": 5
+      }
+    }
+  ],
+  "totals": {
+    "before": {
+      "input": 868813,
+      "output": 865492,
+      "archived_outputs": 0,
+      "saved_ratio": 0.003822456616095704
+    },
+    "after": {
+      "input": 868813,
+      "output": 577122,
+      "archived_outputs": 50,
+      "saved_ratio": 0.33573507762890287
+    }
+  },
+  "elapsed_seconds": 4.97
+}

@@ -172,6 +172,7 @@ class CompressionObservation:
     compression_calls: tuple[dict, ...] = ()
     local_model_calls: int = 0
     lossy_fields: int = 0
+    method_observations: tuple[dict, ...] = ()
 
 
 class ResponsesInputCompressor:
