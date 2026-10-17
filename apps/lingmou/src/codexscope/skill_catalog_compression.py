@@ -10,7 +10,7 @@ _ENTRY = re.compile(r'^- (?P<name>\S+): (?P<description>.+?) \(file: (?P<path>[^
 _HEADER = '### Available skills\n'
 
 
-def defer_skill_descriptions(text, task, store, count):
+def defer_skill_descriptions(text, task, store, count, lexical_keep=6):
     """Only recognize the explicit host catalog; other instructions stay exact.
 
     This is retrieval, not semantic equivalence: descriptions can affect skill
@@ -31,7 +31,7 @@ def defer_skill_descriptions(text, task, store, count):
         query = words(task)
         scores = [(len(query & words(e['name'] + ' ' + e['description'])), i)
                   for i, e in enumerate(entries)]
-        keep = {i for score, i in sorted(scores, reverse=True)[:6] if score >= 2}
+        keep = {i for score, i in sorted(scores, reverse=True)[:lexical_keep] if score >= 2}
         keep.update(i for i, e in enumerate(entries) if re.search(
             r'(?<![\w:-])\$?' + re.escape(e['name']) + r'(?![\w:-])', task, re.I))
         if len(keep) == len(entries):

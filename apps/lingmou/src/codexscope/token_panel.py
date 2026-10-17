@@ -1,6 +1,7 @@
 """Content-free usage projection for the product UI; estimates never become usage."""
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 from .component_usage import COMPONENTS
@@ -47,6 +48,67 @@ def _tool_rows(measurement: dict):
     return sorted(rows, key=lambda row: (-(row['saved'] or 0), -(row['before'] or 0), row['name']))
 
 
+def cache_price_ratio() -> float:
+    """Cached-input price as a fraction of uncached input; configurable per provider."""
+    try:
+        value = float(os.environ.get('LINGMOU_CACHE_PRICE_RATIO', '0.1'))
+    except ValueError:
+        return .1
+    return value if 0 <= value <= 1 else .1
+
+
+def _cache_economics(official: dict) -> dict:
+    """Cache-weighted input: the quantity compression must lower to save money.
+
+    Effective input = uncached + cached * price ratio. It is a token-weighted
+    estimate, not a bill; output and per-model prices are not included.
+    """
+    total, cached = official.get('input_tokens'), official.get('cached_input_tokens')
+    ratio = cache_price_ratio()
+    if total is None or cached is None:
+        return {'uncached_input_tokens': None, 'cache_hit_percent': None,
+                'effective_input_tokens': None, 'cache_price_ratio': ratio}
+    return {'uncached_input_tokens': total - cached,
+            'cache_hit_percent': round(100 * cached / total, 1) if total else None,
+            'effective_input_tokens': round(total - cached + cached * ratio),
+            'cache_price_ratio': ratio}
+
+
+def _calibration(rows: list[dict], before, after) -> dict:
+    """Scale local estimates by official input over the same sent requests."""
+    official = local = paired = 0
+    for row in rows:
+        usage = row.get('official_usage') or {}
+        sent = (row.get('component_usage') or {}).get('request_after')
+        if sent is None:
+            sent = (row.get('compression') or {}).get('full_request_tokens_after_estimate', row.get('input_tokens_after_estimate'))
+        if type(usage.get('input_tokens')) is int and type(sent) is int and sent > 0:
+            official += usage['input_tokens']
+            local += sent
+            paired += 1
+    ratio = official / local if paired and local else None
+    def scaled(value):
+        return round(value * ratio) if ratio is not None and value is not None else None
+    return {'requests': paired, 'official_per_local': round(ratio, 3) if ratio is not None else None,
+            'before': scaled(before), 'after': scaled(after),
+            'saved': scaled(before - after) if before is not None and after is not None else None,
+            'note': 'Local estimates scaled by official input of the same recent requests; not a provider count.'}
+
+
+def _cache_diagnostics(rows: list[dict], session: dict) -> dict:
+    breaks = {'lingmou': 0, 'client': 0}
+    checkpoints = 0
+    for row in rows:
+        prefix = (row.get('compression') or {}).get('cache_prefix') or {}
+        cause = (prefix.get('break') or {}).get('cause')
+        if cause in breaks:
+            breaks[cause] += 1
+        checkpoints += bool(prefix.get('checkpoint'))
+    return {'recent_breaks_by_lingmou': breaks['lingmou'], 'recent_breaks_by_client': breaks['client'],
+            'recent_checkpoints': checkpoints,
+            'declined_checkpoints': session.get('declined_checkpoints', 0)}
+
+
 def token_panel_snapshot(run_dir: Path, *, provider_snapshot: dict | None = None,
                          allow_usage_fallback: bool = True) -> dict:
     live = _read(run_dir / 'live_status.json')
@@ -84,6 +146,7 @@ def token_panel_snapshot(run_dir: Path, *, provider_snapshot: dict | None = None
         'measured_requests': measured, 'missing_requests': requests - measured,
         'complete': bool(requests) and requests == measured and compression_calls == measured_compression,
     }
+    official.update(_cache_economics(official))
     if not requests and allow_usage_fallback:
         usage = live.get('token_usage') or manifest.get('last_token_usage') or _read(run_dir / 'workbench_token_usage.json')
         total = usage.get('total') or {}
@@ -109,6 +172,7 @@ def token_panel_snapshot(run_dir: Path, *, provider_snapshot: dict | None = None
         compression = row.get('compression') or {}
         sent = row.get('component_usage') or {}
         usage = row.get('official_usage') or {}
+        prefix = compression.get('cache_prefix') or {}
         recent.append({
             'request_id': str(row.get('request_id', ''))[:128],
             'status': str(row.get('status', 'unknown'))[:32],
@@ -116,6 +180,9 @@ def token_panel_snapshot(run_dir: Path, *, provider_snapshot: dict | None = None
             'after': _number(sent.get('request_after', compression.get('full_request_tokens_after_estimate', row.get('input_tokens_after_estimate')))),
             'official_input': _number(usage.get('input_tokens')),
             'official_output': _number(usage.get('output_tokens')),
+            'official_cached': _number(usage.get('cached_input_tokens')),
+            'cache_break': (prefix.get('break') or {}).get('cause'),
+            'checkpoint': bool(prefix.get('checkpoint')),
         })
     inflight = live.get('inflight_token_estimate') or {}
     latest = components.get('latest') or {}
@@ -132,6 +199,8 @@ def token_panel_snapshot(run_dir: Path, *, provider_snapshot: dict | None = None
             'current_input': _number(inflight.get('input_tokens_estimated')) if inflight.get('active') else None,
             'current_input_quality': inflight.get('input_quality', 'estimated')},
         'official': official, 'recent_requests': recent,
+        'calibration': _calibration(ledger.get('recent_requests') or [], before, after),
+        'cache': _cache_diagnostics(ledger.get('recent_requests') or [], stats.get('session') or {}),
         'methods': stats.get('methods', []),
         'processing': bool(stats.get('processing', False)),
         'output': {**stats.get('output', {}), 'source': 'post_generation', 'billing_reduction': False},

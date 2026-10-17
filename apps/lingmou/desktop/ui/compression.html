@@ -81,6 +81,7 @@
                       <option value="extract">按任务选段 · 有损</option>
                       <option value="auto">本地自动 · 有损</option>
                       <option value="full">完整压缩 · 有损</option>
+                      <option value="max">最大压缩 · 有损 · 实验</option>
                       <option value="off">关闭压缩，仅采集用量</option>
                     </select>
                   </div>
@@ -119,6 +120,7 @@
                       <option value="extract">按任务选段 · 有损</option>
                       <option value="auto">本地自动 · 有损</option>
                       <option value="full">完整压缩 · 有损</option>
+                      <option value="max">最大压缩 · 有损 · 实验</option>
                     </select>
                   </div>
                   <button id="save-mode" type="button" class="secondary">应用到下一次请求</button>
@@ -166,8 +168,13 @@
                 <div><dt>输入</dt><dd id="official-input">—</dd></div>
                 <div><dt>输出</dt><dd id="official-output">—</dd></div>
                 <div><dt>缓存命中</dt><dd id="official-cached">—</dd></div>
+                <div><dt>缓存命中率</dt><dd id="official-cache-rate">—</dd></div>
+                <div><dt>未命中输入</dt><dd id="official-uncached">—</dd></div>
+                <div><dt>等效计费输入</dt><dd id="official-effective">—</dd></div>
               </dl>
-              <p class="hint">缓存命中包含在输入中。尚未返回的用量显示“—”；缺失 usage 时，仅展示已知小计。</p>
+              <p class="hint">缓存命中包含在输入中。等效计费输入 = 未命中输入 + 缓存命中 × <span id="cache-ratio">0.1</span>，它才是压缩需要降低的量；不是账单金额，也不含输出。尚未返回的用量显示“—”；缺失 usage 时，仅展示已知小计。</p>
+              <p id="calibration-hint" class="hint" hidden></p>
+              <p id="cache-hint" class="hint" hidden></p>
               <p id="auxiliary-usage" class="hint" hidden></p>
             </section>
             <section class="surface" aria-labelledby="components-heading">
@@ -177,8 +184,8 @@
             </section>
             <section class="surface" aria-labelledby="requests-heading">
               <div class="section-heading"><h2 id="requests-heading">最近请求</h2><span class="muted">最近 20 次已结束请求</span></div>
-              <div class="table-scroll" tabindex="0" role="region" aria-labelledby="requests-heading"><table class="request-table"><thead><tr><th scope="col">请求</th><th scope="col">状态</th><th scope="col" class="numeric">压缩前</th><th scope="col" class="numeric">压缩后</th><th scope="col" class="numeric">节省</th><th scope="col" class="numeric">官方输入</th><th scope="col" class="numeric">官方输出</th></tr></thead><tbody id="request-rows"><tr><td colspan="7">还没有请求记录。</td></tr></tbody></table></div>
-              <p class="hint">压缩前后与节省量为本地估算；官方输入、输出来自模型返回。未知值显示“—”。</p>
+              <div class="table-scroll" tabindex="0" role="region" aria-labelledby="requests-heading"><table class="request-table"><thead><tr><th scope="col">请求</th><th scope="col">状态</th><th scope="col" class="numeric">压缩前</th><th scope="col" class="numeric">压缩后</th><th scope="col" class="numeric">节省</th><th scope="col" class="numeric">官方输入</th><th scope="col" class="numeric">缓存命中</th><th scope="col" class="numeric">官方输出</th><th scope="col">缓存前缀</th></tr></thead><tbody id="request-rows"><tr><td colspan="9">还没有请求记录。</td></tr></tbody></table></div>
+              <p class="hint">压缩前后与节省量为本地估算；官方输入、缓存命中、输出来自模型返回。“缓存前缀”标出与上一请求相比发送内容在哪一侧发生变化：集中整理是灵眸按水位线一次性归档旧内容，客户端变化来自 Codex 自身（如上下文压缩）。未知值显示“—”。</p>
             </section>
             </div>
           </section>

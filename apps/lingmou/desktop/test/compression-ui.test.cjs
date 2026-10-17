@@ -52,7 +52,8 @@ function usage() {
       { label: "工具定义", before: 500, after: 505, saved: -5 },
     ] },
     recent_requests: [
-      { request_id: "r1", status: "completed", before: 1000, after: 600, official_input: 610, official_output: 50 },
+      { request_id: "r1", status: "completed", before: 1000, after: 600, official_input: 610, official_output: 50,
+        official_cached: 400, checkpoint: true, cache_break: "lingmou" },
       { request_id: "r2", status: "failed", before: 100, after: null, official_input: null, official_output: null },
     ],
   };
@@ -84,7 +85,8 @@ test("compares components and requests, preserving growth and missing measuremen
     ["工具返回", "10,000", "3,995", "6,005"], ["工具定义", "500", "505", "-5"],
   ]);
   assert.deepEqual(view.rows("request-rows"), [
-    ["r2", "失败", "100", "—", "—", "—", "—"], ["r1", "已结束", "1,000", "600", "400", "610", "50"],
+    ["r2", "失败", "100", "—", "—", "—", "—", "—", "延续"],
+    ["r1", "已结束", "1,000", "600", "400", "610", "400", "50", "集中整理"],
   ]);
 });
 
@@ -98,7 +100,7 @@ test("empty, legacy, and incomplete snapshots show unknown savings instead of ze
       assert.equal(view.text(id), "—");
   }
   assert.equal(view.get("component-rows").children[0].children[0].colSpan, 4);
-  assert.equal(view.get("request-rows").children[0].children[0].colSpan, 7);
+  assert.equal(view.get("request-rows").children[0].children[0].colSpan, 9);
 });
 
 test("known zero savings are displayed and explained, including disabled compression", () => {
@@ -170,4 +172,24 @@ test("compression estimates are available before official usage arrives", () => 
   assert.equal(view.text("compression-saved"), "6,000");
   assert.equal(view.text("official-total"), "—");
   assert.match(view.text("compression-summary"), /正在处理新请求/);
+});
+
+test("shows cache-weighted input, calibration and prefix-change causes", () => {
+  const view = renderer();
+  const tokens = usage();
+  tokens.official = { ...tokens.official, uncached_input_tokens: 400, cache_hit_percent: 55.6,
+    effective_input_tokens: 450, cache_price_ratio: 0.1 };
+  tokens.calibration = { requests: 2, official_per_local: 0.56, before: 11200, after: 7840, saved: 3360 };
+  tokens.cache = { recent_breaks_by_lingmou: 1, recent_breaks_by_client: 2, recent_checkpoints: 1, declined_checkpoints: 3 };
+  view.render({ tokens });
+  assert.equal(view.text("official-cache-rate"), "55.6%");
+  assert.equal(view.text("official-uncached"), "400");
+  assert.equal(view.text("official-effective"), "450");
+  assert.equal(view.get("calibration-hint").hidden, false);
+  assert.match(view.text("calibration-hint"), /× 0.56.*节省约 3,360/);
+  assert.match(view.text("cache-hint"), /灵眸集中整理 1 次.*客户端 2 次.*推迟整理 3 次/);
+  view.render({ tokens: usage() });
+  assert.equal(view.text("official-effective"), "—");
+  assert.equal(view.get("calibration-hint").hidden, true);
+  assert.equal(view.get("cache-hint").hidden, true);
 });

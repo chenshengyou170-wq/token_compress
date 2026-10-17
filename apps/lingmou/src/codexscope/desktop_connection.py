@@ -18,7 +18,7 @@ from urllib.parse import urlsplit
 from .storage import atomic_json_dump, json_load
 
 
-MODES = ("off", "structure", "extract", "auto", "full")
+MODES = ("off", "structure", "extract", "auto", "full", "max")
 CHATGPT_UPSTREAM = "https://chatgpt.com/backend-api/codex"
 API_UPSTREAM = "https://api.openai.com/v1"
 MAX_CONFIG_BYTES = 2 * 1024 * 1024

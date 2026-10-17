@@ -73,9 +73,10 @@ def trim_history(body, *, original_body, budget, keep_turns, count, store, archi
     if any(not isinstance(x, dict) for x in items) or not _paired(items):
         return body, None
     if any(x.get('type', 'message') not in {'message', 'function_call', 'custom_tool_call',
-            'function_call_output', 'custom_tool_call_output'} for x in items):
-        # Tool discovery, item references and opaque reasoning can carry state
-        # across turns. Do not remove them as ordinary conversation text.
+            'function_call_output', 'custom_tool_call_output', 'reasoning'} for x in items):
+        # Tool discovery and item references can carry state across turns. Do
+        # not remove them as ordinary conversation text. Opaque reasoning belongs
+        # to the turn that produced it and is removed only with that whole turn.
         return body, None
     trusted_ids = set()
     for sent, raw in zip(items, original_body.get(key, [])):

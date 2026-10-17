@@ -15,7 +15,7 @@ from typing import Callable
 from codexscope.compression_boundary import reference_text, task_from_body, transform_data
 from codexscope.context_compression import chat_text_slots
 from codexscope.deferred_tools import DeferredToolRegistry
-from codexscope.input_compression import _MAX_BODY_BYTES, _text_slots, compress_prose
+from codexscope.input_compression import _text_slots, compress_prose, oversized_text
 from codexscope.proxy_usage import default_token_counter
 from codexscope.reference_selection import SourceStore, extract_source
 from codexscope.structural_compression import StructuralCompressor, dumps, loads
@@ -143,11 +143,11 @@ class TokenCompressor:
 
     def compress_bytes(self, raw: bytes) -> tuple[bytes, CompressionResult | None]:
         """Byte-preserving fail-open transport adapter for invalid/unsupported JSON."""
-        if not raw or len(raw) > _MAX_BODY_BYTES:
+        if not raw:
             return raw, None
         try:
             body = loads(raw)
-            if not isinstance(body, dict):
+            if not isinstance(body, dict) or oversized_text(raw, body):
                 return raw, None
             result = self.compress_request(body)
         except (ValueError, TypeError, RecursionError, UnicodeError):
@@ -177,7 +177,7 @@ class TokenCompressor:
         if any(body.get(k) is not None for k in ("previous_response_id", "conversation", "prompt")):
             result.issues.append("server_managed_context")
             return finish()
-        if len(dumps(body).encode()) > _MAX_BODY_BYTES:
+        if oversized_text(dumps(body).encode(), body):
             result.issues.append("body_size")
             return finish()
         key = "messages" if "messages" in body else "input"

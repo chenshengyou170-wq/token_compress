@@ -6,13 +6,14 @@ const number = (value) => typeof value === "number" && Number.isFinite(value) ? 
 const savings = (before, after) => typeof before === "number" && Number.isFinite(before)
   && typeof after === "number" && Number.isFinite(after) ? before - after : null;
 const DEFAULT_UPSTREAM = { chatgpt: "https://chatgpt.com/backend-api/codex", api: "https://api.openai.com/v1" };
-const MODE_LABELS = { off: "仅采集用量", structure: "结构压缩", extract: "按任务选段", auto: "本地自动", full: "完整压缩" };
+const MODE_LABELS = { off: "仅采集用量", structure: "结构压缩", extract: "按任务选段", auto: "本地自动", full: "完整压缩", max: "最大压缩" };
 const MODE_HINTS = {
   off: "压缩已关闭。请求仍通过本地服务，用量采集继续；解除接入后恢复直连。",
   structure: "结构压缩仅处理工具结果和显式参考材料；没有收益时保留原文。",
   extract: "按任务选段属于有损压缩。原文保留供补读；当前请求没有补读工具时使用结构压缩。",
   auto: "本地自动组合结构压缩与原文选段，属于有损压缩；没有补读工具时使用结构压缩。",
   full: "完整压缩会裁剪整轮旧历史、整理工具结果并按需加载技能说明，属于有损压缩。原文保留供补读；没有补读工具时使用结构压缩。",
+  max: "最大压缩以压缩率优先：缩写工具说明和回答风格指令，更早归档旧工具输出、旧调用参数和旧对话，只保留最新截图，不考虑缓存成本。文字原文可补读，旧截图不可恢复；回答格式可能变化，实验功能。",
 };
 let state = { enabled: false, running: false, connection: null };
 let environment = {};
@@ -164,7 +165,7 @@ function render(next) {
       : "连接已就绪，等待对话的首个请求。"
     : "后台尚未运行，请恢复服务或解除接入。";
   element("reader-state").textContent = state.source_reader_seen ? "最近请求已包含补读工具" : "尚未在请求中确认";
-  const excerpt = ["extract", "auto", "full"].includes(connection?.mode);
+  const excerpt = ["extract", "auto", "full", "max"].includes(connection?.mode);
   element("applied-mode").textContent = (MODE_LABELS[connection?.mode] || "—")
     + (connection?.mode === "full" ? connection.remote_enabled ? " · 已允许远程改写与校验" : " · 仅本地" : "");
   element("compression-state").textContent = compressionStatus();
@@ -185,6 +186,20 @@ function render(next) {
   element("official-input").textContent = number(official.input_tokens);
   element("official-output").textContent = number(official.output_tokens);
   element("official-cached").textContent = number(official.cached_input_tokens);
+  element("official-cache-rate").textContent = official.cache_hit_percent == null ? "—" : `${number(official.cache_hit_percent)}%`;
+  element("official-uncached").textContent = number(official.uncached_input_tokens);
+  element("official-effective").textContent = number(official.effective_input_tokens);
+  element("cache-ratio").textContent = String(official.cache_price_ratio ?? 0.1);
+  const calibration = tokens.calibration || {};
+  element("calibration-hint").hidden = calibration.official_per_local == null;
+  element("calibration-hint").textContent = calibration.official_per_local == null ? ""
+    : `按最近 ${number(calibration.requests)} 次请求的官方输入校准：本地估算 × ${calibration.official_per_local}，`
+      + `压缩前约 ${number(calibration.before)}、实际发送约 ${number(calibration.after)}、节省约 ${number(calibration.saved)} tokens。仍为估算。`;
+  const cache = tokens.cache || {};
+  const breaks = (cache.recent_breaks_by_lingmou || 0) + (cache.recent_breaks_by_client || 0);
+  element("cache-hint").hidden = !breaks && !cache.declined_checkpoints;
+  element("cache-hint").textContent = `最近请求中缓存前缀变化 ${number(breaks)} 次：灵眸集中整理 ${number(cache.recent_breaks_by_lingmou || 0)} 次，`
+    + `客户端 ${number(cache.recent_breaks_by_client || 0)} 次；因预计不划算而推迟整理 ${number(cache.declined_checkpoints || 0)} 次。`;
   element("auxiliary-usage").hidden = !(official.known_compression_tokens > 0 || official.missing_compression_calls > 0);
   element("auxiliary-usage").textContent = `远程改写与校验另消耗 ${number(official.compression_tokens ?? official.known_compression_tokens)} tokens`
     + (official.missing_compression_calls ? `（已知小计，另有 ${number(official.missing_compression_calls)} 次调用用量未知）` : "")
@@ -209,7 +224,10 @@ function render(next) {
     { value: (row) => number(row.after), numeric: true },
     { value: (row) => number(savings(row.before, row.after)), numeric: true },
     { value: (row) => number(row.official_input), numeric: true },
+    { value: (row) => number(row.official_cached), numeric: true },
     { value: (row) => number(row.official_output), numeric: true },
+    { value: (row) => row.checkpoint ? "集中整理" : row.cache_break === "client" ? "客户端变化"
+      : row.cache_break === "lingmou" ? "灵眸变化" : "延续" },
   ], "还没有请求记录。用量来自模型返回的数据，未返回的数值保持未知。");
   element("footer-status").textContent = state.running ? "本机服务运行中 · 关闭窗口后继续在托盘运行" : "本机服务未运行";
   controls();

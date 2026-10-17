@@ -21,7 +21,10 @@ from .desktop_connection import (
 from .input_compression import CompressionObservation, ResponsesInputCompressor
 from .conversation_usage import ConversationUsage
 from .full_compression import FullCompressionConfig
+from .proxy_usage import default_token_counter
 from .reference_selection import SourceStore
+from .session_compression import MAX_SESSION, SessionCompressionLedger, media_free
+from .structural_compression import dumps
 from .request_token_tap import RequestTokenTap
 from .storage import atomic_json_dump, json_load
 from .token_panel import token_panel_snapshot
@@ -86,6 +89,10 @@ class DesktopCompressor(ResponsesInputCompressor):
         self.last_status = "waiting"
         self.last_mode = None
         self.reader_seen = False
+        # One ledger per relay: per-conversation append-only rendering and
+        # checkpoints survive across the request-local engines below.
+        self.ledger = SessionCompressionLedger()
+        self.max_ledger = SessionCompressionLedger(MAX_SESSION)
         self._stats["mode"] = mode
 
     def set_mode(self, mode: str, *, remote_enabled: bool):
@@ -108,28 +115,70 @@ class DesktopCompressor(ResponsesInputCompressor):
         # Request-local engines cannot share a startup allowance or cached
         # rewrites safely across conversations. Remote work must be funded by
         # this request's local savings; desktop options override ambient flags.
+        maximum = mode == "max"
         config = FullCompressionConfig(max_remote_calls=4 if remote else 0,
                                        max_remote_tokens=6000 if remote else 0,
-                                       startup_remote_tokens=0, output_rewrite=False)
-        engine = UnifiedInputCompressor(mode, source_store=self.store if has_reader else None,
+                                       startup_remote_tokens=0, output_rewrite=False,
+                                       session_managed=True, compact_headers=maximum,
+                                       skill_lexical_keep=0 if maximum else 6)
+        # `max` is the full engine with recoverable header abbreviation and a
+        # low-watermark ledger profile.
+        engine = UnifiedInputCompressor("full" if maximum else mode,
+                                       source_store=self.store if has_reader else None,
                                        token_counter=self.token_counter, full_config=config)
-        if remote and self.worker is not None and mode == 'full' and has_reader:
+        if remote and self.worker is not None and mode == 'full' and has_reader:  # max stays local
             output, observation = self.worker.compress(raw, self.store)
         else:
             output, observation = engine.compress_observed(raw)
-        if not has_reader and mode in {"extract", "auto", "full"}:
+        output, observation = self._stabilize(raw, body, output, observation, mode=mode, has_reader=has_reader)
+        if not has_reader and mode in {"extract", "auto", "full", "max"}:
             observation = replace(observation, reason="source_tool_unavailable")
         with self._lock:
             self.last_reason = observation.reason
             self.last_status = observation.status
-            self.last_mode = "structure" if not has_reader and mode in {"extract", "auto", "full"} else mode
+            self.last_mode = "structure" if not has_reader and mode in {"extract", "auto", "full", "max"} else mode
             self.reader_seen = has_reader
         return output, observation
+
+    def _stabilize(self, raw, body, output, observation, *, mode, has_reader):
+        """Apply the conversation ledger; on any failure send the engine output."""
+        from .structural_compression import loads
+        try:
+            count = self.token_counter or default_token_counter(str(body.get("model", "")))[0]
+            compressed = body if output is raw else loads(output)
+            ledger = self.max_ledger if mode == "max" else self.ledger
+            final, info = ledger.apply(body, compressed, count=count, mode=mode,
+                store=self.store if has_reader else None,
+                checkpoint=has_reader and mode in {"full", "max"}, freeze=mode != "off")
+        except Exception:
+            return output, observation
+        if final == body:
+            output = raw
+        elif final is not compressed:
+            output = dumps(final).encode("utf-8")
+        measure = media_free(count)
+        before, after = measure(dumps(body)), measure(dumps(final))
+        status = observation.status
+        if final != body and after < before and status != "error":
+            status = "compressed"
+        elif final == body and status == "compressed":
+            status = "skipped"
+        return output, replace(observation, status=status, cache_prefix=info,
+                               full_request_tokens_before_estimate=before,
+                               full_request_tokens_after_estimate=after)
+
+    def observe_response(self, record):
+        compression = record.get("compression") or {}
+        prefix = compression.get("cache_prefix") or {}
+        for ledger in (self.ledger, self.max_ledger):
+            ledger.observe_usage(prefix.get("session"), record.get("official_usage"))
 
     def stats(self):
         with self._lock:
             return {**self._stats, "last_reason": self.last_reason, "last_status": self.last_status,
-                    "last_mode": self.last_mode, "source_reader_seen": self.reader_seen}
+                    "last_mode": self.last_mode, "source_reader_seen": self.reader_seen,
+                    "session": {key: value + self.max_ledger.stats()[key]
+                                for key, value in self.ledger.stats().items()}}
 
 
 class Companion:
@@ -196,7 +245,8 @@ class Companion:
         scope = current["scope"]
         public_stats = {**current, "running": bool(self.tap), "configurable": bool(self.tap),
                         "input_compression": {"mode": (self.connection.record or {}).get("mode", "off"),
-                                              "processing": scope["active_requests"] > 0}}
+                                              "processing": scope["active_requests"] > 0,
+                                              "session": (stats.get("input_compression") or {}).get("session", {})}}
         return {
             "schema_version": 1, "enabled": self.connection.enabled, "running": bool(self.tap),
             "active_requests": stats.get("active_requests", 0),

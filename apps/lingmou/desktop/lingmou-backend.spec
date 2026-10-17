@@ -26,7 +26,8 @@ hiddenimports = sorted(
         ] if not windows else [])
         + ["codexscope.desktop_companion", "codexscope.desktop_connection", "codexscope.context_tools",
            "codexscope.unified_compression", "codexscope.full_compression",
-           "codexscope.skill_catalog_compression", "tomlkit", "tiktoken_ext.openai_public"]
+           "codexscope.skill_catalog_compression", "codexscope.session_compression",
+           "codexscope.tool_output_cleanup", "tomlkit", "tiktoken_ext.openai_public"]
         + collect_submodules("token_compression")
         + collect_submodules("uvicorn")
         + collect_submodules("websockets")

@@ -1160,6 +1160,13 @@ class _TapRequestHandler(BaseHTTPRequestHandler):
                     if server.conversation_usage is not None:
                         server.conversation_usage.finish(conversation_epoch, usage_record)
                     server.usage_ledger.append(usage_record)
+                    observe_response = getattr(server.input_compressor, 'observe_response', None)
+                    if observe_response is not None:
+                        try:
+                            # Official cache usage informs later checkpoint economics.
+                            observe_response(usage_record)
+                        except Exception:
+                            server.note("error_count")
             finally:
                 try:
                     if connection is not None:
@@ -1340,16 +1347,24 @@ class RequestTokenTap:
                 ),
             }
 
-    def pause_if_idle(self) -> bool:
-        """Prevent new work atomically before changing a desktop connection."""
+    def pause_if_idle(self, wait_s: float = 2.0) -> bool:
+        """Prevent new work atomically before changing a desktop connection.
+
+        A request whose response already reached Codex still records usage
+        before it ends; wait briefly for that bookkeeping instead of refusing.
+        """
         server = self._server
         if server is None:
             return True
-        with server.stats_lock:
-            if server.active_requests:
+        deadline = time.monotonic() + wait_s
+        while True:
+            with server.stats_lock:
+                if not server.active_requests:
+                    server.stopping.set()
+                    return True
+            if time.monotonic() >= deadline:
                 return False
-            server.stopping.set()
-            return True
+            time.sleep(.01)
 
     def resume(self) -> None:
         if self._server is not None:

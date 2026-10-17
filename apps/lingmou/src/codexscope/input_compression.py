@@ -104,6 +104,29 @@ def compress_prose(text: str) -> str:
     return "".join(result)
 
 
+def _inline_media_bytes(value: Any, depth: int = 0) -> int:
+    if depth > 64:
+        return 0
+    if isinstance(value, str):
+        return len(value) if value.startswith('data:') and ';base64,' in value[:200] else 0
+    if isinstance(value, dict):
+        return sum(_inline_media_bytes(v, depth + 1) for v in value.values())
+    if isinstance(value, list):
+        return sum(_inline_media_bytes(v, depth + 1) for v in value)
+    return 0
+
+
+def oversized_text(raw: bytes, body: Any) -> bool:
+    """Apply the size guard to text, not to inline images/files that stay untouched.
+
+    Long tasks with screenshots used to exceed the limit through media alone,
+    which skipped every text component of every later request.
+    """
+    if len(raw) <= _MAX_BODY_BYTES:
+        return False
+    return len(raw) - _inline_media_bytes(body) > _MAX_BODY_BYTES
+
+
 def _text_slots(body: dict) -> Iterator[tuple[dict, str, str]]:
     """Explicit Responses allowlist: never recurse through arbitrary values."""
     if isinstance(body.get("instructions"), str):
@@ -173,6 +196,7 @@ class CompressionObservation:
     local_model_calls: int = 0
     lossy_fields: int = 0
     method_observations: tuple[dict, ...] = ()
+    cache_prefix: dict | None = None
 
 
 class ResponsesInputCompressor:
@@ -233,12 +257,14 @@ class ResponsesInputCompressor:
         def skip(reason: str) -> tuple[bytes, CompressionObservation]:
             return raw, CompressionObservation("skipped", reason)
 
-        if not raw or len(raw) > _MAX_BODY_BYTES:
+        if not raw:
             return skip("body_size")
         try:
             body = loads(raw)
         except (ValueError, UnicodeDecodeError, RecursionError):
             return skip("invalid_json")
+        if oversized_text(raw, body):
+            return skip("body_size")
         if not isinstance(body, dict) or not isinstance(body.get("input"), (str, list)):
             return skip("unsupported_input")
         if any(body.get(key) is not None for key in ("previous_response_id", "conversation", "prompt")):

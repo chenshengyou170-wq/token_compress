@@ -1,0 +1,799 @@
+{
+  "replay": "evidence/windows_compression_coverage_20261017/paper-visible-replay.json",
+  "requests": 41,
+  "synthetic_extension_requests": 20,
+  "mode": "full",
+  "tokenizer": "tokenizer-est",
+  "cache_price_ratio": 0.1,
+  "cache_model": "item-level prefix shared with the previous request; offline estimate",
+  "variants": {
+    "uncompressed": {
+      "requests": [
+        {
+          "input": 3137,
+          "cached": 0,
+          "uncached": 3137,
+          "effective": 3137
+        },
+        {
+          "input": 4908,
+          "cached": 3137,
+          "uncached": 1771,
+          "effective": 2085
+        },
+        {
+          "input": 10800,
+          "cached": 4908,
+          "uncached": 5892,
+          "effective": 6383
+        },
+        {
+          "input": 18627,
+          "cached": 10800,
+          "uncached": 7827,
+          "effective": 8907
+        },
+        {
+          "input": 19923,
+          "cached": 18627,
+          "uncached": 1296,
+          "effective": 3159
+        },
+        {
+          "input": 25485,
+          "cached": 19923,
+          "uncached": 5562,
+          "effective": 7554
+        },
+        {
+          "input": 26052,
+          "cached": 25485,
+          "uncached": 567,
+          "effective": 3116
+        },
+        {
+          "input": 39876,
+          "cached": 26052,
+          "uncached": 13824,
+          "effective": 16429
+        },
+        {
+          "input": 44152,
+          "cached": 39876,
+          "uncached": 4276,
+          "effective": 8264
+        },
+        {
+          "input": 44830,
+          "cached": 44152,
+          "uncached": 678,
+          "effective": 5093
+        },
+        {
+          "input": 46763,
+          "cached": 44830,
+          "uncached": 1933,
+          "effective": 6416
+        },
+        {
+          "input": 47856,
+          "cached": 46763,
+          "uncached": 1093,
+          "effective": 5769
+        },
+        {
+          "input": 48177,
+          "cached": 47856,
+          "uncached": 321,
+          "effective": 5107
+        },
+        {
+          "input": 57474,
+          "cached": 48177,
+          "uncached": 9297,
+          "effective": 14115
+        },
+        {
+          "input": 57911,
+          "cached": 57474,
+          "uncached": 437,
+          "effective": 6184
+        },
+        {
+          "input": 60123,
+          "cached": 57911,
+          "uncached": 2212,
+          "effective": 8003
+        },
+        {
+          "input": 60429,
+          "cached": 60123,
+          "uncached": 306,
+          "effective": 6318
+        },
+        {
+          "input": 60790,
+          "cached": 60429,
+          "uncached": 361,
+          "effective": 6404
+        },
+        {
+          "input": 62768,
+          "cached": 60790,
+          "uncached": 1978,
+          "effective": 8057
+        },
+        {
+          "input": 63467,
+          "cached": 62768,
+          "uncached": 699,
+          "effective": 6976
+        },
+        {
+          "input": 66588,
+          "cached": 63467,
+          "uncached": 3121,
+          "effective": 9468
+        },
+        {
+          "input": 67423,
+          "cached": 66588,
+          "uncached": 835,
+          "effective": 7494
+        },
+        {
+          "input": 67959,
+          "cached": 67423,
+          "uncached": 536,
+          "effective": 7278
+        },
+        {
+          "input": 68495,
+          "cached": 67959,
+          "uncached": 536,
+          "effective": 7332
+        },
+        {
+          "input": 69031,
+          "cached": 68495,
+          "uncached": 536,
+          "effective": 7386
+        },
+        {
+          "input": 69567,
+          "cached": 69031,
+          "uncached": 536,
+          "effective": 7439
+        },
+        {
+          "input": 70103,
+          "cached": 69567,
+          "uncached": 536,
+          "effective": 7493
+        },
+        {
+          "input": 70639,
+          "cached": 70103,
+          "uncached": 536,
+          "effective": 7546
+        },
+        {
+          "input": 71175,
+          "cached": 70639,
+          "uncached": 536,
+          "effective": 7600
+        },
+        {
+          "input": 71711,
+          "cached": 71175,
+          "uncached": 536,
+          "effective": 7654
+        },
+        {
+          "input": 72247,
+          "cached": 71711,
+          "uncached": 536,
+          "effective": 7707
+        },
+        {
+          "input": 72783,
+          "cached": 72247,
+          "uncached": 536,
+          "effective": 7761
+        },
+        {
+          "input": 73319,
+          "cached": 72783,
+          "uncached": 536,
+          "effective": 7814
+        },
+        {
+          "input": 73855,
+          "cached": 73319,
+          "uncached": 536,
+          "effective": 7868
+        },
+        {
+          "input": 74391,
+          "cached": 73855,
+          "uncached": 536,
+          "effective": 7922
+        },
+        {
+          "input": 74927,
+          "cached": 74391,
+          "uncached": 536,
+          "effective": 7975
+        },
+        {
+          "input": 75463,
+          "cached": 74927,
+          "uncached": 536,
+          "effective": 8029
+        },
+        {
+          "input": 75999,
+          "cached": 75463,
+          "uncached": 536,
+          "effective": 8082
+        },
+        {
+          "input": 76535,
+          "cached": 75999,
+          "uncached": 536,
+          "effective": 8136
+        },
+        {
+          "input": 77071,
+          "cached": 76535,
+          "uncached": 536,
+          "effective": 8190
+        },
+        {
+          "input": 77607,
+          "cached": 77071,
+          "uncached": 536,
+          "effective": 8243
+        }
+      ],
+      "totals": {
+        "input": 2320436,
+        "cached": 2242829,
+        "uncached": 77607,
+        "effective": 301893
+      }
+    },
+    "v0.1.7": {
+      "requests": [
+        {
+          "input": 3137,
+          "cached": 0,
+          "uncached": 3137,
+          "effective": 3137
+        },
+        {
+          "input": 4908,
+          "cached": 3137,
+          "uncached": 1771,
+          "effective": 2085
+        },
+        {
+          "input": 10800,
+          "cached": 4908,
+          "uncached": 5892,
+          "effective": 6383
+        },
+        {
+          "input": 18627,
+          "cached": 10800,
+          "uncached": 7827,
+          "effective": 8907
+        },
+        {
+          "input": 19923,
+          "cached": 18627,
+          "uncached": 1296,
+          "effective": 3159
+        },
+        {
+          "input": 25485,
+          "cached": 19923,
+          "uncached": 5562,
+          "effective": 7554
+        },
+        {
+          "input": 21039,
+          "cached": 5195,
+          "uncached": 15844,
+          "effective": 16364
+        },
+        {
+          "input": 34863,
+          "cached": 21039,
+          "uncached": 13824,
+          "effective": 15928
+        },
+        {
+          "input": 39139,
+          "cached": 34863,
+          "uncached": 4276,
+          "effective": 7762
+        },
+        {
+          "input": 35240,
+          "cached": 15131,
+          "uncached": 20109,
+          "effective": 21622
+        },
+        {
+          "input": 37173,
+          "cached": 35240,
+          "uncached": 1933,
+          "effective": 5457
+        },
+        {
+          "input": 25354,
+          "cached": 16748,
+          "uncached": 8606,
+          "effective": 10281
+        },
+        {
+          "input": 22600,
+          "cached": 17875,
+          "uncached": 4725,
+          "effective": 6512
+        },
+        {
+          "input": 31897,
+          "cached": 22600,
+          "uncached": 9297,
+          "effective": 11557
+        },
+        {
+          "input": 32334,
+          "cached": 31897,
+          "uncached": 437,
+          "effective": 3627
+        },
+        {
+          "input": 34542,
+          "cached": 32334,
+          "uncached": 2208,
+          "effective": 5441
+        },
+        {
+          "input": 34848,
+          "cached": 34542,
+          "uncached": 306,
+          "effective": 3760
+        },
+        {
+          "input": 34845,
+          "cached": 30870,
+          "uncached": 3975,
+          "effective": 7062
+        },
+        {
+          "input": 35724,
+          "cached": 865,
+          "uncached": 34859,
+          "effective": 34946
+        },
+        {
+          "input": 36423,
+          "cached": 35724,
+          "uncached": 699,
+          "effective": 4271
+        },
+        {
+          "input": 39544,
+          "cached": 36423,
+          "uncached": 3121,
+          "effective": 6763
+        },
+        {
+          "input": 40418,
+          "cached": 39544,
+          "uncached": 874,
+          "effective": 4828
+        },
+        {
+          "input": 40993,
+          "cached": 40418,
+          "uncached": 575,
+          "effective": 4617
+        },
+        {
+          "input": 41568,
+          "cached": 40993,
+          "uncached": 575,
+          "effective": 4674
+        },
+        {
+          "input": 42143,
+          "cached": 41568,
+          "uncached": 575,
+          "effective": 4732
+        },
+        {
+          "input": 42718,
+          "cached": 42143,
+          "uncached": 575,
+          "effective": 4789
+        },
+        {
+          "input": 43293,
+          "cached": 42718,
+          "uncached": 575,
+          "effective": 4847
+        },
+        {
+          "input": 43868,
+          "cached": 43293,
+          "uncached": 575,
+          "effective": 4904
+        },
+        {
+          "input": 44443,
+          "cached": 43868,
+          "uncached": 575,
+          "effective": 4962
+        },
+        {
+          "input": 45018,
+          "cached": 44443,
+          "uncached": 575,
+          "effective": 5019
+        },
+        {
+          "input": 45593,
+          "cached": 45018,
+          "uncached": 575,
+          "effective": 5077
+        },
+        {
+          "input": 46168,
+          "cached": 45593,
+          "uncached": 575,
+          "effective": 5134
+        },
+        {
+          "input": 46743,
+          "cached": 46168,
+          "uncached": 575,
+          "effective": 5192
+        },
+        {
+          "input": 47318,
+          "cached": 46743,
+          "uncached": 575,
+          "effective": 5249
+        },
+        {
+          "input": 47893,
+          "cached": 47318,
+          "uncached": 575,
+          "effective": 5307
+        },
+        {
+          "input": 48468,
+          "cached": 47893,
+          "uncached": 575,
+          "effective": 5364
+        },
+        {
+          "input": 49043,
+          "cached": 48468,
+          "uncached": 575,
+          "effective": 5422
+        },
+        {
+          "input": 49618,
+          "cached": 49043,
+          "uncached": 575,
+          "effective": 5479
+        },
+        {
+          "input": 50193,
+          "cached": 49618,
+          "uncached": 575,
+          "effective": 5537
+        },
+        {
+          "input": 50768,
+          "cached": 50193,
+          "uncached": 575,
+          "effective": 5594
+        },
+        {
+          "input": 51343,
+          "cached": 50768,
+          "uncached": 575,
+          "effective": 5652
+        }
+      ],
+      "totals": {
+        "input": 1496055,
+        "cached": 1334552,
+        "uncached": 161503,
+        "effective": 294957
+      }
+    },
+    "session": {
+      "requests": [
+        {
+          "input": 3137,
+          "cached": 0,
+          "uncached": 3137,
+          "effective": 3137
+        },
+        {
+          "input": 4908,
+          "cached": 3137,
+          "uncached": 1771,
+          "effective": 2085
+        },
+        {
+          "input": 10800,
+          "cached": 4908,
+          "uncached": 5892,
+          "effective": 6383
+        },
+        {
+          "input": 18627,
+          "cached": 10800,
+          "uncached": 7827,
+          "effective": 8907
+        },
+        {
+          "input": 19923,
+          "cached": 18627,
+          "uncached": 1296,
+          "effective": 3159
+        },
+        {
+          "input": 25485,
+          "cached": 19923,
+          "uncached": 5562,
+          "effective": 7554
+        },
+        {
+          "input": 26052,
+          "cached": 25485,
+          "uncached": 567,
+          "effective": 3116
+        },
+        {
+          "input": 39876,
+          "cached": 26052,
+          "uncached": 13824,
+          "effective": 16429
+        },
+        {
+          "input": 44152,
+          "cached": 39876,
+          "uncached": 4276,
+          "effective": 8264
+        },
+        {
+          "input": 44830,
+          "cached": 44152,
+          "uncached": 678,
+          "effective": 5093
+        },
+        {
+          "input": 46763,
+          "cached": 44830,
+          "uncached": 1933,
+          "effective": 6416
+        },
+        {
+          "input": 47856,
+          "cached": 46763,
+          "uncached": 1093,
+          "effective": 5769
+        },
+        {
+          "input": 48177,
+          "cached": 47856,
+          "uncached": 321,
+          "effective": 5107
+        },
+        {
+          "input": 57474,
+          "cached": 48177,
+          "uncached": 9297,
+          "effective": 14115
+        },
+        {
+          "input": 57911,
+          "cached": 57474,
+          "uncached": 437,
+          "effective": 6184
+        },
+        {
+          "input": 60119,
+          "cached": 57911,
+          "uncached": 2208,
+          "effective": 7999
+        },
+        {
+          "input": 60425,
+          "cached": 60119,
+          "uncached": 306,
+          "effective": 6318
+        },
+        {
+          "input": 60786,
+          "cached": 60425,
+          "uncached": 361,
+          "effective": 6404
+        },
+        {
+          "input": 62764,
+          "cached": 60786,
+          "uncached": 1978,
+          "effective": 8057
+        },
+        {
+          "input": 63463,
+          "cached": 62764,
+          "uncached": 699,
+          "effective": 6975
+        },
+        {
+          "input": 40769,
+          "cached": 5195,
+          "uncached": 35574,
+          "effective": 36094
+        },
+        {
+          "input": 41643,
+          "cached": 40769,
+          "uncached": 874,
+          "effective": 4951
+        },
+        {
+          "input": 42218,
+          "cached": 41643,
+          "uncached": 575,
+          "effective": 4739
+        },
+        {
+          "input": 42793,
+          "cached": 42218,
+          "uncached": 575,
+          "effective": 4797
+        },
+        {
+          "input": 43368,
+          "cached": 42793,
+          "uncached": 575,
+          "effective": 4854
+        },
+        {
+          "input": 43943,
+          "cached": 43368,
+          "uncached": 575,
+          "effective": 4912
+        },
+        {
+          "input": 44518,
+          "cached": 43943,
+          "uncached": 575,
+          "effective": 4969
+        },
+        {
+          "input": 45093,
+          "cached": 44518,
+          "uncached": 575,
+          "effective": 5027
+        },
+        {
+          "input": 45668,
+          "cached": 45093,
+          "uncached": 575,
+          "effective": 5084
+        },
+        {
+          "input": 46243,
+          "cached": 45668,
+          "uncached": 575,
+          "effective": 5142
+        },
+        {
+          "input": 46818,
+          "cached": 46243,
+          "uncached": 575,
+          "effective": 5199
+        },
+        {
+          "input": 47393,
+          "cached": 46818,
+          "uncached": 575,
+          "effective": 5257
+        },
+        {
+          "input": 47968,
+          "cached": 47393,
+          "uncached": 575,
+          "effective": 5314
+        },
+        {
+          "input": 48543,
+          "cached": 47968,
+          "uncached": 575,
+          "effective": 5372
+        },
+        {
+          "input": 49118,
+          "cached": 48543,
+          "uncached": 575,
+          "effective": 5429
+        },
+        {
+          "input": 49693,
+          "cached": 49118,
+          "uncached": 575,
+          "effective": 5487
+        },
+        {
+          "input": 50268,
+          "cached": 49693,
+          "uncached": 575,
+          "effective": 5544
+        },
+        {
+          "input": 50843,
+          "cached": 50268,
+          "uncached": 575,
+          "effective": 5602
+        },
+        {
+          "input": 51418,
+          "cached": 50843,
+          "uncached": 575,
+          "effective": 5659
+        },
+        {
+          "input": 51993,
+          "cached": 51418,
+          "uncached": 575,
+          "effective": 5717
+        },
+        {
+          "input": 52568,
+          "cached": 51993,
+          "uncached": 575,
+          "effective": 5774
+        }
+      ],
+      "totals": {
+        "input": 1786407,
+        "cached": 1675571,
+        "uncached": 110836,
+        "effective": 278394
+      }
+    }
+  },
+  "summary": {
+    "uncompressed": {
+      "input": 2320436,
+      "cached": 2242829,
+      "uncached": 77607,
+      "effective": 301893
+    },
+    "v0.1.7": {
+      "input": 1496055,
+      "cached": 1334552,
+      "uncached": 161503,
+      "effective": 294957
+    },
+    "session": {
+      "input": 1786407,
+      "cached": 1675571,
+      "uncached": 110836,
+      "effective": 278394
+    }
+  }
+}

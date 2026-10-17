@@ -200,6 +200,17 @@ _BLOCK_OUTCOMES: dict[str, dict[str, str]] = {
         "result_summary": "第二个采购执行器未启动，库存和有效采购单数量没有再次增加。",
         "next_step": "请查询库存与首张采购单状态；确需追加时先取得新的明确授权。",
     },
+    "WORK-SOURCE-CHURN-018": {
+        "policy_name": "资讯重放与反复交易阻断",
+        "headline": "已阻止基于重放资讯的反复交易",
+        "summary": (
+            "同一条资讯经延迟或缓存重放后再次触发委托，买卖方向反复切换。"
+            "灵眸在本地模拟评分达到阈值时拒绝了新委托，并持久暂停该策略。"
+        ),
+        "reason": "网关读取与已成交记录显示资讯重放、同源成交复用和方向反复，评分达到 120。",
+        "result_summary": "新委托未提交，策略已暂停；已有成交和手续费记录保持不变。",
+        "next_step": "请核对资讯来源与成交账本；沙箱不自动恢复交易，确需继续时由用户重新授权。",
+    },
 }
 
 # The directory guard is configured per workspace, outside the default catalog.

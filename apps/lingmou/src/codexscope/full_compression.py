@@ -19,13 +19,16 @@ import httpx
 
 from .compression_models import KimiClient, normalize_usage
 from .context_compression import chat_text_slots, protect_text as protect_material, restore_text
-from .input_compression import CompressionObservation, _MAX_BODY_BYTES, _text_slots, compress_prose
+from .input_compression import CompressionObservation, _text_slots, compress_prose, oversized_text
 from .proxy_usage import default_token_counter
 from .reference_selection import SourceStore, LexicalSelector, extract_source, source_spans
 from .compression_boundary import task_from_body, transform_data, REFERENCE_START
 from .deferred_tools import defer_request_tools
 from .skill_catalog_compression import defer_skill_descriptions
 from .tool_output_history import compact_tool_outputs
+from .tool_output_cleanup import clean_tool_text
+from .header_compression import compact_tool_definitions, defer_style_sections
+from .session_compression import media_free
 from .structural_compression import StructuralCompressor, dumps, loads
 from token_compression.backends import make_backend, protected_rewrite
 from token_compression.history import trim_history
@@ -40,6 +43,7 @@ METHOD_LABELS = {
     'history': '整轮旧历史裁剪', 'tool_loading': '工具按需加载',
     'skill_loading': '技能说明按需加载',
     'tool_history': '旧工具输出按需补读',
+    'header': '工具说明与风格指令按需补读',
 }
 _MARKERS = re.compile(r'⟦KEEP_\d+⟧')
 _TEXT_KEYS = {'text', 'output', 'content', 'stdout', 'stderr', 'description', 'summary'}
@@ -63,6 +67,13 @@ class FullCompressionConfig:
     remote_budget_share: float = .25
     allow_unfunded_remote: bool = False
     output_rewrite: bool = False
+    # A SessionCompressionLedger owns history paging. Per request, only new
+    # material is compressed, with self-contained encodings.
+    session_managed: bool = False
+    # Opt-in (desktop `max`): abbreviate long tool docs and style-only prompt
+    # sections behind reread pointers; keep only explicitly named skills.
+    compact_headers: bool = False
+    skill_lexical_keep: int = 6
 
     def __post_init__(self):
         for name in ('history_max_tokens', 'tool_history_max_tokens', 'min_model_tokens', 'min_saved_tokens',
@@ -99,6 +110,8 @@ class FullCompressionPipeline:
                  client=None, verifier=None, local_backends=None, config=None):
         self.store = source_store
         self.count, self.tokenizer = (token_counter, 'custom') if token_counter else default_token_counter(model)
+        # Whole-request sizes exclude inline media and encrypted reasoning.
+        self.count_body = media_free(self.count)
         self.client, self.verifier = client, verifier
         self.config = config or FullCompressionConfig.from_env()
         self.local_backends = local_backends
@@ -455,43 +468,44 @@ class FullCompressionPipeline:
             self._remote_calls = self._remote_tokens = 0
             self._remote_local_allowance = 0
             original = loads(raw)
-            if not isinstance(original, dict) or len(raw) > _MAX_BODY_BYTES:
+            if not isinstance(original, dict) or oversized_text(raw, original):
                 return raw, CompressionObservation('skipped', 'unsupported_input')
             if any(original.get(k) is not None for k in ('previous_response_id', 'conversation', 'prompt')):
                 return raw, CompressionObservation('skipped', 'server_managed_context')
             self._remote_limit = self.config.max_remote_tokens
             body = copy.deepcopy(original)
-            before = self.count(dumps(original))
+            before = self.count_body(dumps(original))
             task = task_from_body(original)
             stages, roles = [], set()
             changed = structural_changed = lossy = 0
             def stage(name, previous, **extra):
                 stages.append({'name': name, 'before': previous,
-                               'after': self.count(dumps(body)), **extra})
-            # Trim before creating references or spending on discarded history.
-            self._note('history', attempted=1)
-            try:
-                body, archive = trim_history(body, original_body=original,
-                    budget=self.config.history_max_tokens, keep_turns=self.config.history_keep_turns,
-                    count=self.count, store=self.store, archive_notice=True)
-            except (ValueError, OSError):
-                archive = None
-            if archive:
-                self._note('history', accepted=1, saved=before-self.count(dumps(body)))
-                roles.add('history')
-                changed += archive['removed_messages']
-                lossy += 1
-            stage('history', before, archive=archive)
-            self._note('tool_history', attempted=1)
-            previous = stages[-1]['after']
-            archived_outputs = compact_tool_outputs(body, budget=self.config.tool_history_max_tokens,
-                keep_results=self.config.tool_history_keep_results, count=self.count, store=self.store)
-            if archived_outputs:
-                self._note('tool_history', accepted=archived_outputs, saved=previous-self.count(dumps(body)))
-                roles.add('tool_output')
-                structural_changed += archived_outputs
-                lossy += archived_outputs
-            stage('tool_history', previous, archived_outputs=archived_outputs)
+                               'after': self.count_body(dumps(body)), **extra})
+            if not self.config.session_managed:
+                # Trim before creating references or spending on discarded history.
+                self._note('history', attempted=1)
+                try:
+                    body, archive = trim_history(body, original_body=original,
+                        budget=self.config.history_max_tokens, keep_turns=self.config.history_keep_turns,
+                        count=self.count, store=self.store, archive_notice=True)
+                except (ValueError, OSError):
+                    archive = None
+                if archive:
+                    self._note('history', accepted=1, saved=before-self.count_body(dumps(body)))
+                    roles.add('history')
+                    changed += archive['removed_messages']
+                    lossy += 1
+                stage('history', before, archive=archive)
+                self._note('tool_history', attempted=1)
+                previous = stages[-1]['after']
+                archived_outputs = compact_tool_outputs(body, budget=self.config.tool_history_max_tokens,
+                    keep_results=self.config.tool_history_keep_results, count=self.count, store=self.store)
+                if archived_outputs:
+                    self._note('tool_history', accepted=archived_outputs, saved=previous-self.count_body(dumps(body)))
+                    roles.add('tool_output')
+                    structural_changed += archived_outputs
+                    lossy += archived_outputs
+                stage('tool_history', previous, archived_outputs=archived_outputs)
             slots, decoded = [], []
             codec = StructuralCompressor(self.count)
             items = body.get('messages', body.get('input', []))
@@ -516,7 +530,8 @@ class FullCompressionPipeline:
                     if role not in {'system', 'developer', 'instructions'}:
                         continue
                     source = container[field]
-                    compact, deferred = defer_skill_descriptions(source, task, self.store, self.count)
+                    compact, deferred = defer_skill_descriptions(source, task, self.store, self.count,
+                                                                 self.config.skill_lexical_keep)
                     if deferred:
                         container[field] = compact
                         structural_changed += 1
@@ -524,6 +539,26 @@ class FullCompressionPipeline:
                         roles.add(role)
                         self._note('skill_loading', attempted=1, accepted=deferred,
                                    saved=self.count(source)-self.count(compact))
+            if self.config.compact_headers and self.store is not None:
+                for container, field, role in all_slots:
+                    if role in {'system', 'developer', 'instructions'}:
+                        source = container[field]
+                        compact = defer_style_sections(source, store=self.store, count=self.count)
+                        if compact != source:
+                            container[field] = compact
+                            structural_changed += 1
+                            lossy += 1
+                            roles.add(role)
+                            self._note('header', attempted=1, accepted=1, saved=self.count(source)-self.count(compact))
+                groups = [body.get('tools')] + [item.get('tools') for item in items
+                                                if isinstance(item, dict) and item.get('type') == 'additional_tools']
+                for group in groups:
+                    before_tools = self.count(dumps(group)) if group else 0
+                    if group and (done := compact_tool_definitions(group, store=self.store, count=self.count)):
+                        structural_changed += done
+                        lossy += done
+                        roles.add('tool_definitions')
+                        self._note('header', attempted=1, accepted=done, saved=before_tools-self.count(dumps(group)))
             reread_containers = set()
             for item in items:
                 if isinstance(item, dict) and item.get('call_id', item.get('tool_call_id')) in rereads:
@@ -543,8 +578,17 @@ class FullCompressionPipeline:
                 if not isinstance(call_id, str) or ids[call_id] != 1:
                     call_id = None
                 text = container[field]
+                if self.config.session_managed:
+                    # Deterministic terminal cleanup; repeat/delta references to
+                    # other items are avoided because those may be archived later.
+                    cleaned = clean_tool_text(text)
+                    if cleaned != text and self.count(cleaned) < self.count(text):
+                        container[field] = text = cleaned
+                        structural_changed += 1
+                        roles.add('tool_output')
+                    call_id = None
                 self._note('structure', attempted=1)
-                compact = codec.compress(text, call_id=call_id, family=families.get(call_id, ''))
+                compact = codec.compress(text, call_id=call_id, family=families.get(call_id, '') if call_id else '')
                 if compact != text:
                     container[field] = compact
                     structural_changed += 1
@@ -557,7 +601,7 @@ class FullCompressionPipeline:
                     except ValueError:
                         pass
                 structural_slots.append((container, field, call_id, text))
-            stage('structure', stages[-1]['after'])
+            stage('structure', stages[-1]['after'] if stages else before)
 
             def excerpt(text):
                 if text.lstrip().startswith(('{', '[')) or '$lingmou' in text:
@@ -677,7 +721,7 @@ class FullCompressionPipeline:
             for container, field, value in decoded:
                 container[field] = dumps(value)
             stage('extract', stages[-1]['after'])
-            local_saving = max(0, before - self.count(dumps(body)))
+            local_saving = max(0, before - self.count_body(dumps(body)))
             if not self.config.allow_unfunded_remote:
                 self._remote_local_allowance = int(local_saving * self.config.remote_budget_share)
                 self._remote_limit = min(self._remote_limit,
@@ -691,7 +735,7 @@ class FullCompressionPipeline:
             stage('rewrite', stages[-1]['after'], remote_budget_estimate=self._remote_limit,
                   remote_reserved_estimate=self._remote_tokens,
                   startup_remaining_before=self._startup_remaining)
-            after = self.count(dumps(body))
+            after = self.count_body(dumps(body))
             if after >= before:
                 body, after, changed, structural_changed, lossy = copy.deepcopy(original), before, 0, 0, 0
                 roles = set()
@@ -701,7 +745,7 @@ class FullCompressionPipeline:
                 self._note('tool_loading', accepted=deferred)
                 roles.add('tool_definitions')
             stage('tool_loading', after, deferred_tools=deferred, savings_measurement='upstream_only')
-            after = self.count(dumps(body))
+            after = self.count_body(dumps(body))
             with self._stats_lock:
                 self.last_stages = stages
             observation = CompressionObservation('compressed' if after < before else 'skipped',

@@ -1,6 +1,7 @@
 """Desktop integration uses temporary Codex configs and synthetic providers only."""
 import json
 import threading
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from types import SimpleNamespace
 
@@ -81,15 +82,20 @@ def test_full_local_ignores_ambient_remote_flags_and_preserves_recoverable_histo
     store = SourceStore(tmp_path)
     compressor = DesktopCompressor("full", store, SERVER, token_counter=len)
     body = {"tools": [READER], "instructions": "Never delete files.", "input": []}
-    for i in range(6):
+    # Whole old turns are archived only at a session checkpoint above the
+    # history watermark, so this history must exceed it.
+    for i in range(10):
         body["input"] += [{"role": "user", "content": f"Task {i}"},
                           {"role": "assistant", "content": f"Earlier evidence {i}. " * 700}]
     sent, observation = compressor.compress_observed(json.dumps(body).encode())
     got = json.loads(sent)
     assert observation.status == "compressed" and not observation.compression_calls
     assert got["instructions"] == body["instructions"] and got["tools"] == body["tools"]
-    assert [item["content"] for item in got["input"] if item.get("role") == "user"] == ["Task 4", "Task 5"]
-    assert any(json.loads(path.read_text()) == body["input"][:8] for path in tmp_path.glob("*.txt"))
+    kept = [item["content"] for item in got["input"] if item.get("role") == "user"]
+    assert 2 <= len(kept) < 10 and kept == [f"Task {i}" for i in range(10 - len(kept), 10)]
+    removed = 2 * (10 - len(kept))
+    assert any(json.loads(path.read_text()) == body["input"][:removed] for path in tmp_path.glob("*.txt"))
+    assert observation.cache_prefix["checkpoint"]["archived_messages"] == removed
     assert compressor.stats()["last_mode"] == "full"
 
 
@@ -209,7 +215,10 @@ def test_relay_mode_switch_restart_usage_and_restore(tmp_path, monkeypatch):
             assert response.status_code == 200 and response.content == wire
         assert received[0]["input"][-1]["output"] != body["input"][-1]["output"]
         assert received[1] == body
-        status = companion.status()
+        # The relay records usage after the response body reaches the client.
+        deadline = time.monotonic() + 2
+        while (status := companion.status())["tokens"]["official"]["total_tokens"] != 254 and time.monotonic() < deadline:
+            time.sleep(.01)
         assert status["tokens"]["official"]["total_tokens"] == 254
         assert status["tokens"]["official"]["known_compression_tokens"] == 0
         assert status["last_mode"] == "off"
