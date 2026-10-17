@@ -1,5 +1,6 @@
 import copy
 import json
+import os
 import random
 from concurrent.futures import ThreadPoolExecutor
 
@@ -137,7 +138,10 @@ def test_excerpts_copy_original_locations_conditions_and_reread(tmp_path):
     reopened = SourceStore(tmp_path / 'sources')
     assert reopened.get(value['source_id']) == text
     assert reopened.read(value['source_id'], 21, 21)['text'] == text.splitlines(keepends=True)[20]
-    assert (tmp_path / 'sources' / (value['source_id'] + '.txt')).stat().st_mode & 0o777 == 0o600
+    # POSIX mode bits do not describe Windows ACLs; the content/recovery
+    # assertions above apply on both platforms.
+    if os.name != 'nt':
+        assert (tmp_path / 'sources' / (value['source_id'] + '.txt')).stat().st_mode & 0o777 == 0o600
 
 
 @pytest.mark.parametrize('ids', [[], None, [False], [-1], [999], [1, 1], ['1'], {'keep_ids': [2]}])

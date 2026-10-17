@@ -1,0 +1,31 @@
+{
+  "source_commit": "755b5b53b6b5f30a4f567ecab2f0586a82097e2b",
+  "completed": true,
+  "files_before": 2102,
+  "bytes_before": 2528741352,
+  "deleted_categories": [
+    "Lingmou installed versions and source-reader runtime",
+    "Lingmou app data, compression source stores and worker token",
+    "LingmouTests and temporary compression/release checks",
+    "Lingmou launch tasks, shortcuts and application installer logs",
+    "Lingmou-specific Codex backup and lock files"
+  ],
+  "config_unchanged": true,
+  "auth_unchanged": true,
+  "d_drive_ppt_preserved": true,
+  "verification": {
+    "remaining_paths": [],
+    "additional_lingmou_entries": [],
+    "remaining_tasks": [],
+    "uninstall_entries": [],
+    "relay_listeners": [],
+    "codex_running": true,
+    "codex_processes": 14,
+    "codex_auth_exists": true,
+    "d_drive_ppt_exists": true
+  },
+  "model_worker_stopped": true,
+  "ssh_reverse_tunnel_stopped": true,
+  "signed_or_gui_accepted_release": false,
+  "note": "Product code and tests were pushed before remote deletion. Existing Codex login/history and D-drive paper workspaces were not removed."
+}
